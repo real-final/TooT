@@ -1,0 +1,5 @@
+# secret data
+
+spring:
+  config:
+    import: secret/application-secret.yml
