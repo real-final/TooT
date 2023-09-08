@@ -9,7 +9,7 @@ const Chat = () => {
     setBubbles(bubbles => [...bubbles, bubble]);
   };
   return (
-  <div className="w-full h-full flex flex-col justify-between p-[10px] rounded-[24px] border-[8px] border-solid border-blue-950 bg-white">
+  <div className="w-full h-full flex flex-col justify-between p-2.5 rounded-3xl border-8 border-solid border-blue-950 bg-white">
     <ChatList bubbles={bubbles} />
     <Guide />
     <Input addBubble={addBubble} />

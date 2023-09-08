@@ -24,7 +24,7 @@ const Input = ({addBubble}: {addBubble: (bubble: string) => void}) => {
   };
 
   return (
-    <div className="w-full h-[40px] pl-[10px] pr-[2px] flex items-center justify-between rounded-full bg-gray-300">
+    <div className="w-full h-9 pl-2.5 pr-1 flex items-center justify-between rounded-full bg-gray-300">
       <VoiceButton />
       <input type="text" autoFocus value={inputText} onChange={handleInputTextChange} className="w-full h-full bg-gray-300 focus:outline-none" onKeyDown={handleKeyDown} ></input>
       <SendButton handleSendClick={handleSendClick} />

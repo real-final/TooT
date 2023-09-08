@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SendButton = ({handleSendClick}: {handleSendClick: (e: React.MouseEvent<HTMLButtonElement>) => void}) => {
   return(
-    <button className="min-w-[30px] w-[30px] h-[30px] mt-[3px] mb-[3px] ml-[5px] rounded-full bg-blue-400 text-white focus:outline-none" onClick={handleSendClick}>
+    <button className="shrink-0 grow-0 w-7 h-7 mt-1 mb-1 mr-0.1 rounded-full bg-blue-400 text-white focus:outline-none" onClick={handleSendClick}>
       <FontAwesomeIcon icon={faPaperPlane} />
     </button>
   );
