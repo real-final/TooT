@@ -4,7 +4,7 @@ import UserContainer from "./components/container/UserContainer";
 
 const Grid = () => {
   return (
-    <div className="h-full grid grid-cols-4 gap-[24px] p-[24px] grid-rows-3">
+    <div className="min-h-0 h-full grid grid-cols-4 gap-[24px] p-[24px] grid-rows-3">
       <MainContainer />
       <UserContainer />
       <ChatContainer />

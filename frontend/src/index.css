@@ -52,3 +52,11 @@ body {
   height: 100vh;
   max-height: 100vh;
 }
+
+body, html {
+  overflow: hidden;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
