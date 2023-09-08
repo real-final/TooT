@@ -11,6 +11,7 @@ const Input = ({addBubble}: {addBubble: (bubble: string) => void}) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if(e.key === "Enter"){
+      if(inputText === "") return;
       addBubble(inputText);
       setInputText("");
     }

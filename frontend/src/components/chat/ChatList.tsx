@@ -3,7 +3,7 @@ import UserBubble from "./bubble/UserBubble";
 
 const ChatList = ({bubbles}: {bubbles: string[]}) => {
 
-  // NOTE: 메세지가 올라올 
+  // NOTE: 메세지가 채팅에 올라올 때 스크롤이 최신 메세지를 보여주도록
   const scrollEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (scrollEndRef.current) {
