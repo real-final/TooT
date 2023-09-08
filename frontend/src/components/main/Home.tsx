@@ -1,16 +1,22 @@
 import { ReactNode } from "react";
+import StockCard from "../../common/card/StockCard";
+import CardCarousel from "../../common/carousel/CardCarousel";
 
 const Home = () => {
+  let items = Array(10).fill(<StockCard />);
+
   return (
-    <div className="h-full p-6">
-      <div className="h-1/5 border border-dotted border-red-600">
+    <div className="h-full">
+      <div className="h-1/5 flex p-6 items-start bg-slate-200">
         <Container>
-          <Title>관심 종목</Title>
-          <Content>캐러셀</Content>
+          {/* <Title>관심 종목</Title> */}
+          <Content className="flex">
+            <CardCarousel items={items} />
+          </Content>
         </Container>
       </div>
-      <div className="w-full h-2/5 flex border border-dotted border-red-600">
-        <Container>
+      <div className="h-2/5 flex px-6 pt-6">
+        <Container className="pr-2">
           <Title>거래량 순위</Title>
           <Content>세부내용</Content>
         </Container>
@@ -19,7 +25,7 @@ const Home = () => {
           <Content>세부내용</Content>
         </Container>
       </div>
-      <div className="h-2/5 flex border border-dotted border-red-600">
+      <div className="h-2/5 flex px-6 pb-6">
         <Container>
           <Title>퀴즈</Title>
           <Content>세부내용</Content>
@@ -42,7 +48,7 @@ interface BAaProps {
 
 const Container = (props: BAaProps) => {
   const { children } = props;
-  return <div className="flex flex-col flex-1">{children}</div>;
+  return <div className="flex flex-col flex-1 overflow-hidden">{children}</div>;
 };
 
 const Title = (props: BAaProps) => {
@@ -51,7 +57,7 @@ const Title = (props: BAaProps) => {
 };
 
 const Content = (props: BAaProps) => {
-  const { children } = props;
-  return <div className="p-4 bg-red-200 flex-grow">{children}</div>;
+  const { children, className } = props;
+  const combinedClassName = "flex-grow " + (className || "");
+  return <div className={combinedClassName}>{children}</div>;
 };
-
