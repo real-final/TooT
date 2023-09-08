@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import StockCard from "../../common/card/StockCard";
 import CardCarousel from "../../common/carousel/CardCarousel";
+import MiniRanking from "../ranking/mini/miniRanking";
 
 const Home = () => {
   let items = Array(10).fill(<StockCard />);
@@ -32,7 +33,9 @@ const Home = () => {
         </Container>
         <Container>
           <Title>전체랭킹</Title>
-          <Content>세부내용</Content>
+          <Content className="min-h-0">
+            <MiniRanking />
+          </Content>
         </Container>
       </div>
     </div>
