@@ -1,6 +1,6 @@
-import ChatContainer from "./components/container/chat";
-import MainContainer from "./components/container/main";
-import UserContainer from "./components/container/user";
+import ChatContainer from "./components/container/ChatContainer";
+import MainContainer from "./components/container/MainContainer";
+import UserContainer from "./components/container/UserContainer";
 
 const Grid = () => {
   return (
