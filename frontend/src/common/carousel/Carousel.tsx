@@ -1,11 +1,11 @@
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 
-interface CardCarouselProps {
+interface CarouselProps {
   items: React.ReactNode[];
 }
 
-const CardCarousel = ({ items }: CardCarouselProps) => {
+const Carousel = ({ items }: CarouselProps) => {
   return (
     <AliceCarousel
       autoWidth
@@ -17,4 +17,4 @@ const CardCarousel = ({ items }: CardCarouselProps) => {
   );
 };
 
-export default CardCarousel;
+export default Carousel;
