@@ -1,17 +1,17 @@
 import { ReactNode } from "react";
 import StockCard from "../../common/card/StockCard";
-import CardCarousel from "../../common/carousel/CardCarousel";
+import Carousel from "../../common/carousel/Carousel";
 
 const Home = () => {
   let items = Array(10).fill(<StockCard />);
 
   return (
     <div className="h-full">
-      <div className="h-1/5 flex p-6 items-start bg-slate-200">
+      <div className="h-1/5 flex p-6 items-start bg-slate-200 rounded-t-lg">
         <Container>
           {/* <Title>관심 종목</Title> */}
           <Content className="flex">
-            <CardCarousel items={items} />
+            <Carousel items={items} />
           </Content>
         </Container>
       </div>

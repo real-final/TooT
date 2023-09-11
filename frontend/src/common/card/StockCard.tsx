@@ -1,8 +1,9 @@
 import { ReactNode } from "react";
+import Card from "./Card";
 
 const StockCard = () => {
   return (
-    <div className="w-[184px] h-fit pr-2">
+    <div className="w-[180px] h-fit">
       <Card>
         <CardContent>
           <div className="flex justify-between">
@@ -33,14 +34,6 @@ interface BAaProps {
   children: ReactNode;
   className?: string;
 }
-
-const Card = (props: BAaProps) => {
-  const { children, className } = props;
-  const combinedClassName =
-    "w-44 h-17 p-2 bg-white border border-solid rounded-lg border-neutral-300 " +
-    (className || "");
-  return <div className={combinedClassName}>{children}</div>;
-};
 
 const CardContent = (props: BAaProps) => {
   const { children } = props;
