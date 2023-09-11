@@ -5,13 +5,13 @@ const MiniRankingItem = ({user, index}:{user: {
   gameover: number
 }, index: number}) => {
   return (
-    <div className="flex items-center">
-      <div className="text-[36px]">{index + 1}</div>
-      <div className="w-[40px] h-[40px] rounded-full bg-point">{user.profile}</div>
-      <div className="text-[16px]">{user.nickname}</div>
-      <div className="text-[16px]">{user.profit}원</div>
-      <div className="text-[16px]">파산{user.gameover}회</div>
-    </div>
+    <tr className="w-full">
+      <td align="center" className={`text-[28px] align-middle ${index === 0 ? "text-first " : " "}${index === 1 ? "text-second " : " "}${index === 2 ? "text-third " : " "}`}>{index + 1}</td>
+      <td align="center" className="w-[40px] h-[40px] rounded-full bg-point align-middle">{user.profile}</td>
+      <td align="center" className="text-[16px] align-middle">{user.nickname}</td>
+      <td align="right" className={`text-[16px] align-middle ${user.profit > 0 ? "text-stockRed" : "text-stockBlue"}`}>{user.profit}<span className="text-stockGray">원</span></td>
+      <td align="right" className="text-[16px] align-middle text-stockGray">파산 {user.gameover}회</td>
+    </tr>
   );
 };
 
