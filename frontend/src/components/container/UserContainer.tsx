@@ -1,10 +1,10 @@
-import KakaoLogin from "./../user/KakaoLogin"
+import KakaoLogin from "./../user/KakaoLogin";
 
 const UserContainer = () => {
   return (
-    <div className="col-span-1 row-span-1 rounded-lg drop-shadow-md">
+    <div className="col-span-1 row-span-1 drop-shadow-lg">
       <KakaoLogin />
     </div>
   );
-}
+};
 export default UserContainer;
