@@ -18,21 +18,21 @@ const Home = () => {
       </div>
       <div className="h-2/5 flex px-6 pt-6">
         <Container className="pr-2">
-          <div className="text-[20px] mb-4 font-bold">거래량 순위</div>
+          <Title>거래량 순위</Title>
           <Content>세부내용</Content>
         </Container>
         <Container>
-          <div className="text-[20px] mb-4 font-bold">코스피 200</div>
+          <Title>코스피 200</Title>
           <Content>세부내용</Content>
         </Container>
       </div>
       <div className="h-2/5 flex px-6 pb-6">
         <Container>
-          <div className="text-[20px] mb-4 font-bold">퀴즈</div>
+          <Title>퀴즈</Title>
           <Content>세부내용</Content>
         </Container>
         <Container>
-          <div className="text-[20px] mb-4 font-bold">전체랭킹</div>
+          <Title>전체랭킹</Title>
           <Content className="min-h-0">
             <Ranking size="small" />
           </Content>
@@ -56,7 +56,7 @@ const Container = (props: BAaProps) => {
 
 const Title = (props: BAaProps) => {
   const { children } = props;
-  return <h2 className="text-base font-extrabold mb-2">{children}</h2>;
+  return <h2 className="text-base font-bold text-[22px] mb-4">{children}</h2>;
 };
 
 const Content = (props: BAaProps) => {
