@@ -13,6 +13,7 @@ module.exports = {
         "first":"#FFCA10",
         "second":"#BAD1D6",
         "third":"#BC800A",
+        "lightYellow":"#FFFBEB",
       },
     },
   },
