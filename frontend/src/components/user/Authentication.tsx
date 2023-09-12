@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import api from "./../../util/api";
@@ -6,7 +7,7 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const Authentication = () => {
+const Authentication: React.FC = () => {
   const query = useQuery();
   const code = query.get("code"); // 인증 Code 저장
 
