@@ -22,7 +22,7 @@ const handleLoginClick = () => {
   window.location.href = authUrl;
 };
 
-const KakaoLogin = () => {
+const KakaoLogin: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 rounded-lg">
       <p className="text-white text-sm font-bold mb-2">
