@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import StockCard from "../../common/card/StockCard";
 import Carousel from "../../common/carousel/Carousel";
 import TradingRanking from "./TradingRanking";
+import Ranking from "../ranking/Ranking";
+
 
 const Home = () => {
   let items = Array(10).fill(<StockCard />);
@@ -38,7 +40,9 @@ const Home = () => {
         </Container>
         <Container>
           <Title>전체랭킹</Title>
-          <Content>세부내용</Content>
+          <Content className="min-h-0">
+            <Ranking size="small" />
+          </Content>
         </Container>
       </div>
     </div>
@@ -59,7 +63,7 @@ const Container = (props: BAaProps) => {
 
 const Title = (props: BAaProps) => {
   const { children } = props;
-  return <h2 className="text-base font-extrabold mb-2">{children}</h2>;
+  return <h2 className="text-base font-bold text-[22px] mb-4">{children}</h2>;
 };
 
 const Content = (props: BAaProps) => {
