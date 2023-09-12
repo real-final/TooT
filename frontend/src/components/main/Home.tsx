@@ -18,21 +18,21 @@ const Home = () => {
       </div>
       <div className="h-2/5 flex px-6 pt-6">
         <Container className="pr-2">
-          <Title>거래량 순위</Title>
+          <div className="text-[20px] mb-4 font-bold">거래량 순위</div>
           <Content>세부내용</Content>
         </Container>
         <Container>
-          <Title>코스피 200</Title>
+          <div className="text-[20px] mb-4 font-bold">코스피 200</div>
           <Content>세부내용</Content>
         </Container>
       </div>
       <div className="h-2/5 flex px-6 pb-6">
         <Container>
-          <Title>퀴즈</Title>
+          <div className="text-[20px] mb-4 font-bold">퀴즈</div>
           <Content>세부내용</Content>
         </Container>
         <Container>
-          <Title>전체랭킹</Title>
+          <div className="text-[20px] mb-4 font-bold">전체랭킹</div>
           <Content className="min-h-0">
             <Ranking size="small" />
           </Content>
