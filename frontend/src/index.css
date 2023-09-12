@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'ChosunGu';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGu.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* reset.css */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -28,8 +35,9 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
 }
-body {
+html, body {
   line-height: 1;
+  font-family: 'ChosunGu';
 }
 ol, ul {
   list-style: none;
@@ -51,10 +59,6 @@ body {
   width: 100vw;
   height: 100vh;
   max-height: 100vh;
-}
-
-body, html {
-  overflow: hidden;
 }
 
 .no-scrollbar::-webkit-scrollbar {
