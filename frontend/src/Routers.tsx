@@ -3,12 +3,13 @@ import Home from "./components/main/Home";
 import NotFound from "./common/notfound/NotFound";
 import Example from "./components/main/Example";
 import RankingContainer from "./components/ranking/RankingContainer";
+import StockDetails from "./components/main/StockDetails";
 
 const Routers = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />}></Route>
-      <Route path="/stock" element={<Example />}></Route>
+      <Route path="/stock/:stockId" element={<StockDetails />}></Route>
       <Route path="/user" element={<Example />}></Route>
       <Route path="/rank" element={<Example />}>
         <Route

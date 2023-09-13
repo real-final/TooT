@@ -1,5 +1,5 @@
 import { useEffect, createContext, useState } from "react";
-import api from "./util/api";
+import api from "./utils/api";
 import Grid from "./Grid";
 import Nav from "./common/nav/Nav";
 
