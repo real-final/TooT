@@ -1,7 +1,9 @@
 import { ReactNode } from "react";
 import StockCard from "../../common/card/StockCard";
 import Carousel from "../../common/carousel/Carousel";
+import TradingRanking from "./TradingRanking";
 import Ranking from "../ranking/Ranking";
+
 
 const Home = () => {
   let items = Array(10).fill(<StockCard />);
@@ -18,8 +20,13 @@ const Home = () => {
       </div>
       <div className="h-2/5 flex px-6 pt-6">
         <Container className="pr-2">
-          <Title>거래량 순위</Title>
-          <Content>세부내용</Content>
+          <Title>
+            거래량 순위
+            <span className="text-xs text-slate-600 ml-2">한국투자증권 기준</span>
+          </Title>
+          <Content className="pr-6">
+            <TradingRanking />
+          </Content>
         </Container>
         <Container>
           <Title>코스피 200</Title>
