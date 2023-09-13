@@ -6,7 +6,7 @@ interface CarouselProps {
   items: React.ReactNode[];
 }
 
-const Carousel = ({ items }: CarouselProps) => {
+const Carousel: React.FC<CarouselProps> = ({ items }) => {
   return (
     <AliceCarousel
       autoWidth
