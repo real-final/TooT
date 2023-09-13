@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import api from "./../../util/api";
+import api from "../../utils/api";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
