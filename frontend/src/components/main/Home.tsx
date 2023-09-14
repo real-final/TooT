@@ -28,7 +28,7 @@ const Home: React.FC = () => {
         <Container className="pr-2">
           <Title>
             거래량 순위
-            <span className="text-xs text-slate-600 ml-2">
+            <span className="text-sm text-slate-600 ml-2">
               한국투자증권 기준
             </span>
           </Title>
@@ -71,7 +71,7 @@ const Container = (props: BAaProps) => {
 
 const Title = (props: BAaProps) => {
   const { children } = props;
-  return <h2 className="text-base font-bold text-[22px] mb-4">{children}</h2>;
+  return <h2 className="text-lg font-bold mb-4">{children}</h2>;
 };
 
 const Content = (props: BAaProps) => {

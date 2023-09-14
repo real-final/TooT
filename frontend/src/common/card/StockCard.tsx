@@ -55,13 +55,13 @@ export default StockCard;
 
 /** 좋아요 버튼 */
 const LikeButton: React.FC = () => {
-  const handleClick = (event: React.MouseEvent) => {
+  const handleLikeButtonClick = (event: React.MouseEvent) => {
     event.stopPropagation();
   };
 
   return (
     <FontAwesomeIcon
-      onClick={handleClick}
+      onClick={handleLikeButtonClick}
       icon={faHeart}
       style={{
         color: "#b0b0b0",
