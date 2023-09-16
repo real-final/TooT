@@ -4,7 +4,7 @@
  * 2. 상승 => 글자색: 빨강, 아이콘: "▲"
  * 3. 하락 => 글자색: 파랑, 아이콘: "▼"
  */
-const getStockStyle = (value: string): { textColor: string; icon: string } => {
+export const getStockStyle = (value: string): { textColor: string; icon: string } => {
   let num = parseFloat(value);
   let textColor = "text-slate-500";
   let icon = "―";
@@ -19,5 +19,3 @@ const getStockStyle = (value: string): { textColor: string; icon: string } => {
 
   return { textColor, icon };
 };
-
-export default getStockStyle;

@@ -1,24 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import api from "../../utils/api";
-
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-};
+import { useGetSearchParam } from "../../hooks/useGetSearchParam";
+import { api } from "../../utils/api";
 
 /** Kakao 로그인 후 params에 담긴 code를 서버로 보내주기 */
 const Authentication: React.FC = () => {
-  const query = useQuery();
-  const code = query.get("code"); // 인증 Code 저장
+  const code = useGetSearchParam("code");
 
   const fetchData = async () => {
     try {
       await api.get(`/user/login/kakao?code=${code}`);
-      console.log("서버 전송성공");
+      console.log("카카오인증코드 서버전송 성공");
       window.location.replace("/");
     } catch (error) {
-      console.error(error);
+      console.error("카카오인증코드 서버전송 실패");
     }
   };
 

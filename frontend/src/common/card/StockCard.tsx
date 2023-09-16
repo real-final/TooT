@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Card from "./Card";
-import getStockStyle from "../../utils/getStockStyle";
+import { getStockStyle } from "../../utils/getStockStyle";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";

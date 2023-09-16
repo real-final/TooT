@@ -2,7 +2,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import getStockStyle from "../../utils/getStockStyle";
+import { getStockStyle } from "../../utils/getStockStyle";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -38,7 +38,11 @@ const TradingRanking: React.FC = () => {
               navigate(`/stock/${row.id}`);
             };
             return (
-              <TableRow key={row.name} onClick={handleTableRowClick} className="hover:cursor-pointer">
+              <TableRow
+                key={row.name}
+                onClick={handleTableRowClick}
+                className="hover:cursor-pointer"
+              >
                 <TableCell align="left">
                   <span className="text-slate-500">{row.ranking}</span>
                 </TableCell>
