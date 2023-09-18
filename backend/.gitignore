@@ -1,6 +1,5 @@
 ### Spring secret configurations ###
-secret/
-
+application.yml
 
 HELP.md
 .gradle
