@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import StockCard from "../../common/card/StockCard";
 import Carousel from "../../common/carousel/Carousel";
-import TradingRanking from "./TradingRanking";
+import TopStocks from "./TopStocks";
 import Ranking from "../ranking/Ranking";
 
 const Home: React.FC = () => {
@@ -33,7 +33,7 @@ const Home: React.FC = () => {
             </span>
           </Title>
           <Content className="pr-6">
-            <TradingRanking />
+            <TopStocks />
           </Content>
         </Container>
         <Container>

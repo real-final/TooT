@@ -24,7 +24,7 @@ const rows = [
   createData("5", "030425", "에코프로", "1,117,000", "-5.26"),
 ];
 
-const TradingRanking: React.FC = () => {
+const TopStocks: React.FC = () => {
   const navigate = useNavigate();
 
   return (
@@ -63,4 +63,4 @@ const TradingRanking: React.FC = () => {
   );
 };
 
-export default TradingRanking;
+export default TopStocks;
