@@ -1,38 +1,54 @@
 import { useEffect, createContext, useState } from "react";
-import { requestToken } from "./utils/requestToken";
+import { requestAccessToken } from "./utils/requestAccessToken";
+import { requestUserInfo } from "./utils/requestUserInfo";
 
 import Grid from "./Grid";
 import Nav from "./common/nav/Nav";
 
-type TokenContextType = {
-  accessToken?: string; 
-};
+interface IUserAuthContext {
+  accessToken?: string;
+  userInfo?: object;
+}
 
-/** Access토큰 관리용 변수 */
-export const TokenContext = createContext<TokenContextType | undefined>(
+/** 유저정보 & access토큰 관리용 ContextAPI */
+export const UserAuthContext = createContext<IUserAuthContext | undefined>(
   undefined
 );
 
 function App() {
-  let [accessToken, setAccessToken] = useState<string | undefined>();
+  let [contextData, setContextData] = useState<IUserAuthContext>({});
 
   useEffect(() => {
-    /** Access 토큰 받아오기 */
-    const getAccessToken = async () => {
-      const token = await requestToken();
-      setAccessToken(token);
+    const fetchUserAuthData = async () => {
+      // 1. Access토큰 요청
+      const accessToken = await requestAccessToken();
+      // 2. 사용자정보 요청
+      if (typeof accessToken === "string") {
+        const userInfo = await requestUserInfo(accessToken);
+        // 3. Access토큰 & 사용자정보 저장
+        if (userInfo && Object.keys(userInfo).length > 0) {
+          setContextData({
+            accessToken: accessToken,
+            userInfo: userInfo,
+          });
+        } else {
+          console.error("위치: App.tsx, userInfo 요청 실패");
+        }
+      } else {
+        console.error("위치: App.tsx, access토큰 타입 에러");
+      }
     };
 
-    getAccessToken();
+    fetchUserAuthData();
   }, []);
 
   return (
-    <TokenContext.Provider value={{accessToken}}>
+    <UserAuthContext.Provider value={contextData}>
       <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
         <Nav />
         <Grid />
       </div>
-    </TokenContext.Provider>
+    </UserAuthContext.Provider>
   );
 }
 

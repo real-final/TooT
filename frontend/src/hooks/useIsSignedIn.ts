@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { TokenContext } from "../App";
+import { UserAuthContext } from "../App";
 
 export const useIsSignedIn = () => {
-    const tokenContext = useContext(TokenContext);
-    const isSignedIn = !!tokenContext?.accessToken;
-  
-    return isSignedIn;
-  };
+  const userContext = useContext(UserAuthContext);
+  const isSignedIn = !!userContext?.accessToken;
+
+  return isSignedIn;
+};
