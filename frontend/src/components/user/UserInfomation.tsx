@@ -27,6 +27,7 @@ const UserInfomation: React.FC = () => {
             <p className="text-slate-500">시드머니</p>
             <p>
               <span className="text-black text-lg">{시드머니}</span>
+
               <span>원</span>
             </p>
           </div>

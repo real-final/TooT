@@ -4,6 +4,7 @@ import Carousel from "../../common/carousel/Carousel";
 import TopStocks from "./TopStocks";
 import Ranking from "../ranking/Ranking";
 
+
 const Home: React.FC = () => {
   let item = {
     id: "001230",
