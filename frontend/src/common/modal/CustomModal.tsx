@@ -3,13 +3,13 @@ import { ReactNode } from "react";
 import Modal from "@mui/joy/Modal";
 import Sheet from "@mui/joy/Sheet";
 
-interface CustomModalProps {
+interface ICustomModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: ReactNode;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({
+const CustomModal: React.FC<ICustomModalProps> = ({
   open,
   setOpen,
   children,
