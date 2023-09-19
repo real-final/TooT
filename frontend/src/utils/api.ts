@@ -9,8 +9,6 @@ export const api = axios.create({
   baseURL: REACT_APP_SERVER,
 });
 
-const chatbotApi = axios.create({
+export const chatbotApi = axios.create({
   baseURL: CHATBOT_SERVER,
 });
-
-export default api;
