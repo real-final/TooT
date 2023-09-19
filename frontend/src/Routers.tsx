@@ -3,7 +3,7 @@ import Home from "./components/main/Home";
 import NotFound from "./common/notfound/NotFound";
 import Example from "./components/main/Example";
 import RankingContainer from "./components/ranking/RankingContainer";
-import UserStock from "./components/user/UserStock";
+import UserStock from "./components/user/stock/UserStock";
 
 const Routers = () => {
   return (

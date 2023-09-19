@@ -1,7 +1,10 @@
 import { useEffect, createContext, useState } from "react";
+import { QueryClient, QueryClientProvider} from "react-query";
 import api from "./util/api";
 import Grid from "./Grid";
 import Nav from "./common/nav/Nav";
+
+const queryClient = new QueryClient();
 
 type TokenContextType = {
   token: string | null;
@@ -32,12 +35,14 @@ function App() {
   }, []);
 
   return (
-    <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
-      <Nav />
-      <TokenContext.Provider value={{ token, setToken }}>
-        <Grid />
-      </TokenContext.Provider>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
+        <Nav />
+        <TokenContext.Provider value={{ token, setToken }}>
+          <Grid />
+        </TokenContext.Provider>
+      </div>
+    </QueryClientProvider>
   );
 }
 

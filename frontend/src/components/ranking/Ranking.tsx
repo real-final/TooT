@@ -1,5 +1,5 @@
 import RankingItem from "./RankingItem";
-import testData from "./rankingTestData";
+import testData from "../../test/rankingTestData";
 
 const Ranking = ({size}:{size:string}) => {
   return (
