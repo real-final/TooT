@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useGetSearchParam } from "../../hooks/useGetSearchParam";
 import { api } from "../../utils/api";
@@ -9,10 +10,9 @@ const Authentication: React.FC = () => {
   const fetchData = async () => {
     try {
       await api.get(`/user/login/kakao?code=${code}`);
-      console.log("카카오인증코드 서버전송 성공");
-      window.location.replace("/");
+      window.location.replace("/");  // 브라우저 URL 안의 parameter를 지우기 위한 새로고침
     } catch (error) {
-      console.error("카카오인증코드 서버전송 실패");
+      console.error("위치: Authentication.tsx, 카카오인증코드 서버전송 실패");
     }
   };
 
