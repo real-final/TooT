@@ -43,10 +43,12 @@ function App() {
   }, []);
 
   return (
-    <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
-      <Nav />
-      <Grid />
-    </div>
+    <UserAuthContext.Provider value={contextData}>
+      <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
+        <Nav />
+        <Grid />
+      </div>
+    </UserAuthContext.Provider>
   );
 }
 

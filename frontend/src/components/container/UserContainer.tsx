@@ -4,6 +4,7 @@ import UserInfomation from "../user/UserInfomation";
 import { useIsSignedIn } from "../../hooks/useIsSignedIn";
 
 const UserContainer = () => {
+  let isSigned = useIsSignedIn();
   return (
     <div className="col-span-1 row-span-1 drop-shadow-lg">
       <Authentication />
@@ -11,5 +12,5 @@ const UserContainer = () => {
     </div>
   );
 };
-};
+
 export default UserContainer;
