@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 import Ranking from "./Ranking";
-import testData from "./rankingTestData";
+import testData from "../../test/rankingTestData";
 import UserRanking from "./UserRanking";
 const RankingContainer = ({ title } : {size: string, title:string}) => {
   return (

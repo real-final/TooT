@@ -1,9 +1,9 @@
-import logo_dark from "./../../assets/images/logo/logo_dark.png"
-import { styled } from '@mui/material/styles';
-import Button, { ButtonProps } from '@mui/material/Button';
-import { blue } from '@mui/material/colors';
+import logo_dark from "./../../assets/images/logo/logo_dark.png";
+import { styled } from "@mui/material/styles";
+import Button, { ButtonProps } from "@mui/material/Button";
+import { blue } from "@mui/material/colors";
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
   return (
     <div className="h-full flex flex-col items-center justify-center">
       <img src={logo_dark} alt="logo_yellow" width={200} className="mb-4" />

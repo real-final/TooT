@@ -1,12 +1,19 @@
 import { ReactNode } from "react";
 import StockCard from "../../common/card/StockCard";
 import Carousel from "../../common/carousel/Carousel";
-import TradingRanking from "./TradingRanking";
+import TopStocks from "./TopStocks";
 import Ranking from "../ranking/Ranking";
 
 
-const Home = () => {
-  let items = Array(10).fill(<StockCard />);
+const Home: React.FC = () => {
+  let item = {
+    id: "001230",
+    name: "삼성전자",
+    price: "100,000",
+    difference: "200",
+    percentage: "-0.80",
+  };
+  let items = Array(10).fill(<StockCard item={item} />);
 
   return (
     <div className="h-full">
@@ -22,10 +29,12 @@ const Home = () => {
         <Container className="pr-2">
           <Title>
             거래량 순위
-            <span className="text-xs text-slate-600 ml-2">한국투자증권 기준</span>
+            <span className="text-sm text-slate-600 ml-2">
+              한국투자증권 기준
+            </span>
           </Title>
           <Content className="pr-6">
-            <TradingRanking />
+            <TopStocks />
           </Content>
         </Container>
         <Container>
@@ -63,7 +72,7 @@ const Container = (props: BAaProps) => {
 
 const Title = (props: BAaProps) => {
   const { children } = props;
-  return <h2 className="text-base font-bold text-[22px] mb-4">{children}</h2>;
+  return <h2 className="text-lg font-bold mb-4">{children}</h2>;
 };
 
 const Content = (props: BAaProps) => {

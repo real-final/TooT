@@ -2,10 +2,11 @@ import { useState } from "react";
 import ChatList from "./ChatList";
 import Guide from "./Guide";
 import Input from "./input/Input";
+import type { Ibubble } from "../../interface/Ibubble";
 
 const Chat = () => {
-  const [bubbles, setBubbles] = useState<string[]>([]);
-  const addBubble = (bubble:string) => {
+  const [bubbles, setBubbles] = useState<Ibubble[]>([]);
+  const addBubble = (bubble:Ibubble) => {
     setBubbles(bubbles => [...bubbles, bubble]);
   };
   return (

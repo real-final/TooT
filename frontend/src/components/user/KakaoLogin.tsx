@@ -1,13 +1,10 @@
 import kakao_login_logo from "./../../assets/images/kakao_login/ko/kakao_login_large_wide.png";
 
-const REST_API_KEY = "d1fc52f81b5a4dd2f6ae29b5fb7d6932";
-const REDIRECT_URI = "http://localhost:3000";
-
 interface KaKaoButtonProps {
   onClick: () => void;
 }
 
-/** 카카오 로그인 버튼 */
+/** 카카오 로그인 버튼 UI */
 const KaKaoButton: React.FC<KaKaoButtonProps> = ({ onClick }) => {
   return (
     <button onClick={onClick}>
@@ -18,6 +15,9 @@ const KaKaoButton: React.FC<KaKaoButtonProps> = ({ onClick }) => {
 
 /** 버튼 클릭 후 카카오 로그인 화면 이동 */
 const handleLoginClick = () => {
+  const REST_API_KEY = "d1fc52f81b5a4dd2f6ae29b5fb7d6932";
+  const REDIRECT_URI = "http://localhost:3000";
+
   const authUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
   window.location.href = authUrl;
 };

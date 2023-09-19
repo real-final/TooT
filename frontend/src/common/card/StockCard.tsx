@@ -1,41 +1,76 @@
-import { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "./Card";
+import { getStockStyle } from "../../utils/getStockStyle";
 
-const StockCard = () => {
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+
+type Item = {
+  id: string;
+  name: string;
+  price: string;
+  difference: string;
+  percentage: string;
+};
+
+type StockCardProps = {
+  item?: Item; // 나중에 optional modifier("?") 지워야함!!!!!
+};
+
+/** 주식종목 카드 */
+const StockCard: React.FC<StockCardProps> = ({ item }) => {
+  const navigate = useNavigate();
+
+  const { textColor, icon } = getStockStyle(item?.percentage as string);
+
+  const handleCardClick = () => {
+    navigate(`/stock/${item?.id}`);
+  };
+
   return (
-    <div className="w-[180px] h-fit">
+    <button className="w-[180px]" onClick={handleCardClick}>
       <Card>
-        <CardContent>
-          <div className="flex justify-between">
-            <div className="flex">
-              <p className="text-xs text-slate-500 mr-2">001230</p>
-              <p className="text-xs text-slate-500">코스피200</p>
-            </div>
-            <div>
-              <div className="text-red-600">❤</div>
-            </div>
+        <div className="h-full flex flex-col justify-between relative">
+          <LikeButton />
+          <div className="flex items-start">
+            <p className="text-xs text-slate-500 mr-2">{item?.id}</p>
+            <p className="text-xs text-slate-500">코스피200</p>
           </div>
-          <div>
-            <h2 className="text-sm font-medium">삼성전자</h2>
+          <div className="flex items-start">
+            <h2 className="text-sm">{item?.name}</h2>
           </div>
           <div className="flex items-center">
-            <p className="text-base mr-2 text-red-500">100,000</p>
-            <p className="text-xs text-center text-red-500">▲200(+0.30%)</p>
+            <p className={"text-lg mr-2 " + textColor}>{item?.price}</p>
+            <p className={"text-xs text-center " + textColor}>
+              {icon} {item?.difference}({item?.percentage}%)
+            </p>
           </div>
-        </CardContent>
+        </div>
       </Card>
-    </div>
+    </button>
   );
 };
 
 export default StockCard;
 
-interface BAaProps {
-  children: ReactNode;
-  className?: string;
-}
+/** 좋아요 버튼 */
+const LikeButton: React.FC = () => {
+  const handleLikeButtonClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+  };
 
-const CardContent = (props: BAaProps) => {
-  const { children } = props;
-  return <div className="h-full flex flex-col justify-between">{children}</div>;
+  return (
+    <FontAwesomeIcon
+      onClick={handleLikeButtonClick}
+      icon={faHeart}
+      style={{
+        color: "#b0b0b0",
+        width: "15px",
+        height: "15px",
+        position: "absolute",
+        top: "0",
+        right: "0",
+      }}
+    />
+  );
 };
