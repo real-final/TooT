@@ -13,7 +13,7 @@ public enum ErrorCode {
     /* 409 : CONFLICT : Resource의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
 
 
-    KIS_TOKEN_REQUEST_FAILED(HttpStatus.BAD_REQUEST, "881");
+    KIS_TOKEN_REQUEST_FAILED(HttpStatus.BAD_REQUEST, "881"),
 
     NOT_PROVIDED_PROVIDER(HttpStatus.BAD_REQUEST, "999"),
     REDIS_NOT_SAVED(HttpStatus.CONFLICT, "998"), //레디스 저장 중 문제 발생.
