@@ -38,7 +38,7 @@ import org.apache.http.message.BasicNameValuePair;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class KakaoLoginService {
+public class  KakaoLoginService {
 
     private final InMemoryClientRegistrationRepository inMemoryRepository;
     private final UserRepository userRepository;

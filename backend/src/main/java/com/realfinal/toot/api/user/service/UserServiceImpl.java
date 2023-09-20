@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 log.info("UserServiceImpl_login_mid: failed to login");
             }
             assert loginRes != null;
-            log.info("UserServiceImpl_login_end: " + loginRes.toString());
+            log.info("UserServiceImpl_login_end: " + loginRes);
             return loginRes;
         }
         throw new NotProvidedProviderException();
@@ -68,15 +68,12 @@ public class UserServiceImpl implements UserService {
     /**
      * 로그아웃. 토큰 삭제
      *
-     * @param accessToken
      * @param refreshToken
      */
     @Transactional
-    public void logout(String accessToken, String refreshToken) {
-        log.info("UserServiceImpl_logout_start: " + accessToken + " " + refreshToken);
-        Long id = jwtProviderUtil.getPayload(accessToken);
-        String key = "refreshToken" + id;
-        redisUtil.deleteData(key);
+    public void logout(String refreshToken) {
+        log.info("UserServiceImpl_logout_start: " + " " + refreshToken);
+        redisUtil.deleteData(refreshToken);
         log.info("UserServiceImpl_logout_end: redis key deleted");
     }
 
@@ -102,14 +99,13 @@ public class UserServiceImpl implements UserService {
     /**
      * refresh token으로 access token 재발급
      *
-     * @param accessToken
      * @param refreshToken
      * @return 새 accesstoken
      */
     @Override
-    public String recreateAccessToken(String accessToken, String refreshToken) {
-        log.info("UserServiceImpl_recreateAccessToken_start: " + accessToken + " " + refreshToken);
-        String newAccessToken = jwtProviderUtil.recreateAccessToken(accessToken, refreshToken);
+    public String recreateAccessToken(String refreshToken) {
+        log.info("UserServiceImpl_recreateAccessToken_start: " + refreshToken);
+        String newAccessToken = jwtProviderUtil.recreateAccessToken(refreshToken);
         log.info("UserServiceImpl_recreateAccessToken_end: " + newAccessToken);
         return newAccessToken;
     }
@@ -117,7 +113,7 @@ public class UserServiceImpl implements UserService {
     /**
      * 생성된 토큰 레디스에 저장
      *
-     * @param id              토큰 멤버
+     * @param id              토큰 user
      * @param refreshJWTToken JWT refresh token
      * @param accessToken     oauth access token
      */
@@ -125,10 +121,8 @@ public class UserServiceImpl implements UserService {
     public void saveTokens(String id, String refreshJWTToken, String accessToken) {
         log.info("UserServiceImpl_saveTokens_start: " + id + " " + refreshJWTToken + " "
                 + accessToken);
-        String refreshTokenName = "refreshToken" + id;
-        String oauthTokenName = "oauthToken" + id;
-        redisUtil.setDataExpire(refreshTokenName, refreshJWTToken, 1209600000);
-        redisUtil.setDataExpire(oauthTokenName, accessToken, 31536000);
+        redisUtil.setDataExpire(refreshJWTToken, id, 1209600000);
+        redisUtil.setDataExpire(accessToken, id, 31536000);
         log.info("UserServiceImpl_saveTokens_end: token saved");
     }
 }

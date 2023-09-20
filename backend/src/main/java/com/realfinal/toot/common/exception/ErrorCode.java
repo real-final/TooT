@@ -13,7 +13,6 @@ public enum ErrorCode {
     /* 409 : CONFLICT : Resource의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
 
     /////// 예시 - 이렇게 작성하시면 됩니다.
-    UN_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
     NOT_PROVIDED_PROVIDER(HttpStatus.BAD_REQUEST, "999"),
     REDIS_NOT_SAVED(HttpStatus.CONFLICT, "998"), //레디스 저장 중 문제 발생.
     TOKEN_CREATE_FAILED(HttpStatus.CONFLICT, "997"),

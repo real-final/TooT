@@ -156,22 +156,19 @@ public class JwtProviderUtil {
     /**
      * access token 재발급
      *
-     * @param accessToken  만료된 토큰 (userId 추출 위해 사용)
      * @param refreshToken 레디스에 저장된 토큰. 확인 후 access token 재발급 시 사용
      * @return 새로 발급된 access token
      */
-    public String recreateAccessToken(String accessToken, String refreshToken) {
-        log.info("JwtProviderUtil_recreateAccessToken_start: " + accessToken + " " + refreshToken);
+    public String recreateAccessToken(String refreshToken) {
+        log.info("JwtProviderUtil_recreateAccessToken_start: " + refreshToken);
         refreshTokenExtractor(refreshToken);
-        Long id = getPayload(accessToken);
-        String redisKey = "refreshToken" + id;
-        String data = redisUtil.getData(redisKey);
-        if (!data.equals(refreshToken)) { //리프레시도 만료된 경우.
+        String data = redisUtil.getData(refreshToken); //id
+        if (data == null) { //리프레시도 만료된 경우.
             log.info("JwtProviderUtil_recreateAccessToken_mid: refresh token expired: "
                     + refreshToken);
             throw new RefreshTokenExpiredException();
         }
-        String newAccessToken = createAccessToken(String.valueOf(id));
+        String newAccessToken = createAccessToken(data);
         log.info("JwtProviderUtil_recreateAccessToken_end: " + newAccessToken);
         return newAccessToken;
     }

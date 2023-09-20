@@ -29,7 +29,6 @@ public interface UserMapper {
             throws MapperException {
         return UserReq.builder()
                 .providerId(String.valueOf(kakaoUserInfoReq.getProviderId()))
-                .email(kakaoUserInfoReq.getEmail())
                 .name(kakaoUserInfoReq.getNickName())
                 .profileImage(kakaoUserInfoReq.getImageUrl())
                 .build();
