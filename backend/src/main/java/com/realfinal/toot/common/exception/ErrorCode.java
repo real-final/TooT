@@ -23,10 +23,9 @@ public enum ErrorCode {
     MYSQL_NO_DATA(HttpStatus.BAD_REQUEST, "994"),
     MAPPING_PROBLEM(HttpStatus.CONFLICT, "993"),
     KAKAO_PARSE_DATA(HttpStatus.BAD_REQUEST, "992"),
-    DATA_NOT_FOUND(HttpStatus.BAD_REQUEST, "991" ),
-    KAKAO_REQUEST_TOKEN(HttpStatus.BAD_REQUEST, "990")
-    ;
-
+    DATA_NOT_FOUND(HttpStatus.BAD_REQUEST, "991"),
+    KAKAO_REQUEST_TOKEN(HttpStatus.BAD_REQUEST, "990"),
+    TOKEN_NOT_IN_COOKIE(HttpStatus.BAD_REQUEST, "989");
 
 //    UNAUTHORIZED_ROLE(HttpStatus.UNAUTHORIZED, "현재 유저 권한으로는 접근할 수 없는 리소스 요청입니다."),
 
