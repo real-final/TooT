@@ -5,6 +5,7 @@ import Example from "./components/main/Example";
 import RankingContainer from "./components/ranking/RankingContainer";
 import StockDetails from "./components/stockDetails/StockDetails";
 import UserStock from "./components/user/stock/UserStock";
+import UserStockDetail from "./components/user/stockDetail/UserStockDetail";
 
 
 const Routers = () => {
@@ -14,6 +15,7 @@ const Routers = () => {
       <Route path="/stock/:stockId" element={<StockDetails />}></Route>
       <Route path="/user" element={<Example />}>
         <Route path="stock" element={<UserStock />}></Route>
+        <Route path="stock/:stockId" element={<UserStockDetail />}></Route>
       </Route>
       <Route path="/rank" element={<Example />}>
         <Route

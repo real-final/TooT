@@ -15,7 +15,7 @@ const Input = ({addBubble}: {addBubble: (bubble: Ibubble) => void}) => {
     await sendBubble(inputText, addBubble);
     await getBubble(inputText, addBubble);
     setInputText("");
-  }
+  };
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if(e.key === "Enter"){
@@ -33,7 +33,7 @@ const Input = ({addBubble}: {addBubble: (bubble: Ibubble) => void}) => {
   return (
     <div className="w-full h-9 pl-2.5 pr-1 flex items-center justify-between rounded-full bg-gray-300">
       <VoiceButton />
-      <input type="text" autoFocus value={inputText} onChange={handleInputTextChange} className="w-full h-full bg-gray-300 focus:outline-none" onKeyDown={handleKeyDown} ></input>
+      <input type="text" autoFocus value={inputText} onChange={handleInputTextChange} className="w-full h-full font-light text-[14px] bg-gray-300 focus:outline-none" onKeyDown={handleKeyDown} ></input>
       <SendButton handleSendClick={handleSendClick} />
     </div>
   );

@@ -28,7 +28,10 @@ export const getBubble = async (text:string, addBubble: (bubble: Ibubble) => voi
   await axios.post("https://clovachatbot.ncloud.com/api/chatbot/messenger/v1/11717/4341b324382837bdd4e3484b0ba438beb6f358968d0a6d09cfcacd9396c11ce6/message", sendData).then(
     (response) => { 
       console.log(response);
-      newBubble.message = response.data.content[0].data.details;
+      const data = response.data.content[0].data.details.split('|');
+      // TODO: sessionStorage 대신 다른 공간에 저장 & code switch 함수로 전달하기
+      sessionStorage.setItem('chat-code', JSON.stringify(data[0]));
+      newBubble.message = data[1];
     }).catch((err) => console.log(err));
 
   addBubble(newBubble);
