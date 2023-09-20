@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConfigurationProperties(prefix = "kis")
-@Getter
+@Data
 public class KisConfig {
   private String appKey;
   private String appSecret;
