@@ -1,14 +1,15 @@
 import UserStockItem from "./UserStockItem";
+import stockTestData from "../../../test/data/stockTestData";
+import Title from "../../../common/etc/Title";
 
 const UserStock = () => {
   return (
     <div className="w-full h-full p-8 min-h-0">
-      <div className="h-[10%] text-[36px] mb-8">보유 주식</div>
+      <Title title="보유 주식" />
       <div className="h-[90%] no-scrollbar overflow-y-auto">
-        <UserStockItem />
-        <UserStockItem />
-        <UserStockItem />
-        <UserStockItem />
+        {stockTestData.map((item, index) => (
+          <UserStockItem key={index} stock={item} index={index} />
+        ))}
       </div>
     </div>
   );
