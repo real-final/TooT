@@ -12,8 +12,19 @@ public enum ErrorCode {
     /* 404 NOT_FOUND : Resource를 찾을 수 없음 */
     /* 409 : CONFLICT : Resource의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
 
-        /////// 예시 - 이렇게 작성하시면 됩니다.
-    UN_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다.");
+    /////// 예시 - 이렇게 작성하시면 됩니다.
+    UN_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
+    NOT_PROVIDED_PROVIDER(HttpStatus.BAD_REQUEST, "999"),
+    REDIS_NOT_SAVED(HttpStatus.CONFLICT, "998"), //레디스 저장 중 문제 발생.
+    TOKEN_CREATE_FAILED(HttpStatus.CONFLICT, "997"),
+    TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "996"),
+    REDIS_NOT_DELETED(HttpStatus.BAD_REQUEST, "995"),
+    MYSQL_NO_DATA(HttpStatus.BAD_REQUEST, "994"),
+    MAPPING_PROBLEM(HttpStatus.CONFLICT, "993"),
+    KAKAO_PARSE_DATA(HttpStatus.BAD_REQUEST, "992"),
+    DATA_NOT_FOUND(HttpStatus.BAD_REQUEST, "991" ),
+    KAKAO_REQUEST_TOKEN(HttpStatus.BAD_REQUEST, "990")
+    ;
 
 //    UNAUTHORIZED_ROLE(HttpStatus.UNAUTHORIZED, "현재 유저 권한으로는 접근할 수 없는 리소스 요청입니다."),
 

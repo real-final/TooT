@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Industry extends BaseEntity{
 
-  @Column(name="name", nullable = false, length = 50)
+  @Column(name="industry_class", nullable = false, length = 50)
   private String industry_class;
 
-  @Column(name="name", nullable = false, length = 50)
+  @Column(name="wics", nullable = false, length = 50)
   private String wics;
 
 }
