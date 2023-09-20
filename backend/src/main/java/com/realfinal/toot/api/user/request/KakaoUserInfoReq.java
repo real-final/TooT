@@ -18,10 +18,6 @@ public class KakaoUserInfoReq {
         return "kakao";
     }
 
-    public String getEmail() {
-        return (String) getKakaoAccount().get("email");
-    }
-
     public String getNickName() {
         return (String) getProfile().get("nickname");
     }

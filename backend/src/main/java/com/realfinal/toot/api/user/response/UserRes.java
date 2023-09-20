@@ -1,5 +1,6 @@
 package com.realfinal.toot.api.user.response;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,24 +16,22 @@ public class UserRes {
     private Long cash;
     private String profileImage;
     private String name;
-    private String email;
     private Integer bankruptcyNo;
     private Integer resignNo;
-    private String lastQuizDate;
-    private String joinAt;
-    private String deleteAt;
+    private LocalDateTime lastQuizDate;
+    private LocalDateTime joinAt;
+    private LocalDateTime deleteAt;
 
     @Builder
     public UserRes(String providerId, Long seedMoney, Long cash, String profileImage, String name,
-            String email, Integer bankruptcyNo, Integer resignNo, String lastQuizDate,
-            String joinAt,
-            String deleteAt) {
+            Integer bankruptcyNo, Integer resignNo, LocalDateTime lastQuizDate,
+            LocalDateTime joinAt,
+            LocalDateTime deleteAt) {
         this.providerId = providerId;
         this.seedMoney = seedMoney;
         this.cash = cash;
         this.profileImage = profileImage;
         this.name = name;
-        this.email = email;
         this.bankruptcyNo = bankruptcyNo;
         this.resignNo = resignNo;
         this.lastQuizDate = lastQuizDate;

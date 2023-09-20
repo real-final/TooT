@@ -7,11 +7,11 @@ public interface UserService {
 
     LoginRes login(String code, String provider);
 
-    void logout(String accessToken, String refreshToken);
+    void logout(String refreshToken);
 
     UserRes getUserInfo(String accessToken);
 
-    String recreateAccessToken(String accessToken, String refreshToken);
+    String recreateAccessToken(String refreshToken);
 
     void saveTokens(String id, String refreshJWTToken, String accessToken);
 

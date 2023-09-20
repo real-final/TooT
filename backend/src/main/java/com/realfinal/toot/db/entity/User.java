@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import jakarta.persistence.Table;
@@ -37,10 +38,6 @@ public class User extends BaseEntity {
     @Column(name = "name")
     @NotNull
     private String name;
-    //    email          varchar(255)                       not null,
-    @Column(name = "email")
-    @NotNull
-    private String email;
     //    bankruptcy_no  int      default 0                 not null,
     @Column(name = "bankruptcy_no")
     @NotNull
@@ -51,24 +48,22 @@ public class User extends BaseEntity {
     private Integer resignNo = 0;
     //    last_quiz_date date                               null,
     @Column(name = "last_quiz_date")
-    private String lastQuizDate;
+    private LocalDateTime lastQuizDate;
     //    join_at        datetime default CURRENT_TIMESTAMP not null,
     @Column(name = "join_at", insertable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    private String joinAt;
+    private LocalDateTime joinAt;
     //    delete_at      datetime                           null
     @Column(name = "delete_at")
-    private String deleteAt;
+    private LocalDateTime deleteAt;
 
 
     @Builder
-    public User(String providerId, String profileImage, String name,
-            String email) {
+    public User(String providerId, String profileImage, String name) {
         this.providerId = providerId;
         this.profileImage = profileImage;
         this.name = name;
-        this.email = email;
 
     }
 }

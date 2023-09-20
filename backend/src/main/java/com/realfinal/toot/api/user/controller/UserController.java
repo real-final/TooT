@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final String SUCCESS = "success";
 
     /**
      * 카카오 로그인
@@ -41,22 +42,21 @@ public class UserController {
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true);
         response.addCookie(refreshTokenCookie);
-        log.info("UserController_kakaoLogin_end: " + loginRes.toString());
+        log.info("UserController_kakaoLogin_end: " + loginRes);
         return CommonResponse.success(loginRes);
     }
 
     /**
      * refresh token (JWT)로 access token 재발급
      *
-     * @param accessToken  (만료됨. id 추출용)
      * @param refreshToken (쿠키에 담긴 토큰)
      * @return 새 access token
      */
     @GetMapping("/refresh")
-    public CommonResponse<String> recreateAccessToken(@RequestBody String accessToken,
+    public CommonResponse<String> recreateAccessToken(
             @RequestHeader("refreshToken") String refreshToken) {
-        log.info("UserController_recreateAccessToken_start: " + accessToken + " " + refreshToken);
-        String newAccessToken = userService.recreateAccessToken(accessToken, refreshToken);
+        log.info("UserController_recreateAccessToken_start: " + refreshToken);
+        String newAccessToken = userService.recreateAccessToken(refreshToken);
         log.info("UserController_recreateAccessToken_end: " + newAccessToken);
         return CommonResponse.success(newAccessToken);
     }
@@ -78,16 +78,15 @@ public class UserController {
     /**
      * 로그아웃. JWT 토큰 정보 삭제
      *
-     * @param accessToken
      * @param refreshToken
      * @return "success"
      */
     @GetMapping("/logout")
-    public CommonResponse<String> logout(@RequestBody String accessToken,
+    public CommonResponse<String> logout(
             @RequestHeader("refreshToken") String refreshToken) {
-        log.info("UserController_logout_start: " + accessToken + " " + refreshToken);
-        userService.logout(accessToken, refreshToken);
+        log.info("UserController_logout_start: " + refreshToken);
+        userService.logout(refreshToken);
         log.info("UserController_logout_end: success");
-        return CommonResponse.success("success");
+        return CommonResponse.success(SUCCESS);
     }
 }
