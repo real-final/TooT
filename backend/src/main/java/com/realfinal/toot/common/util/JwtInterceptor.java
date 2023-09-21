@@ -27,7 +27,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         try {
             String requestPath = request.getRequestURI();
             log.info("JwtInterceptor_preHandle_start: " + requestPath);
-
+            log.warn(response.toString());
             if (requestPath.startsWith("/swagger-ui/") ||
                     requestPath.equals("/swagger-ui.html") ||
                     requestPath.startsWith("/v3/api-docs") ||
@@ -79,7 +79,9 @@ public class JwtInterceptor implements HandlerInterceptor {
             }
 
             // accessToken 이 유효한지 확인
-            jwtProviderUtil.validateToken(accessToken);
+            if (!"/user/refresh".equals(requestPath) && !"/user/logout".equals(requestPath)) {
+                jwtProviderUtil.validateToken(accessToken);
+            }
             log.info("JwtInterceptor_preHandle_end: true");
 
         } catch (Exception e) {

@@ -34,10 +34,10 @@ public class UserServiceImpl implements UserService {
      *
      * @param code     인가코드
      * @param provider 카카오
-     * @return 사용자 정보
+     * @return refresh token
      */
     @Override
-    public LoginRes login(String code, String provider) {
+    public String login(String code, String provider) {
         log.info("UserServiceImpl_login_start: " + code + " " + provider);
         if (provider.equals("kakao")) {
             OauthTokenRes jsonToken = kakaoLoginService.getAccessToken(code, "kakao");
@@ -46,21 +46,16 @@ public class UserServiceImpl implements UserService {
                         + jsonToken.getErrorCode() + " " + jsonToken.getErrorDescription());
                 throw new KakaoTokenRequestException();
             }
-            LoginRes loginRes = null;
-            User userInfo = kakaoLoginService.getUserProfile("kakao", jsonToken);
+            String id = kakaoLoginService.getUserProfile("kakao", jsonToken);
             try {
-                String accessToken = jwtProviderUtil.createAccessToken(
-                        String.valueOf(userInfo.getId()));
                 String refreshToken = jwtProviderUtil.createRefreshToken();
-                saveTokens(String.valueOf(userInfo.getId()), refreshToken,
+                saveTokens(id, refreshToken,
                         jsonToken.getAccessToken());
-                loginRes = UserMapper.INSTANCE.userToLoginRes(userInfo, accessToken, refreshToken);
+                return refreshToken;
             } catch (Exception e) {
                 log.info("UserServiceImpl_login_mid: failed to login");
             }
-            assert loginRes != null;
-            log.info("UserServiceImpl_login_end: " + loginRes);
-            return loginRes;
+
         }
         throw new NotProvidedProviderException();
     }
