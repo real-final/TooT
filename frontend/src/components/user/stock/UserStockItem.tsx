@@ -30,8 +30,8 @@ const UserStockItem = (
         <div className="text-[16px] text-stockGray font-light">평균단가</div>
         <div className="text-[20px] font-light text-gray-800">{stock.avgPrice.toLocaleString()}</div>
       </div>
-      <div className="col-span-1 row-span-1 text-right text-[16px] text-stockGray text-base font-light">
-        평가금
+      <div className="col-span-1 row-span-1 text-right text-stockGray text-base font-light">
+        평가액
       </div>
       <div className="col-span-1 row-span-1 flex text-base justify-between">
         <div className="text-[16px] text-stockGray font-light">수익률(손익률)</div>
