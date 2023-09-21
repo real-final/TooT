@@ -1,7 +1,7 @@
 const UserInfomation: React.FC = () => {
   let 프로필사진: string = "";
   let 이름: string = "잠자는 커비";
-  let 평가금액: string = "734,500";
+  let 평가액: string = "734,500";
   let 시드머니: string = "340,000";
   let 총자산: string = "1,047,500";
 
@@ -17,9 +17,9 @@ const UserInfomation: React.FC = () => {
       <div className="h-2/3 w-full rounded-b-lg bg-white px-12 py-4 flex flex-col justify-between">
         <div>
           <div className="flex justify-between mb-1">
-            <p className="text-slate-500">평가금액</p>
+            <p className="text-slate-500">평가액</p>
             <p>
-              <span className="text-black text-lg">{평가금액}</span>
+              <span className="text-black text-lg">{평가액}</span>
               <span>원</span>
             </p>
           </div>
