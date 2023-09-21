@@ -38,7 +38,7 @@ import org.apache.http.message.BasicNameValuePair;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class  KakaoLoginService {
+public class KakaoLoginService {
 
     private final InMemoryClientRegistrationRepository inMemoryRepository;
     private final UserRepository userRepository;
@@ -108,10 +108,9 @@ public class  KakaoLoginService {
      *
      * @param providerName  카카오
      * @param tokenResponse 토큰 정보들
-     * @return 유저 entity
      */
     @Transactional
-    public User getUserProfile(String providerName, OauthTokenRes tokenResponse) {
+    public String getUserProfile(String providerName, OauthTokenRes tokenResponse) {
         log.info("KakaoLoginService_getUserProfile_start: " + providerName + " "
                 + tokenResponse.toString());
         ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
@@ -125,7 +124,7 @@ public class  KakaoLoginService {
                 userRepository.save(userEntity);
             }
             log.info("KakaoLoginService_getUserProfile_end: " + userEntity.toString());
-            return userEntity;
+            return userEntity.getId().toString();
         }
         log.info(
                 "KakaoLoginService_getUserProfile_mid: failed to access kakao, wrong provider name");

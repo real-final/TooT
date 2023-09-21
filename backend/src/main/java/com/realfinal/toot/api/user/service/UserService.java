@@ -5,7 +5,7 @@ import com.realfinal.toot.api.user.response.UserRes;
 
 public interface UserService {
 
-    LoginRes login(String code, String provider);
+    String login(String code, String provider);
 
     void logout(String refreshToken);
 

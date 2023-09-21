@@ -35,14 +35,17 @@ public class UserController {
     public CommonResponse<?> kakaoLogin(@RequestParam String code,
             HttpServletResponse response) {
         log.info("UserController_kakaoLogin_start: " + code + " " + response.toString());
-        LoginRes loginRes = userService.login(code, "kakao");
-        Cookie refreshTokenCookie = new Cookie("refreshToken", loginRes.getRefreshToken());
+        String refreshToken = userService.login(code, "kakao");
+
+        // "refreshToken"을 쿠키에 설정
+        Cookie refreshTokenCookie = new Cookie("refreshToken",refreshToken);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true);
         response.addCookie(refreshTokenCookie);
-        log.info("UserController_kakaoLogin_end: " + loginRes);
-        return CommonResponse.success(loginRes);
+
+        log.info("UserController_kakaoLogin_end: " + refreshToken);
+        return CommonResponse.success(SUCCESS);
     }
 
     /**
@@ -52,13 +55,14 @@ public class UserController {
      * @return 새 access token
      */
     @GetMapping("/refresh")
-    public CommonResponse<String> recreateAccessToken(HttpServletRequest request) {
+    public CommonResponse<String> recreateAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = getTokenFromCookie(request);
         log.info("UserController_recreateAccessToken_start: " + refreshToken);
         String newAccessToken = userService.recreateAccessToken(refreshToken);
         log.info("UserController_recreateAccessToken_end: " + newAccessToken);
+        response.addHeader("accesstoken", newAccessToken);
 
-        return CommonResponse.success(newAccessToken);
+        return CommonResponse.success(SUCCESS);
     }
 
 
@@ -70,7 +74,7 @@ public class UserController {
      */
     @GetMapping("/userinfo")
     public CommonResponse<UserRes> getUserInfo(
-            @RequestHeader(value = "accessToken", required = false) String accessToken) {
+            @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("UserController_getUserInfo_start: " + accessToken);
         UserRes userRes = userService.getUserInfo(accessToken);
         log.info("UserController_getUserInfo_end: " + userRes.toString());

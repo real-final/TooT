@@ -21,8 +21,7 @@ public interface UserMapper {
 
     User userReqToUser(UserReq userReq) throws MapperException;
 
-    @Mapping(target = "imageUrl", source = "user.profileImage")
-    LoginRes userToLoginRes(User user, String accessToken, String refreshToken)
+    LoginRes userToLoginRes(String accessToken, String refreshToken)
             throws MapperException;
 
     default UserReq kakaoUserInfoReqToUserReq(KakaoUserInfoReq kakaoUserInfoReq)
