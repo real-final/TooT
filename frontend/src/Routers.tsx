@@ -8,6 +8,7 @@ import UserStock from "./components/user/stock/UserStock";
 import UserStockDetail from "./components/user/stockDetail/UserStockDetail";
 import Bankrupt from "./components/user/bankrupt/Bankrupt";
 import BankruptDetail from "./components/user/bankrupt/BankruptDetail";
+import UserTrade from "./components/user/trade/UserTrade";
 
 const Routers = () => {
   return (
@@ -20,6 +21,7 @@ const Routers = () => {
         <Route path="stock/:stockId" element={<UserStockDetail />}></Route>
         <Route path="bankrupt/:userId" element={<Bankrupt />}></Route>
         <Route path="bankrupt/:userId/:index" element={<BankruptDetail />}></Route>
+        <Route path="trade" element={<UserTrade />}></Route>
       </Route>
       <Route path="/rank" element={<Example />}>
         <Route
