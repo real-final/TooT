@@ -13,7 +13,7 @@ const UserStockTrade = ({index, trade, isName}: {index:number, trade:IstockTrade
       >
         {trade.type ? "매수" : "매도"}
       </div>
-      {isName ? <div className="col-span-1 flex items-center font-normal">{trade.name}</div> : null}
+      {isName ? <div className="col-span-1 flex items-center font-normal">{trade.name}</div> : <div className="col-span-1"></div>}
       <div className="col-span-1 text-stockGray flex items-center">거래 수량</div>
       <div className="col-span-1 flex items-center text-gray-800 font-light text-lg">
         {trade.share.toLocaleString()}
