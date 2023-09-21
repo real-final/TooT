@@ -17,7 +17,7 @@ public class RedisUtil {
     private final StringRedisTemplate stringRedisTemplate;
 
     /**
-     * 토큰 레디스에서 가져요기
+     * 토큰 레디스에서 가져요기. 없을 경우 null return
      *
      * @param key redis 키 ("token 분류" + userId)
      * @return 값 (토큰)
