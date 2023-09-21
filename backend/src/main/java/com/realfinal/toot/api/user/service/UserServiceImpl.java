@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
      * 로그인 메서드. provider로 분기.
      *
      * @param code     인가코드
-     * @param provider
+     * @param provider 카카오
      * @return 사용자 정보
      */
     @Override
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     /**
      * 로그아웃. 토큰 삭제
      *
-     * @param refreshToken
+     * @param refreshToken refreshToken
      */
     @Transactional
     public void logout(String refreshToken) {
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     /**
      * 유저 정보 조회. access token으로 확인. 유효하지 않으면 에러.
      *
-     * @param accessToken
+     * @param accessToken accessToken
      * @return 유저 정보
      */
     @Override
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
     /**
      * refresh token으로 access token 재발급
      *
-     * @param refreshToken
+     * @param refreshToken refreshToken
      * @return 새 accesstoken
      */
     @Override
@@ -125,4 +125,20 @@ public class UserServiceImpl implements UserService {
         redisUtil.setDataExpire(accessToken, id, 31536000);
         log.info("UserServiceImpl_saveTokens_end: token saved");
     }
+
+    /**
+     * 인터셉터에서 로그인 된 사용자인지 확인. 쿠키에 있는 refresh token과 redis에 있는  refresh token이 같은건지 확인
+     *
+     * @param refreshToken 리프레시 토큰
+     * @return 결과가 로그아웃이다 판단하면 true, 로그인 된 상태면 false
+     */
+    @Override
+    public boolean isLogout(String refreshToken) {
+        log.info("UserServiceImpl_isLogout_start: " + refreshToken);
+        String data = redisUtil.getData(refreshToken);
+        log.info("UserServiceImpl_isLogout_end: isLogout?" + (data == null));
+        return data == null;
+    }
+
+
 }

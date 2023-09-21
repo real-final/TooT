@@ -13,10 +13,11 @@ public enum ErrorCode {
     /* 409 : CONFLICT : Resource의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
 
 
+    UNEXPECTED_ERROR(HttpStatus.BAD_REQUEST, "0"),
     KIS_TOKEN_REQUEST_FAILED(HttpStatus.BAD_REQUEST, "881"),
 
     NOT_PROVIDED_PROVIDER(HttpStatus.BAD_REQUEST, "999"),
-    REDIS_NOT_SAVED(HttpStatus.CONFLICT, "998"), //레디스 저장 중 문제 발생.
+    REDIS_NOT_SAVED(HttpStatus.CONFLICT, "998"), //레디스 저장 중 문제 발생.,
     TOKEN_CREATE_FAILED(HttpStatus.CONFLICT, "997"),
     TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "996"),
     REDIS_NOT_DELETED(HttpStatus.BAD_REQUEST, "995"),
@@ -25,7 +26,8 @@ public enum ErrorCode {
     KAKAO_PARSE_DATA(HttpStatus.BAD_REQUEST, "992"),
     DATA_NOT_FOUND(HttpStatus.BAD_REQUEST, "991"),
     KAKAO_REQUEST_TOKEN(HttpStatus.BAD_REQUEST, "990"),
-    TOKEN_NOT_IN_COOKIE(HttpStatus.BAD_REQUEST, "989");
+    TOKEN_NOT_IN_COOKIE(HttpStatus.BAD_REQUEST, "989"),
+    NOT_LOGINED(HttpStatus.BAD_REQUEST, "1000");
 
 //    UNAUTHORIZED_ROLE(HttpStatus.UNAUTHORIZED, "현재 유저 권한으로는 접근할 수 없는 리소스 요청입니다."),
 

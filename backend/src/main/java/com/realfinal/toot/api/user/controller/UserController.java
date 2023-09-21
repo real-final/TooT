@@ -3,7 +3,6 @@ package com.realfinal.toot.api.user.controller;
 import com.realfinal.toot.api.user.response.LoginRes;
 import com.realfinal.toot.api.user.response.UserRes;
 import com.realfinal.toot.api.user.service.UserService;
-import com.realfinal.toot.common.exception.user.NoRefreshTokenInCookieException;
 import com.realfinal.toot.common.model.CommonResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,16 +10,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
-@RestController
-@RequestMapping("/user")
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@RequestMapping("/user")
+@RestController
 public class UserController {
 
     private final UserService userService;
@@ -55,22 +53,7 @@ public class UserController {
      */
     @GetMapping("/refresh")
     public CommonResponse<String> recreateAccessToken(HttpServletRequest request) {
-        String refreshToken = null;
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("refreshToken".equals(cookie.getName())) {
-                    refreshToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        if (refreshToken == null) {
-            throw new NoRefreshTokenInCookieException();
-        }
-
+        String refreshToken = getTokenFromCookie(request);
         log.info("UserController_recreateAccessToken_start: " + refreshToken);
         String newAccessToken = userService.recreateAccessToken(refreshToken);
         log.info("UserController_recreateAccessToken_end: " + newAccessToken);
@@ -86,7 +69,8 @@ public class UserController {
      * @return 사용자 정보
      */
     @GetMapping("/userinfo")
-    public CommonResponse<UserRes> getUserInfo(@RequestBody String accessToken) {
+    public CommonResponse<UserRes> getUserInfo(
+            @RequestHeader(value = "accessToken", required = false) String accessToken) {
         log.info("UserController_getUserInfo_start: " + accessToken);
         UserRes userRes = userService.getUserInfo(accessToken);
         log.info("UserController_getUserInfo_end: " + userRes.toString());
@@ -100,9 +84,34 @@ public class UserController {
      * @return "success"
      */
     @GetMapping("/logout")
-    public CommonResponse<String> logout(HttpServletRequest request) {
+    public CommonResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = getTokenFromCookie(request);
+        log.info("UserController_logout_start: " + refreshToken);
+        userService.logout(refreshToken);
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setMaxAge(0); // 쿠키 삭제
+                cookie.setPath("/"); // 이 경로에 설정된 쿠키를 삭제
+                response.addCookie(cookie); // 응답에 쿠키를 다시 추가
+            }
+        }
+
+        log.info("UserController_logout_end: success");
+        return CommonResponse.success(SUCCESS);
+    }
+
+    /**
+     * request에서 쿠키에서 refreshtoken 추출
+     *
+     * @param request 쿠키 정보 위해.
+     * @return refresh token
+     */
+    private String getTokenFromCookie(HttpServletRequest request) {
         String refreshToken = null;
 
+        log.info("UserController_getTokenFromCookie_start: " + request.toString());
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -112,13 +121,8 @@ public class UserController {
                 }
             }
         }
-
-        if (refreshToken == null) {
-            throw new NoRefreshTokenInCookieException();
-        }
-        log.info("UserController_logout_start: " + refreshToken);
-        userService.logout(refreshToken);
-        log.info("UserController_logout_end: success");
-        return CommonResponse.success(SUCCESS);
+        log.info("UserController_getTokenFromCookie_end: " + refreshToken);
+        return refreshToken;
     }
 }
+

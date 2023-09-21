@@ -3,6 +3,7 @@ package com.realfinal.toot.common.util;
 import com.realfinal.toot.common.exception.user.CreateTokenException;
 import com.realfinal.toot.common.exception.user.EmptyTokenException;
 import com.realfinal.toot.common.exception.user.ExpiredTokenException;
+import com.realfinal.toot.common.exception.user.InvalidTokenException;
 import com.realfinal.toot.common.exception.user.RefreshTokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,6 +12,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.nio.charset.StandardCharsets;
+import java.rmi.UnexpectedException;
 import java.util.Date;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -111,6 +113,8 @@ public class JwtProviderUtil {
             return payload;
         } catch (JwtException e) {
             throw new ExpiredTokenException();
+        } catch (Exception e) {
+            throw new InvalidTokenException();
         }
     }
 
@@ -130,9 +134,12 @@ public class JwtProviderUtil {
             Boolean result = !claimsJws.getBody().getExpiration().before(new Date());
             log.info("JwtProviderUtil_validateToken_end: " + result);
             return result;
-        } catch (JwtException | IllegalArgumentException exception) {
+        } catch (ExpiredJwtException exception) {
             log.info("JwtProviderUtil_validateToken_end: " + false);
             return false;
+        } catch (Exception e){
+            log.warn("JwtProviderUtil_validateToken_end: unexpected Exception occured");
+            throw new UnexpecteTokenException();
         }
     }
 
