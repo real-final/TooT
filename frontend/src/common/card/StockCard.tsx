@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import Card from "./Card";
 import { getStockStyle } from "../../utils/getStockStyle";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import Card from "./Card";
+
+import IconButton from "@mui/joy/IconButton";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 
 type Item = {
   id: string;
@@ -14,7 +15,7 @@ type Item = {
 };
 
 type StockCardProps = {
-  item?: Item; // 나중에 optional modifier("?") 지워야함!!!!!
+  item?: Item; // TODO: 나중에 optional modifier("?") 지워야함!!!!!
 };
 
 /** 주식종목 카드 */
@@ -28,8 +29,8 @@ const StockCard: React.FC<StockCardProps> = ({ item }) => {
   };
 
   return (
-    <button className="w-[180px]" onClick={handleCardClick}>
-      <Card>
+    <div className="w-[198px]" onClick={handleCardClick}>
+      <Card className="hover:cursor-pointer">
         <div className="h-full flex flex-col justify-between relative">
           <LikeButton />
           <div className="flex items-start">
@@ -37,17 +38,17 @@ const StockCard: React.FC<StockCardProps> = ({ item }) => {
             <p className="text-xs text-slate-500">코스피200</p>
           </div>
           <div className="flex items-start">
-            <h2 className="text-sm">{item?.name}</h2>
+            <h2 className="text-md">{item?.name}</h2>
           </div>
           <div className="flex items-center">
-            <p className={"text-lg mr-2 " + textColor}>{item?.price}</p>
+            <p className={"text-xl mr-2 " + textColor}>{item?.price}</p>
             <p className={"text-xs text-center " + textColor}>
               {icon} {item?.difference}({item?.percentage}%)
             </p>
           </div>
         </div>
       </Card>
-    </button>
+    </div>
   );
 };
 
@@ -60,17 +61,20 @@ const LikeButton: React.FC = () => {
   };
 
   return (
-    <FontAwesomeIcon
+    <IconButton
       onClick={handleLikeButtonClick}
-      icon={faHeart}
+      color="neutral"
+      variant="plain"
+      sx={{
+        "--IconButton-size": "20px",
+      }}
       style={{
-        color: "#b0b0b0",
-        width: "15px",
-        height: "15px",
         position: "absolute",
         top: "0",
         right: "0",
       }}
-    />
+    >
+      <FavoriteBorder fontSize="small" />
+    </IconButton>
   );
 };

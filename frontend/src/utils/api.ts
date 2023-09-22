@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const REACT_APP_SERVER = "http://localhost:8080";
+// const REACT_APP_SERVER = "http://localhost:8080";
+// const REACT_APP_SERVER = "http://70.12.247.88:8080";
+const REACT_APP_SERVER = "https://too-t.com/api";
 
 const SIGNATURE = "WVVKWnlJRmFMSUFtalBPWlRqUFN2WXlPRUluSUtZVUc=";
 const STAGE = "v1";

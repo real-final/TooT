@@ -1,10 +1,6 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import { getStockStyle } from "../../utils/getStockStyle";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { getStockStyle } from "../../utils/getStockStyle";
 
 function createData(
   ranking: string,
@@ -28,38 +24,37 @@ const TopStocks: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="overflow-hidden">
-      <Table size="small" aria-label="a dense table">
-        <TableBody>
-          {rows.map((row) => {
-            const { textColor, icon } = getStockStyle(row.percentage);
-
-            const handleTableRowClick = () => {
-              navigate(`/stock/${row.id}`);
-            };
-            return (
-              <TableRow
-                key={row.name}
-                onClick={handleTableRowClick}
-                className="hover:cursor-pointer"
-              >
-                <TableCell align="left">
-                  <span className="text-slate-500">{row.ranking}</span>
-                </TableCell>
-                <TableCell align="left">{row.name}</TableCell>
-                <TableCell align="right">{row.price}</TableCell>
-                <TableCell>
-                  <p className={textColor + " flex items-center justify-end"}>
-                    <span className="text-[10px]">{icon}</span>&nbsp;
-                    {row.percentage}%
-                  </p>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+    <table className="w-full h-full overflow-hidden">
+      <tbody>
+        {rows.map((row) => {
+          const { textColor, icon } = getStockStyle(row.percentage);
+          const handleTableRowClick = () => navigate(`/stock/${row.id}`);
+          return (
+            <tr
+              key={row.name}
+              onClick={handleTableRowClick}
+              className="hover:cursor-pointer"
+            >
+              <td align="left" className="w-1/12">
+                <span className="text-slate-500">{row.ranking}</span>
+              </td>
+              <td align="left" className="w-4/12">
+                {row.name}
+              </td>
+              <td align="right" className="w-4/12">
+                {row.price}
+              </td>
+              <td className="w-3/12">
+                <p className={textColor + " flex items-center justify-end"}>
+                  <span className="text-[10px]">{icon}</span>&nbsp;
+                  {row.percentage}%
+                </p>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
 

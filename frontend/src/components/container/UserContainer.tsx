@@ -1,13 +1,11 @@
-import KakaoLogin from "./../user/KakaoLogin";
-import Authentication from "../user/Authentication";
-import UserInfomation from "../user/UserInfomation";
+import KakaoLogin from "./../user/login/KakaoLogin";
+import UserInfomation from "../user/login/UserInfomation";
 import { useIsSignedIn } from "../../hooks/useIsSignedIn";
 
 const UserContainer = () => {
   let isSigned = useIsSignedIn();
   return (
     <div className="col-span-1 row-span-1 drop-shadow-lg">
-      <Authentication />
       {isSigned ? <UserInfomation /> : <KakaoLogin />}
     </div>
   );

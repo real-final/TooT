@@ -7,12 +7,12 @@ import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 import Input from "@mui/joy/Input";
 
-interface SellModalProps {
+interface IsellModal {
   sellModalOpen: boolean;
   setSellModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SellModal: React.FC<SellModalProps> = ({
+const SellModal: React.FC<IsellModal> = ({
   sellModalOpen: sellModalopen,
   setSellModalOpen,
 }) => {

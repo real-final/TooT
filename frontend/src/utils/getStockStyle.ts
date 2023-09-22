@@ -7,7 +7,7 @@
 export const getStockStyle = (value: string): { textColor: string; icon: string } => {
   let num = parseFloat(value);
   let textColor = "text-slate-500";
-  let icon = "―";
+  let icon = "";
 
   if (num > 0) {
     textColor = "text-red-500";
