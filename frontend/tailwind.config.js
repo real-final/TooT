@@ -3,6 +3,10 @@ module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        'quiz': "url(/src/assets/images/quiz_paper.jpg)",
+        'money': "url(/src/assets/images/money_background.jpg)",
+      },
       colors: {
         "main": "#93C1F2",
         "point": "#FFDD9C",

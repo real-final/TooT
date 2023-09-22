@@ -2,7 +2,7 @@ import { useState } from "react";
 import VoiceButton from "./VoiceButton";
 import SendButton from "./SendButton";
 import type { Ibubble } from "../../../interface/Ibubble";
-import { getBubble, sendBubble } from "../../../utils/chat";
+import { getBubble, sendBubble } from "../../../utils/chat/chat";
 
 const Input = ({addBubble}: {addBubble: (bubble: Ibubble) => void}) => {
   const [inputText, setInputText] = useState<string>("");

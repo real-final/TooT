@@ -6,7 +6,8 @@ import stockTradeTestData from "../../../test/data/stockTradeTestData";
 import UserStockTrade from "../UserStockTrade";
 
 const UserStockDetail = () => {
-  const { stockId } = useParams<{ stockId: string }>();
+  // TODO: stockId(종목코드)로 바꾸기
+  const { stockName } = useParams<{ stockName: string }>();
   const location = useLocation();
   // TODO: 임시로 연결한 데이터라 유저 상세 주식 조회 페이지에 들어온 후 stock.code(stockId)를 가지고 다시 백엔드에서 주식 정보 가져와야함
   const stock = location.state.stock;

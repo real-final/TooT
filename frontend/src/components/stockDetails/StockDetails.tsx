@@ -2,10 +2,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 import StockCard from "../../common/card/StockCard";
-import BuyModal from "./tradeModals/BuyModal";
-import SellModal from "./tradeModals/SellModal";
+import BuyModal from "./TradeModals/BuyModal";
+import SellModal from "./TradeModals/SellModal";
 import StockChart from "./stockChart/StockChart";
-import StockInfoTabs from "./stockInfoTabs/StockInfoTabs";
+import StockInfoTabs from "./StockInfoTabs/StockInfoTabs";
 import FavoriteItemsCarousel from "../main/FavoriteItemsCarousel";
 
 import Button from "@mui/joy/Button";
