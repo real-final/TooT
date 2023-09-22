@@ -1,4 +1,4 @@
-import { ItemOverviewHeader } from "./StockInfoTabs";
+import { ItemOverviewHeader } from "./StockInformationTabs";
 
 /** 상세조회 페이지 재무정보 */
 const ItemFinancialDetails: React.FC = () => {

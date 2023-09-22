@@ -1,17 +1,16 @@
 import { ReactNode } from "react";
-import StockCard from "../../common/card/StockCard";
 import TopStocks from "./TopStocks";
 import Ranking from "../ranking/Ranking";
 import FavoriteItemsCarousel from "./FavoriteItemsCarousel";
 
 const Home: React.FC = () => {
-  let item = {
-    id: "001230",
-    name: "삼성전자",
-    price: "100,000",
-    difference: "200",
-    percentage: "-0.80",
-  };
+  // let item = {
+  //   id: "001230",
+  //   name: "삼성전자",
+  //   price: "100,000",
+  //   difference: "200",
+  //   percentage: "-0.80",
+  // };
   // let items = Array(10).fill(<StockCard item={item} />);
   let items = Array(0);
 

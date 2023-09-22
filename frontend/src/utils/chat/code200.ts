@@ -4,7 +4,7 @@ import { IResponseStockData } from "../../interface/IResponseStockData";
 export const code200 = (stock:IResponseStockData) => {
   switch(stock.code){
     case 201:
-      console.log(stock.name + " " + stock.share +"주 " + "매수");
+      console.log(stock.name + " " + stock.share +"주 매수");
       break;
     case 202:
       break;
