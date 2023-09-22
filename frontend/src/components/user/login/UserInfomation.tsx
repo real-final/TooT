@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { UserAuthContext } from "../../../App";
-import { Idata } from "../../../interface/IauthUserContext";
+import { IuserInfo } from "../../../interface/IauthUserContext";
 
 import Avatar from "@mui/joy/Avatar";
 
 const UserInfomation: React.FC = () => {
   const userAuthContext = useContext(UserAuthContext);
   // console.log(userAuthContext?.userInfo)
-  const userInfo = userAuthContext?.userInfo?.data as Idata;
+  const userInfo = userAuthContext?.userInfo as IuserInfo;
 
   return (
     <div className="h-full overflow-hidden">
@@ -18,7 +18,7 @@ const UserInfomation: React.FC = () => {
           size="lg"
           sx={{ mr: 2 }}
         />
-        <p className="text-2xl font-semibold">{userInfo.name} 개미님</p>
+        <p className="text-2xl font-semibold">{userInfo.name}님</p>
       </div>
       <div className="h-2/3 w-full rounded-b-lg bg-white px-10 py-4 flex flex-col justify-between">
         <div>

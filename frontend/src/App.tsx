@@ -9,9 +9,12 @@ import CustomCircularProgress from "./common/circularProgress/CustomCircularProg
 
 import { IuserAuthContext } from "./interface/IauthUserContext";
 
+/** 유저정보 & 토큰관리용 ContextAPI */
+export const UserAuthContext = createContext<IuserAuthContext | undefined>(
+  undefined
+);
+
 function App() {
-  // 브라우저 URL Parameter에서 Kakao 인증 코드 읽기
-  // const code = useGetSearchParam("code");
   // 유저정보 & Access 토큰 요청하기
   const { data: contextData, isLoading } = useQuery(
     "userAuthData",
@@ -30,8 +33,3 @@ function App() {
 }
 
 export default App;
-
-/** 유저정보 & access토큰 관리용 ContextAPI */
-export const UserAuthContext = createContext<IuserAuthContext | undefined>(
-  undefined
-);

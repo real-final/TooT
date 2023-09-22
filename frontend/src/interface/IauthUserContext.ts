@@ -1,4 +1,4 @@
-export interface Idata {
+export interface IuserInfo {
   bankruptcyNo: number;
   cash: number;
   deleteAt: null | string; // 또는 deleteAt: any;로 설정할 수 있습니다.
@@ -11,9 +11,9 @@ export interface Idata {
   seedMoney: number;
 }
 
-interface IuserInfo {
+export interface Idata {
   success?: boolean;
-  data?: Idata;
+  data?: IuserInfo;
   error?: null | string; // 에러 메시지의 형식을 모르므로 null 또는 문자열로 추정합니다.
 }
 
