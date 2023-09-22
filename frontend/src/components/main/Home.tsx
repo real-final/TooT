@@ -1,9 +1,8 @@
 import { ReactNode } from "react";
 import StockCard from "../../common/card/StockCard";
-import Carousel from "../../common/carousel/Carousel";
 import TopStocks from "./TopStocks";
 import Ranking from "../ranking/Ranking";
-
+import FavoriteItemsCarousel from "./FavoriteItemsCarousel";
 
 const Home: React.FC = () => {
   let item = {
@@ -13,17 +12,14 @@ const Home: React.FC = () => {
     difference: "200",
     percentage: "-0.80",
   };
-  let items = Array(10).fill(<StockCard item={item} />);
+  // let items = Array(10).fill(<StockCard item={item} />);
+  let items = Array(0);
 
   return (
     <div className="h-full">
-      <div className="h-1/5 flex p-6 items-start bg-slate-200 rounded-t-lg">
-        <Container>
-          {/* <Title>관심 종목</Title> */}
-          <Content className="flex">
-            <Carousel items={items} />
-          </Content>
-        </Container>
+      {/* 좋아요 종목 캐러셀 */}
+      <div className="h-1/5">
+        <FavoriteItemsCarousel items={items} />
       </div>
       <div className="h-2/5 flex px-6 pt-6">
         <Container className="pr-2">
@@ -60,22 +56,22 @@ const Home: React.FC = () => {
 
 export default Home;
 
-interface BAaProps {
+interface Icontainer {
   children: ReactNode;
   className?: string;
 }
 
-const Container = (props: BAaProps) => {
+const Container = (props: Icontainer) => {
   const { children } = props;
   return <div className="flex flex-col flex-1 overflow-hidden">{children}</div>;
 };
 
-const Title = (props: BAaProps) => {
+const Title = (props: Icontainer) => {
   const { children } = props;
   return <h2 className="text-lg font-bold mb-4">{children}</h2>;
 };
 
-const Content = (props: BAaProps) => {
+const Content = (props: Icontainer) => {
   const { children, className } = props;
   const combinedClassName = "flex-grow " + (className || "");
   return <div className={combinedClassName}>{children}</div>;

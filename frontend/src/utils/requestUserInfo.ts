@@ -3,10 +3,10 @@ import { api } from "./api";
 /** 서버로 사용자정보 요청 */
 export const requestUserInfo = async (accessToken: string) => {
   try {
-    let response = await api<object>({
-      method: "get",
-      url: `/${"사용자정보 요청url"}`,
-      data: accessToken,
+    let response = await api.get<object>("/user/userinfo", {
+      headers: {
+        accesstoken: accessToken,
+      },
     });
     if (response?.data) {
       return response.data;
