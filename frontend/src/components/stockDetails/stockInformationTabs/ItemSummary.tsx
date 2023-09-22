@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ItemOverviewHeader } from "./StockInfoTabs";
+import { ItemOverviewHeader } from "./StockInformationTabs";
 
 /** 상세조회 페이지 종목요약 */
 const ItemSummary: React.FC = () => {

@@ -2,10 +2,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 import StockCard from "../../common/card/StockCard";
-import BuyModal from "./tradeModals/BuyModal";
-import SellModal from "./tradeModals/SellModal";
+import BuyModal from "./stockTradingModals/BuyModal";
+import SellModal from "./stockTradingModals/SellModal";
 import StockChart from "./stockChart/StockChart";
-import StockInfoTabs from "./stockInfoTabs/StockInfoTabs";
+import StockInformationTabs from "./stockInformationTabs/StockInformationTabs";
 import FavoriteItemsCarousel from "../main/FavoriteItemsCarousel";
 
 import Button from "@mui/joy/Button";
@@ -49,7 +49,7 @@ const StockDetails: React.FC = () => {
             <StockChart />
           </div>
           <div className="row-span-5 col-span-1 h-full">
-            <StockInfoTabs />
+            <StockInformationTabs />
           </div>
         </div>
       </div>
