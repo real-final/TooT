@@ -1,6 +1,5 @@
 package com.realfinal.toot.api.user.controller;
 
-import com.realfinal.toot.api.user.response.LoginRes;
 import com.realfinal.toot.api.user.response.UserRes;
 import com.realfinal.toot.api.user.service.UserService;
 import com.realfinal.toot.common.model.CommonResponse;
@@ -42,6 +41,8 @@ public class UserController {
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true);
+//        String cookieValue = refreshTokenCookie.toString() + "; SameSite=None";
+//        response.setHeader("Set-Cookie", cookieValue);
         response.addCookie(refreshTokenCookie);
 
         log.info("UserController_kakaoLogin_end: " + refreshToken);

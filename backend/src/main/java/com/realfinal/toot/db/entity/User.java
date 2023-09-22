@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,7 +49,7 @@ public class User extends BaseEntity {
     private Integer resignNo = 0;
     //    last_quiz_date date                               null,
     @Column(name = "last_quiz_date")
-    private LocalDateTime lastQuizDate;
+    private LocalDate lastQuizDate;
     //    join_at        datetime default CURRENT_TIMESTAMP not null,
     @Column(name = "join_at", insertable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,10 +61,24 @@ public class User extends BaseEntity {
 
 
     @Builder
-    public User(String providerId, String profileImage, String name) {
+    public User(String providerId, Long seedMoney, Long cash, String profileImage, String name,
+            Integer bankruptcyNo, Integer resignNo, LocalDate lastQuizDate) {
         this.providerId = providerId;
+        this.seedMoney = seedMoney;
+        this.cash = cash;
         this.profileImage = profileImage;
         this.name = name;
+        this.bankruptcyNo = bankruptcyNo;
+        this.resignNo = resignNo;
+        this.lastQuizDate = lastQuizDate;
+    }
 
+    public void setLastQuizDate(LocalDate currentDate) {
+        this.lastQuizDate = currentDate;
+    }
+
+    public void updateQuizResult() {
+        this.seedMoney += 10000;
+        this.cash += 10000;
     }
 }

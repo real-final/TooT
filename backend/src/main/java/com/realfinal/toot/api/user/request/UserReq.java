@@ -12,7 +12,6 @@ public class UserReq {
     private final String name;
     private final String profileImage;
 
-
     @Builder
     public UserReq(String providerId, String name, String profileImage) {
         this.providerId = providerId;

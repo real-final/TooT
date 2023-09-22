@@ -49,6 +49,8 @@ public class JwtInterceptor implements HandlerInterceptor {
             }
 
             if (refreshToken == null) { //로그인이 필요한 상황
+                log.info(
+                        "=====================================     JWT Interceptor End     =====================================");
                 throw new NoRefreshTokenInCookieException();
             }
             //TODO ExpiredTime으로 남은 유효 기간 판단해서 만료되기 전 엑세스 토큰 재발급 (선택/자동) - 이게 금융권에서 사용하는 방법.
@@ -73,6 +75,8 @@ public class JwtInterceptor implements HandlerInterceptor {
             boolean isLogout = userService.isLogout(refreshToken);
             if (isLogout) {
                 log.info("JwtInterceptor_preHandle_mid: isLogout: true");
+                log.info(
+                        "=====================================     JWT Interceptor End     =====================================");
                 throw new NotLoginedException();
             } else {
                 log.info("JwtInterceptor_preHandle_mid: isLogout: false");

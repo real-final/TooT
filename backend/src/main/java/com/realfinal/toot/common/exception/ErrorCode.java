@@ -14,6 +14,7 @@ public enum ErrorCode {
 
 
     UNEXPECTED_ERROR(HttpStatus.BAD_REQUEST, "0"),
+    NOT_LOGINED(HttpStatus.BAD_REQUEST, "1000"),
     KIS_TOKEN_REQUEST_FAILED(HttpStatus.BAD_REQUEST, "881"),
 
     NOT_PROVIDED_PROVIDER(HttpStatus.BAD_REQUEST, "999"),
@@ -27,7 +28,8 @@ public enum ErrorCode {
     DATA_NOT_FOUND(HttpStatus.BAD_REQUEST, "991"),
     KAKAO_REQUEST_TOKEN(HttpStatus.BAD_REQUEST, "990"),
     TOKEN_NOT_IN_COOKIE(HttpStatus.BAD_REQUEST, "989"),
-    NOT_LOGINED(HttpStatus.BAD_REQUEST, "1000");
+    DATABASE_EMPTY(HttpStatus.BAD_REQUEST, "799"),
+    NO_DATA(HttpStatus.BAD_REQUEST, "798");
 
 //    UNAUTHORIZED_ROLE(HttpStatus.UNAUTHORIZED, "현재 유저 권한으로는 접근할 수 없는 리소스 요청입니다."),
 

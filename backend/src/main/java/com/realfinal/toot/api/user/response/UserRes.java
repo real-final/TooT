@@ -1,5 +1,6 @@
 package com.realfinal.toot.api.user.response;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,13 +19,13 @@ public class UserRes {
     private String name;
     private Integer bankruptcyNo;
     private Integer resignNo;
-    private LocalDateTime lastQuizDate;
+    private LocalDate lastQuizDate;
     private LocalDateTime joinAt;
     private LocalDateTime deleteAt;
 
     @Builder
     public UserRes(String providerId, Long seedMoney, Long cash, String profileImage, String name,
-            Integer bankruptcyNo, Integer resignNo, LocalDateTime lastQuizDate,
+            Integer bankruptcyNo, Integer resignNo, LocalDate lastQuizDate,
             LocalDateTime joinAt,
             LocalDateTime deleteAt) {
         this.providerId = providerId;
