@@ -2,7 +2,6 @@ package com.realfinal.toot.api.user.service;
 
 
 import com.realfinal.toot.api.user.mapper.UserMapper;
-import com.realfinal.toot.api.user.response.LoginRes;
 import com.realfinal.toot.api.user.response.OauthTokenRes;
 import com.realfinal.toot.api.user.response.UserRes;
 import com.realfinal.toot.common.exception.user.InvalidTokenException;
@@ -134,6 +133,5 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl_isLogout_end: isLogout?" + (data == null));
         return data == null;
     }
-
 
 }

@@ -54,9 +54,9 @@ public class KakaoLoginService {
         log.info("KakaoLoginService_getAccessToken_start: " + authorizeCode + " " + providerName);
         // 지정된 제공자(provider)의 클라이언트 등록 정보(예: 클라이언트 ID, 클라이언트 비밀번호, 리다이렉트 URI 등)를 가져옵니다.
         ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
-// OAuth 토큰을 요청할 URL입니다.
+        // OAuth 토큰을 요청할 URL입니다.
         final String RequestUrl = "https://kauth.kakao.com/oauth/token";
-// POST 요청에 전송될 파라미터 목록을 생성합니다.
+        // POST 요청에 전송될 파라미터 목록을 생성합니다.
         final List<NameValuePair> postParams = new ArrayList<NameValuePair>();
         postParams.add(new BasicNameValuePair("grant_type", "authorization_code")); // 인증 타입을 지정합니다.
         postParams.add(new BasicNameValuePair("client_id",
@@ -102,7 +102,6 @@ public class KakaoLoginService {
         return tokenResponse;
     }
 
-
     /**
      * 토큰이랑 api 키 등으로 카카오에서 사용자 정보 받아오기
      *
@@ -123,7 +122,7 @@ public class KakaoLoginService {
                 userEntity = UserMapper.INSTANCE.userReqToUser(userReq);
                 userRepository.save(userEntity);
             }
-            log.info("KakaoLoginService_getUserProfile_end: " + userEntity.toString());
+            log.info("KakaoLoginService_getUserProfile_end: " + userEntity);
             return userEntity.getId().toString();
         }
         log.info(

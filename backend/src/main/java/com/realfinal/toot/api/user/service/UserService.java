@@ -1,6 +1,5 @@
 package com.realfinal.toot.api.user.service;
 
-import com.realfinal.toot.api.user.response.LoginRes;
 import com.realfinal.toot.api.user.response.UserRes;
 
 public interface UserService {
@@ -14,7 +13,6 @@ public interface UserService {
     String recreateAccessToken(String refreshToken);
 
     void saveTokens(String id, String refreshJWTToken, String accessToken);
-
 
     boolean isLogout(String refreshToken);
 }

@@ -5,7 +5,7 @@ import com.realfinal.toot.common.exception.user.EmptyTokenException;
 import com.realfinal.toot.common.exception.user.ExpiredTokenException;
 import com.realfinal.toot.common.exception.user.InvalidTokenException;
 import com.realfinal.toot.common.exception.user.RefreshTokenExpiredException;
-import com.realfinal.toot.common.exception.user.UnexpectedTokenException;
+import com.realfinal.toot.common.exception.user.UnexpecteTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -139,7 +139,7 @@ public class JwtProviderUtil {
             return false;
         } catch (Exception e){
             log.warn("JwtProviderUtil_validateToken_end: unexpected Exception occured");
-            throw new UnexpectedTokenException();
+            throw new UnexpecteTokenException();
         }
     }
 

@@ -30,7 +30,7 @@ public class OauthTokenRes {
     private int refreshTokenExpiresIn;
 
     @JsonProperty("id_token")
-    private String idToken;  // 추가된 필드
+    private String idToken;
 
     @JsonProperty("error")
     private String error;
