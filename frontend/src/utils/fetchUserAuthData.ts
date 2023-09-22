@@ -5,11 +5,16 @@ import { requestUserInfo } from "./requestUserInfo";
 export const fetchUserAuthData = async () => {
   // 1. Access토큰 요청
   const accessToken = await requestAccessToken();
+
   // 2. 사용자정보 요청
   if (typeof accessToken === "string") {
     const userInfo = await requestUserInfo(accessToken);
+
     // 3. Access토큰 & 사용자정보 저장
     if (userInfo && Object.keys(userInfo).length > 0) {
+      // LocalStorage에 userInfo 저장
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
       return {
         accessToken: accessToken,
         userInfo: userInfo,
