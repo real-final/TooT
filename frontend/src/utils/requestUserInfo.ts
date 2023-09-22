@@ -7,6 +7,7 @@ export const requestUserInfo = async (accessToken: string) => {
     let response = await api.get<Idata>("/user/userinfo", {
       headers: {
         accesstoken: accessToken,
+        withCredentials: true
       },
     });
     return response?.data?.data;
