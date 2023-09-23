@@ -18,9 +18,13 @@ const KakaoLogin: React.FC = () => {
     throw new Error("위치: KakaoLogin.tsx, Code is not available");
   });
 
+  // Warning: 무한루프 조심
   useEffect(() => {
-    code && mutation.mutate();
-  }, [code, mutation]);
+    if (code && !mutation.isError && !mutation.isLoading) {
+      mutation.mutate();
+    }
+  // eslint-disable-next-line
+  }, [code]);
 
   return mutation.isLoading ? (
     <LoginWaitScreen />
