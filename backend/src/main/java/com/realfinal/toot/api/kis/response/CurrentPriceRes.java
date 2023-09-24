@@ -2,8 +2,10 @@ package com.realfinal.toot.api.kis.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class CurrentPriceRes {
 
   private Output output;
@@ -25,20 +27,5 @@ public class CurrentPriceRes {
     private String pbr; // PBR
     private String w52_hgpr; // 52주 최고가
     private String w52_lwpr; // 52주 최저가
-
-    @Override
-    public String toString() {
-      return "Output{" +
-          "stck_prpr='" + stck_prpr + '\'' +
-          ", prdy_vrss='" + prdy_vrss + '\'' +
-          ", prdy_ctrt='" + prdy_ctrt + '\'' +
-          ", lstn_stcn='" + lstn_stcn + '\'' +
-          ", hts_avls='" + hts_avls + '\'' +
-          ", per='" + per + '\'' +
-          ", pbr='" + pbr + '\'' +
-          ", w52_hgpr='" + w52_hgpr + '\'' +
-          ", w52_lwpr='" + w52_lwpr + '\'' +
-          '}';
-    }
   }
 }
