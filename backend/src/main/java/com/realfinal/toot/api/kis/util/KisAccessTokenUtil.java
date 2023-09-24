@@ -10,6 +10,7 @@ import com.realfinal.toot.common.exception.kis.KisTokenRequestException;
 import com.realfinal.toot.config.KisConfig;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,50 +18,48 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class KisAccessTokenUtil {
 
-  public static String accessToken;
   private final String kisUri = "https://openapi.koreainvestment.com:9443";
   private final WebClient kisWebClient =
       WebClient
           .builder()
           .baseUrl(kisUri)
           .build();
-  private final KisTokenCreateReq kisTokenCreateReq;
+  private final KisConfig kisConfig;
 
-  @Autowired
-  public KisAccessTokenUtil(KisConfig kisConfig) {
-    this.kisTokenCreateReq = new KisTokenCreateReq(kisConfig);
-  }
+  private String accessToken;
 
-  @PostConstruct // 의존성 주입이 이루어진 후 초기화를 수행하는 메서드
+  @PostConstruct
   @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 매일 자정 토큰 발급
-  public void getAccessToken() {
+  public void init() {
 
-    KisTokenCreateRes kisTokenCreateRes = null;
-
-    // 한투에서 accesstoken 얻어오는 연결
-    String tokenResponse = kisWebClient
-          .post()
-          .uri("/oauth2/tokenP")
-          .contentType(MediaType.APPLICATION_JSON)
-          .bodyValue(kisTokenCreateReq)
-          .retrieve()
-          .bodyToMono(String.class)
-          .block();
+    KisTokenCreateReq kisTokenCreateReq = new KisTokenCreateReq(kisConfig);
 
     try{
-      // JSON 결과를 토큰 response dto로 변환
-      ObjectMapper mapper = new ObjectMapper();
-      kisTokenCreateRes = mapper.readValue(tokenResponse, KisTokenCreateRes.class);
+      // 한투에서 accesstoken 얻어오는 연결
+      KisTokenCreateRes kisTokenCreateRes = kisWebClient
+              .post()
+              .uri("/oauth2/tokenP")
+              .contentType(MediaType.APPLICATION_JSON)
+              .bodyValue(kisTokenCreateReq)
+              .retrieve()
+              .bodyToMono(KisTokenCreateRes.class)
+              .block();
 
       accessToken = kisTokenCreateRes.getAccessToken();
-    } catch (JsonProcessingException e) {
+      log.info("kis 접근 토큰 발급 완료");
+    } catch (Exception e) {
       // 요청값이 제대로 가지 않아 한투에서 거부하는 경우
       throw new KisTokenRequestException();
     }
 
+  }
+
+  public String getAccessToken() {
+    return accessToken;
   }
 }

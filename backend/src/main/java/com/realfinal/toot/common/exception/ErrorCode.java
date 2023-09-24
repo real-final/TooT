@@ -16,6 +16,8 @@ public enum ErrorCode {
     UNEXPECTED_ERROR(HttpStatus.BAD_REQUEST, "0"),
     NOT_LOGINED(HttpStatus.BAD_REQUEST, "1000"),
     KIS_TOKEN_REQUEST_FAILED(HttpStatus.BAD_REQUEST, "881"),
+    KIS_API_CALL_DENIED(HttpStatus.NOT_FOUND, "882"),
+    KIS_API_CALL_TOO_MANY(HttpStatus.INTERNAL_SERVER_ERROR, "883"),
 
     NOT_PROVIDED_PROVIDER(HttpStatus.BAD_REQUEST, "999"),
     REDIS_NOT_SAVED(HttpStatus.CONFLICT, "998"), //레디스 저장 중 문제 발생.,
