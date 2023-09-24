@@ -3,8 +3,10 @@ package com.realfinal.toot.api.kis.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class MinutePriceRes {
 
   private Output1 output1;
@@ -27,14 +29,6 @@ public class MinutePriceRes {
     private String stck_cntg_hour; // 체결 시간(HHMMSS)
     private String stck_prpr; // 현재가
     private String cntg_vol; // 체결 거래량
-
-    @Override
-    public String toString() {
-      return "Output2{" +
-          "stck_prpr='" + stck_prpr + '\'' +
-          ", cntg_vol='" + cntg_vol + '\'' +
-          '}';
-    }
   }
 
 }

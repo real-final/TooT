@@ -1,15 +1,16 @@
 package com.realfinal.toot.api.kis.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.realfinal.toot.api.kis.response.MinutePriceRes.Output1;
-import com.realfinal.toot.api.kis.response.MinutePriceRes.Output2;
 import java.util.List;
 import lombok.Getter;
+import lombok.ToString;
 
+@Getter
+@ToString
 public class PeriodPriceRes {
 
-  private MinutePriceRes.Output1 output1;
-  private List<MinutePriceRes.Output2> output2 = null;
+  private Output1 output1;
+  private List<Output2> output2 = null;
   private String corp; // 종목번호
 
   public void setCorp(String corp) {
