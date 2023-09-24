@@ -21,6 +21,7 @@ public class CurrentPriceRes {
     private String stck_prpr; // 현재가
     private String prdy_vrss; // 전일 대비 금액 변동
     private String prdy_ctrt; // 전일 대비율
+    private String acml_vol; // 누적 거래량
     private String lstn_stcn; // 상장주식수
     private String hts_avls; // 시가총액
     private String per; // PER
