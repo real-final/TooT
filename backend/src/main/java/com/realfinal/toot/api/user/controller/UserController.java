@@ -25,32 +25,34 @@ public class UserController {
     private final String SUCCESS = "success";
 
     /**
-     * 카카오 로그인
+     * 카카오 로그인 후 받은 인가코드로 refreshToken을 Cookie 로 저장
      *
      * @param code     카카오 오어스 인가코드
      * @param response 쿠키 담을거
-     * @return 사용자정보 + accesstoken
      */
     @GetMapping("/login/kakao")
     public CommonResponse<?> kakaoLogin(@RequestParam String code,
         HttpServletResponse response) {
-        log.info("UserController_kakaoLogin_start: ====================================================================");
-        log.info("UserController_kakaoLogin_start: " + code + " //////// " + response.toString());
+        log.info(
+            "UserController_kakaoLogin_start: ====================================================================");
+        log.info("UserController_kakaoLogin_start: " + code);
+
+        // 카카오
         String refreshToken = userService.login(code, "kakao");
         log.info("UserController_kakaoLogin_mid: " + refreshToken);
 
-        // "refreshToken"을 쿠키에 설정
+        // "refreshToken"을 프론트 엔드 쿠키에 저장
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
-            .path("/")
+            .path("/") // too-t.com 하위 url은 모두 저장 유지
             .httpOnly(true)
             .secure(true)
             .sameSite("None")
             .build();
-
         response.setHeader("Set-Cookie", refreshTokenCookie.toString());
 
-        log.info("============================" + refreshTokenCookie + "=====================================");
         log.info("UserController_kakaoLogin_end: " + refreshToken);
+        log.info(
+            "UserController_kakaoLogin_end: SUCCESS =============================================================");
         return CommonResponse.success(SUCCESS);
     }
 
@@ -61,14 +63,16 @@ public class UserController {
      * @return 새 access token
      */
     @GetMapping("/refresh")
-    public CommonResponse<String> recreateAccessToken(HttpServletRequest request, HttpServletResponse response) {
+    public CommonResponse<String> recreateAccessToken(HttpServletRequest request,
+        HttpServletResponse response) {
         log.info("UserController_recreateAccessToken_start");
-        String refreshToken = getTokenFromCookie(request);
-        log.info("UserController_recreateAccessToken_mid: " + refreshToken);
-        String newAccessToken = userService.recreateAccessToken(refreshToken);
-        log.info("UserController_recreateAccessToken_end: " + newAccessToken);
-        response.addHeader("accesstoken", newAccessToken);
 
+        String refreshToken = getRefreshTokenFromCookies(request);
+        log.info("UserController_recreateAccessToken_mid: " + refreshToken);
+
+        String newAccessToken = userService.recreateAccessToken(refreshToken);
+        response.addHeader("accesstoken", newAccessToken);
+        log.info("UserController_recreateAccessToken_end: " + newAccessToken);
         return CommonResponse.success(SUCCESS);
     }
 
@@ -81,7 +85,7 @@ public class UserController {
      */
     @GetMapping("/userinfo")
     public CommonResponse<UserRes> getUserInfo(
-            @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("UserController_getUserInfo_start: " + accessToken);
         UserRes userRes = userService.getUserInfo(accessToken);
         log.info("UserController_getUserInfo_end: " + userRes.toString());
@@ -89,7 +93,7 @@ public class UserController {
     }
 
     /**
-     * 로그아웃. JWT 토큰 정보 삭제
+     * 로그아웃. redis, cookie에서 JWT 토큰 정보 삭제
      *
      * @param request (쿠키에 담긴 토큰 추출해서 확인)
      * @return "success"
@@ -97,7 +101,7 @@ public class UserController {
     @GetMapping("/logout")
     public CommonResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
         log.info("UserController_logout_start");
-        String refreshToken = getTokenFromCookie(request);
+        String refreshToken = getRefreshTokenFromCookies(request);
         log.info("UserController_logout_mid: " + refreshToken);
         userService.logout(refreshToken);
 
@@ -120,10 +124,10 @@ public class UserController {
      * @param request 쿠키 정보 위해.
      * @return refresh token
      */
-    private String getTokenFromCookie(HttpServletRequest request) {
+    private String getRefreshTokenFromCookies(HttpServletRequest request) {
         String refreshToken = null;
 
-        log.info("UserController_getTokenFromCookie_start: " + request.toString());
+        log.info("UserController_getRefreshTokenFromCookies_start: " + request.toString());
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -133,8 +137,7 @@ public class UserController {
                 }
             }
         }
-        log.info("UserController_getTokenFromCookie_end: " + refreshToken);
+        log.info("UserController_getRefreshTokenFromCookies_end: " + refreshToken);
         return refreshToken;
     }
 }
-

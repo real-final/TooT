@@ -78,11 +78,11 @@ public class JwtProviderUtil {
             Date now = new Date();
             Date validity = new Date(now.getTime() + expireLength);
             String token = Jwts.builder()
-                    .setClaims(claims)
-                    .setIssuedAt(now)
-                    .setExpiration(validity)
-                    .signWith(SignatureAlgorithm.HS256, secretKey)
-                    .compact();
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
             log.info("JwtProviderUtil_createToken_end: " + token);
             return token;
         } catch (Exception e) {
@@ -91,26 +91,26 @@ public class JwtProviderUtil {
     }
 
     /**
-     * 토큰에 담긴 정보 추출 메서드
+     * 토큰에 담긴 정보 추출 메서드 payload의 sub에 userId가 담겨있으므로 추출
      *
-     * @param token 정보 추출할 토큰. (우리는 refresh token에 정보를 담지 않아 access만 가능하다)
-     * @return 정보. 우리의 경우 userId (providerId아님)
+     * @param accessToken 정보 추출할 토큰. (우리는 refresh token에 정보를 담지 않아 access만 가능하다)
+     * @return userId (providerId 아님)
      */
-    public Long getPayload(String token) {
-        log.info("JwtProviderUtil_getPayload_start: " + token);
+    public Long getUserIdFromToken(String accessToken) {
+        log.info("JwtProviderUtil_getUserIdFromToken_start: " + accessToken);
         try {
-            Long payload = Long.parseLong(Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject());
-            log.info("JwtProviderUtil_getPayload_end: " + payload);
-            return payload;
+            Long userId = Long.parseLong(Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .getSubject());
+            log.info("JwtProviderUtil_getUserIdFromToken_end: " + userId);
+            return userId;
         } catch (ExpiredJwtException e) {
-            Long payload = Long.parseLong(e.getClaims().getSubject());
-            log.info("JwtProviderUtil_getPayload_end: " + payload);
-            return payload;
+            Long userId = Long.parseLong(e.getClaims().getSubject());
+            log.info("JwtProviderUtil_getUserIdFromToken_end: " + userId);
+            return userId;
         } catch (JwtException e) {
             throw new ExpiredTokenException();
         } catch (Exception e) {
@@ -128,16 +128,16 @@ public class JwtProviderUtil {
         log.info("JwtProviderUtil_validateToken_start: " + token);
         try {
             Jws<Claims> claimsJws = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token);
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token);
             Boolean result = !claimsJws.getBody().getExpiration().before(new Date());
             log.info("JwtProviderUtil_validateToken_end: " + result);
             return result;
         } catch (ExpiredJwtException exception) {
             log.info("JwtProviderUtil_validateToken_end: " + false);
             return false;
-        } catch (Exception e){
+        } catch (Exception e) {
             log.warn("JwtProviderUtil_validateToken_end: unexpected Exception occured");
             throw new UnexpecteTokenException();
         }
@@ -172,7 +172,7 @@ public class JwtProviderUtil {
         String data = redisUtil.getData(refreshToken); //id
         if (data == null) { //리프레시도 만료된 경우.
             log.info("JwtProviderUtil_recreateAccessToken_mid: refresh token expired: "
-                    + refreshToken);
+                + refreshToken);
             throw new RefreshTokenExpiredException();
         }
         String newAccessToken = createAccessToken(data);

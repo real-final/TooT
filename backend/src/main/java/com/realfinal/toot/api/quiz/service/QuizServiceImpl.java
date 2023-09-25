@@ -39,8 +39,8 @@ public class QuizServiceImpl implements QuizService {
     @Transactional
     public Boolean isQuizTodayAvailable(String accessToken) {
         log.info("QuizServiceImpl_isQuizTodayAvailable_start: " + accessToken);
-        Long id = jwtProviderUtil.getPayload(accessToken);
-        User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         LocalDate lastQuizDate = user.getLastQuizDate();
         LocalDate currentDate = LocalDate.now();
         if (lastQuizDate == null || !lastQuizDate.isEqual(currentDate)) {
@@ -102,8 +102,8 @@ public class QuizServiceImpl implements QuizService {
     @Transactional
     public void saveQuizResult(String accessToken, String result) {
         log.info("QuizServiceImpl_saveQuizResult_start");
-        Long id = jwtProviderUtil.getPayload(accessToken);
-        User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         user.updateQuizResult();
         log.info("QuizServiceImpl_saveQuizResult_end: saved");
     }
