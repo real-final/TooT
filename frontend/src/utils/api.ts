@@ -16,6 +16,7 @@ const CHATBOT_SERVER = `https://clovachatbot.ncloud.com/api/chatbot/messenger/${
 /** 서버로 ajax 요청 */
 const api = axios.create({
   baseURL: REACT_APP_SERVER,
+  withCredentials: true, // 쿠키와 인증 정보를 포함하여 요청
 });
 
 const chatbotApi = axios.create({
