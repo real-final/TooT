@@ -33,18 +33,19 @@ public class UserController {
     @GetMapping("/login/kakao")
     public CommonResponse<?> kakaoLogin(@RequestParam String code,
             HttpServletResponse response) {
-        log.info("UserController_kakaoLogin_start: " + code + " " + response.toString());
+        log.info("UserController_kakaoLogin_start: ====================================================================");
+        log.info("UserController_kakaoLogin_start: " + code + " //////// " + response.toString());
         String refreshToken = userService.login(code, "kakao");
+        log.info("UserController_kakaoLogin_mid: " + refreshToken);
 
         // "refreshToken"을 쿠키에 설정
-        Cookie refreshTokenCookie = new Cookie("refreshToken",refreshToken);
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true);
-//        String cookieValue = refreshTokenCookie.toString() + "; SameSite=None";
-//        response.setHeader("Set-Cookie", cookieValue);
-        response.addCookie(refreshTokenCookie);
+        response.setHeader("Set-Cookie", refreshTokenCookie + "; SameSite=None");
 
+        log.info("============================" + refreshTokenCookie + "=====================================");
         log.info("UserController_kakaoLogin_end: " + refreshToken);
         return CommonResponse.success(SUCCESS);
     }
@@ -57,8 +58,9 @@ public class UserController {
      */
     @GetMapping("/refresh")
     public CommonResponse<String> recreateAccessToken(HttpServletRequest request, HttpServletResponse response) {
+        log.info("UserController_recreateAccessToken_start");
         String refreshToken = getTokenFromCookie(request);
-        log.info("UserController_recreateAccessToken_start: " + refreshToken);
+        log.info("UserController_recreateAccessToken_mid: " + refreshToken);
         String newAccessToken = userService.recreateAccessToken(refreshToken);
         log.info("UserController_recreateAccessToken_end: " + newAccessToken);
         response.addHeader("accesstoken", newAccessToken);
@@ -90,8 +92,9 @@ public class UserController {
      */
     @GetMapping("/logout")
     public CommonResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        log.info("UserController_logout_start");
         String refreshToken = getTokenFromCookie(request);
-        log.info("UserController_logout_start: " + refreshToken);
+        log.info("UserController_logout_mid: " + refreshToken);
         userService.logout(refreshToken);
 
         Cookie[] cookies = request.getCookies();
