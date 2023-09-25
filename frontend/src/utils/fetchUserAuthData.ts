@@ -12,17 +12,16 @@ export const fetchUserAuthData = async () => {
 
     // 3. Access토큰 & 사용자정보 저장
     if (userInfo && Object.keys(userInfo).length > 0) {
-      // LocalStorage에 userInfo 저장
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      localStorage.setItem("userInfo", JSON.stringify(userInfo)); // LocalStorage에 userInfo 저장
 
       return {
         accessToken: accessToken,
         userInfo: userInfo,
       };
     } else {
-      throw new Error("위치: fetchUserAuthData.tsx, 사용자정보 요청 실패");
+      console.error("위치: fetchUserAuthData.tsx, 사용자정보 요청 실패");
     }
   } else {
-    throw new Error("위치: fetchUserAuthData.tsx, Access토큰 요청 실패");
+    console.error("위치: fetchUserAuthData.tsx, Access토큰 요청 실패");
   }
 };

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useMutation } from "react-query";
 import { useGetSearchParam } from "../../../hooks/useGetSearchParam";
 import { requestKakaoLogin } from "../../../utils/requestKakaoLogin";
-import { requestRefreshToken } from "../../../utils/requestRefreshToken";
+import { sendKakaoAuthCode } from "../../../utils/sendKakaoAuthCode";
 
 import kakao_login_logo from "./../../../assets/images/kakao_login/ko/kakao_login_large_wide.png";
 import { CircularProgress } from "@mui/joy";
@@ -13,7 +13,7 @@ const KakaoLogin: React.FC = () => {
   // 2. 카카오 인증코드로 서버에 Refresh토큰 요청
   const mutation = useMutation(() => {
     if (typeof code === "string") {
-      return requestRefreshToken(code);
+      return sendKakaoAuthCode(code);
     }
     throw new Error("위치: KakaoLogin.tsx, Code is not available");
   });
