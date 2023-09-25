@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,18 +33,21 @@ public class UserController {
      */
     @GetMapping("/login/kakao")
     public CommonResponse<?> kakaoLogin(@RequestParam String code,
-            HttpServletResponse response) {
+        HttpServletResponse response) {
         log.info("UserController_kakaoLogin_start: ====================================================================");
         log.info("UserController_kakaoLogin_start: " + code + " //////// " + response.toString());
         String refreshToken = userService.login(code, "kakao");
         log.info("UserController_kakaoLogin_mid: " + refreshToken);
 
         // "refreshToken"을 쿠키에 설정
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true);
-        response.setHeader("Set-Cookie", refreshTokenCookie + "; SameSite=None");
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+            .path("/")
+            .httpOnly(true)
+            .secure(true)
+            .sameSite("None")
+            .build();
+
+        response.setHeader("Set-Cookie", refreshTokenCookie.toString());
 
         log.info("============================" + refreshTokenCookie + "=====================================");
         log.info("UserController_kakaoLogin_end: " + refreshToken);
