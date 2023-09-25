@@ -1,7 +1,10 @@
 import axios from "axios";
 
+// 카카오 OAuth Redirect URI
+// export const REDIRECT_URI = "http://localhost:3000";
+export const REDIRECT_URI = "https://too-t.com";
+  
 // const REACT_APP_SERVER = "http://localhost:8080";
-// const REACT_APP_SERVER = "http://70.12.247.88:8080";
 const REACT_APP_SERVER = "https://too-t.com/api";
 
 const SIGNATURE = "WVVKWnlJRmFMSUFtalBPWlRqUFN2WXlPRUluSUtZVUc=";

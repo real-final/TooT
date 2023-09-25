@@ -23,8 +23,8 @@ const KakaoLogin: React.FC = () => {
     if (code && !mutation.isError && !mutation.isLoading) {
       mutation.mutate();
     }
-  // eslint-disable-next-line
-  }, [code]);
+    // eslint-disable-next-line
+  }, []);
 
   return mutation.isLoading ? (
     <LoginWaitScreen />
