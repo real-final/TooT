@@ -30,7 +30,7 @@ public class MinutePriceService {
     private final String kisUri = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(kisUri).build();
 
-    @Scheduled(fixedDelay = 30000, initialDelay = 1000)
+//    @Scheduled(fixedDelay = 30000, initialDelay = 1000)
     public void getMinutePrice() {
         fetchMinutePrice(kospi32Config.totalCompany);
     }

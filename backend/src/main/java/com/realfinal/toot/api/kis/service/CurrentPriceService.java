@@ -29,22 +29,22 @@ public class CurrentPriceService {
     private final String kisUri = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(kisUri).build();
 
-    @Scheduled(fixedRate = 4000, initialDelay = 1000)
+//    @Scheduled(fixedRate = 4000, initialDelay = 1000)
     public void fetchCurrentPriceForBatch1() {
         getCurrentPrice(kospi32Config.company1, "현재가 기업1");
     }
 
-    @Scheduled(fixedRate = 4000, initialDelay = 2000)
+//    @Scheduled(fixedRate = 4000, initialDelay = 2000)
     public void fetchCurrentPriceForBatch2() {
         getCurrentPrice(kospi32Config.company2, "현재가 기업2");
     }
 
-    @Scheduled(fixedRate = 4000, initialDelay = 3000)
+//    @Scheduled(fixedRate = 4000, initialDelay = 3000)
     public void fetchCurrentPriceForBatch3() {
         getCurrentPrice(kospi32Config.company3, "현재가 기업3");
     }
 
-    @Scheduled(fixedRate = 4000, initialDelay = 4000)
+//    @Scheduled(fixedRate = 4000, initialDelay = 4000)
     public void fetchCurrentPriceForBatch4() {
         getCurrentPrice(kospi32Config.company4, "현재가 기업4");
     }
