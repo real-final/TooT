@@ -1,6 +1,11 @@
-const GuideButton = () => {
+const GuideButton = ({buttonName} : {buttonName:string}) => {
+
+  const handleGuideButtonClick = () => {
+    console.log(buttonName);
+  };
+
   return (
-    <div></div>
+    <button onClick={handleGuideButtonClick}>{buttonName}</button>
   );
 };
 

@@ -1,19 +1,20 @@
 import { useState } from "react";
 import VoiceButton from "./VoiceButton";
 import SendButton from "./SendButton";
-import type { Ibubble } from "../../../interface/Ibubble";
+import { useDispatch } from "react-redux";
 import { getBubble, sendBubble } from "../../../utils/chat/chat";
 
-const Input = ({addBubble}: {addBubble: (bubble: Ibubble) => void}) => {
+const Input = () => {
   const [inputText, setInputText] = useState<string>("");
+  const dispatch = useDispatch();
 
   const handleInputTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
   };
 
   const handleBubble = async () => {
-    await sendBubble(inputText, addBubble);
-    await getBubble(inputText, addBubble);
+    await sendBubble(inputText, dispatch);
+    await getBubble(inputText, dispatch);
     setInputText("");
   };
 

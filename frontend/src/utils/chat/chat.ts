@@ -1,18 +1,17 @@
 import axios from "axios";
 import { Ibubble } from "../../interface/Ibubble";
-import { codeSwitch } from "./codeSwitch";
+import { add } from "../../store/slices/bubbleSlice";
 
-export const sendBubble = (text:string, addBubble: (bubble: Ibubble) => void) => {
+export const sendBubble = (text:string, dispatch: any) => {
   const newBubble: Ibubble = {
     message: text,
     speaker: true
   };
-  addBubble(newBubble);
+  dispatch(add(newBubble));
 };
 
-export const getBubble = async (text:string, addBubble: (bubble: Ibubble) => void) => {
-  let responseData: Array<string> = [];
-  let bubble = ""; 
+export const getBubble = async (text:string, dispatch: any) => {
+  
   // TODO: userID와 timestamp 값 동적으로 바꾸기
   const sendData = {
     userId: "1234",
@@ -31,17 +30,4 @@ export const getBubble = async (text:string, addBubble: (bubble: Ibubble) => voi
     (response) => { 
       console.log(response);
       // TODO: 이미지가 오는 경우 고려(기존 버블 응답 객체와는 속성 이름이 달라서 추가로 수정 필요)
-
-      // TODO: data 배열의 길이에 따라 추가로 파라미터들을 전달해야 함
-      // ex) stockId, stockName, share 등
-      const data = response.data.content[0].data.details.split('|');
-      responseData = data.slice(0, -1);
-      bubble = data.slice(-1);
-      console.log(data);
-      console.log(responseData);
-      console.log(bubble);
-      newBubble.message = bubble;
-    }).catch((err) => console.log(err));
-  await addBubble(newBubble);
-  await codeSwitch(bubble, responseData);
-};
+    dispatch(add(newBubble));})};

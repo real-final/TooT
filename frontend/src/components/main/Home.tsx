@@ -45,7 +45,7 @@ const Home: React.FC = () => {
         <Container>
           <Title>전체랭킹</Title>
           <Content className="min-h-0">
-            <Ranking size="small" />
+            {/* <Ranking size="small" /> */}
           </Content>
         </Container>
       </div>
