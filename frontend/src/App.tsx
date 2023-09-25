@@ -1,6 +1,5 @@
-import { createContext } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-// import { useGetSearchParam } from "./hooks/useGetSearchParam";
 import { fetchUserAuthData } from "./utils/fetchUserAuthData";
 
 import Grid from "./Grid";
@@ -15,11 +14,21 @@ export const UserAuthContext = createContext<IuserAuthContext | undefined>(
 );
 
 function App() {
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  useEffect(() => {
+    setShouldFetch(true);
+  }, []);
+
   // 유저정보 & Access 토큰 요청하기
   const { data: contextData, isLoading } = useQuery(
     "userAuthData",
     fetchUserAuthData,
-    { retry: 0 }
+    {
+      enabled: shouldFetch, // shouldFetch가 true일 때만 useQuery 실행
+      refetchOnWindowFocus: false, // 다른 탭에서 다시 페이지 접근 시 refetch 취소
+      retry: 1, // 오류로 인한 refetch 횟수 1회로 제한
+    }
   );
 
   return (
