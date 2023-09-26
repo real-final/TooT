@@ -1,5 +1,7 @@
 export interface Ibubble {
+  type?: string | undefined;
   message: string;
+  url?: string | undefined;
   speaker: boolean;
 };
 
