@@ -3,6 +3,14 @@ import { Ibubble } from "../../interface/Ibubble";
 import { add } from "../../store/slices/bubbleSlice";
 import { codeSwitch } from "./codeSwitch";
 
+export const pushBotBubble = (message:string, dispatch: any) => {
+  const newBubble: Ibubble = {
+    message: message,
+    speaker: false,
+  };
+  dispatch(add(newBubble));
+};
+
 export const sendBubble = (text:string, dispatch: any) => {
   const newBubble: Ibubble = {
     message: text,
