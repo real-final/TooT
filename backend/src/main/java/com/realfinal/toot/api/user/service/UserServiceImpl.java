@@ -9,6 +9,7 @@ import com.realfinal.toot.common.exception.user.KakaoTokenRequestException;
 import com.realfinal.toot.common.exception.user.MySQLSearchException;
 import com.realfinal.toot.common.exception.user.NotProvidedProviderException;
 import com.realfinal.toot.common.util.JwtProviderUtil;
+import com.realfinal.toot.common.util.KakaoUtil;
 import com.realfinal.toot.common.util.RedisUtil;
 import com.realfinal.toot.db.entity.User;
 import com.realfinal.toot.db.repository.UserRepository;
@@ -26,30 +27,39 @@ public class UserServiceImpl implements UserService {
     private final JwtProviderUtil jwtProviderUtil;
     private final RedisUtil redisUtil;
     private final UserRepository userRepository;
-    private final KakaoLoginService kakaoLoginService;
+    private final KakaoUtil kakaoUtil;
 
     /**
-     * 로그인 메서드. provider로 분기.
+     * 로그인 서비스 - kakao 로그인
+     * kakao로부터 Oauth Token 받기
      *
-     * @param code     인가코드
-     * @param provider 카카오
+     * @param authorizeCode 프론트에서 받은 인가코드
+     * @param provider      카카오
      * @return refresh token
      */
     @Override
-    public String login(String code, String provider) {
-        log.info("UserServiceImpl_login_start: " + code + " " + provider);
+    public String login(String authorizeCode, String provider) {
+        log.info("UserServiceImpl_login_start:\nauthorizeCode: " + authorizeCode + "\nprovider: "
+            + provider);
         if (provider.equals("kakao")) {
-            OauthTokenRes jsonToken = kakaoLoginService.getAccessToken(code, "kakao");
-            if (jsonToken.getError() != null) {
-                log.info("UserServiceImpl_login_mid: kakao 데이터 요청, 에러 반환, 에러코드: "
-                        + jsonToken.getErrorCode() + " " + jsonToken.getErrorDescription());
+            // 받은 인가코드로 다시 kakao에게 oauth Token 요청 -> 받기
+            OauthTokenRes jsonToken = kakaoUtil.getOauthTokens(authorizeCode, "kakao");
+
+            if (jsonToken.getError() != null) { // 에러가 (담겨)있다면
+                log.info("UserServiceImpl_login_end: kakao 데이터 요청, 에러 반환, 에러코드: "
+                    + jsonToken.getErrorCode() + " " + jsonToken.getErrorDescription());
                 throw new KakaoTokenRequestException();
             }
-            String id = kakaoLoginService.getUserProfile("kakao", jsonToken);
+
+            // 로그인한적 없는 ID이면 회원가입 후 userId 반환
+            String id = kakaoUtil.getUserIdAndRegistIfNot("kakao", jsonToken);
             try {
+                // JWT refreshToken 생성
                 String refreshToken = jwtProviderUtil.createRefreshToken();
+
+                // redis에 JwtRefreshToken, oauthAccessToken 저장
                 saveTokens(id, refreshToken,
-                        jsonToken.getAccessToken());
+                    jsonToken.getAccessToken());
                 return refreshToken;
             } catch (Exception e) {
                 log.info("UserServiceImpl_login_mid: failed to login");
@@ -66,7 +76,7 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     public void logout(String refreshToken) {
-        log.info("UserServiceImpl_logout_start: " + " " + refreshToken);
+        log.info("UserServiceImpl_logout_start: " + refreshToken);
         redisUtil.deleteData(refreshToken);
         log.info("UserServiceImpl_logout_end: redis key deleted");
     }
@@ -80,9 +90,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserRes getUserInfo(String accessToken) {
         log.info("UserServiceImpl_getUserInfo_start: " + accessToken);
-        Long id = jwtProviderUtil.getPayload(accessToken);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+
         if (jwtProviderUtil.validateToken(accessToken)) {
-            User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
+            User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
             UserRes userRes = UserMapper.INSTANCE.userToUserRes(user);
             log.info("UserServiceImpl_getUserInfo_end: " + userRes.toString());
             return userRes;
@@ -107,16 +118,18 @@ public class UserServiceImpl implements UserService {
     /**
      * 생성된 토큰 레디스에 저장
      *
-     * @param id              토큰 user
-     * @param refreshJWTToken JWT refresh token
-     * @param accessToken     oauth access token
+     * @param id               토큰 userId
+     * @param refreshJWTToken  JWT refresh token
+     * @param oauthAccessToken oauth access token
      */
     @Override
-    public void saveTokens(String id, String refreshJWTToken, String accessToken) {
+    public void saveTokens(String id, String refreshJWTToken, String oauthAccessToken) {
         log.info("UserServiceImpl_saveTokens_start: " + id + " " + refreshJWTToken + " "
-                + accessToken);
-        redisUtil.setDataExpire(refreshJWTToken, id, 1209600000);
-        redisUtil.setDataExpire(accessToken, id, 31536000);
+            + oauthAccessToken);
+
+        redisUtil.setDataWithExpire(refreshJWTToken, id, 1209600000);
+        redisUtil.setDataWithExpire(id, oauthAccessToken, 31536000);
+
         log.info("UserServiceImpl_saveTokens_end: token saved");
     }
 
@@ -133,5 +146,4 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl_isLogout_end: isLogout?" + (data == null));
         return data == null;
     }
-
 }

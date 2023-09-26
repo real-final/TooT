@@ -31,14 +31,14 @@ public class RedisUtil {
     }
 
     /**
-     * 토큰 저장할때 사용. 이건 시간 지나면 알아서 redis에서 삭제됨. 없어서 요청 들어오면 null 리턴하는듯.
+     * 토큰 저장할때 사용. 이건 시간 지나면 알아서 redis에서 삭제됨. 없어서 요청 들어오면 null 리턴
      *
      * @param key      redis 키 ("token 분류" + userId)
      * @param value    redis value (token)
      * @param duration redis 만료기간
      */
-    public void setDataExpire(String key, String value, long duration) {
-        log.info("RedisUtil_setDataExpire_start: " + key + " " + value + " " + duration);
+    public void setDataWithExpire(String key, String value, long duration) {
+        log.info("RedisUtil_setDataWithExpire_start: " + key + " " + value + " " + duration);
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);
@@ -47,7 +47,7 @@ public class RedisUtil {
         if (storedValue == null || !storedValue.equals(value)) {
             throw new RedisNotSavedException();
         }
-        log.info("RedisUtil_setDataExpire_end: token saved in redis");
+        log.info("RedisUtil_setDataWithExpire_end: token saved in redis");
     }
 
     /**
