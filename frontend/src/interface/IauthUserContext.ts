@@ -21,5 +21,3 @@ export interface IuserAuthContext {
   accessToken?: string;
   userInfo?: IuserInfo;
 }
-
- 
