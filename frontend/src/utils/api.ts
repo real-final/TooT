@@ -1,9 +1,10 @@
 import axios from "axios";
 
-// 카카오 OAuth Redirect URI
-// export const REDIRECT_URI = "http://localhost:3000";
-export const REDIRECT_URI = "https://too-t.com";
-  
+// 카카오 Redirect URI
+// const REDIRECT_URI = "http://localhost:3000";
+const REDIRECT_URI = "https://too-t.com";
+
+// 서버 API URI
 // const REACT_APP_SERVER = "http://localhost:8080";
 const REACT_APP_SERVER = "https://too-t.com/api";
 
@@ -23,4 +24,4 @@ const chatbotApi = axios.create({
   baseURL: CHATBOT_SERVER,
 });
 
-export { api, chatbotApi};
+export { api, chatbotApi, REDIRECT_URI, REACT_APP_SERVER };

@@ -8,9 +8,6 @@ import CustomCircularProgress from "./common/circularProgress/CustomCircularProg
 import { fetchUserAuthData } from "./utils/fetchUserAuthData";
 import { IuserAuthContext } from "./interface/IauthUserContext";
 
-
-
-
 /** 유저정보 & 토큰관리용 ContextAPI */
 export const UserAuthContext = createContext<IuserAuthContext | undefined>(
   undefined
@@ -31,7 +28,7 @@ function App() {
     {
       enabled: shouldFetch, // shouldFetch가 true일 때만 useQuery 실행
       refetchOnWindowFocus: false, // 다른 탭에서 다시 페이지 접근 시 refetch 취소
-      retry: 1, // 오류로 인한 refetch 횟수 1회로 제한
+      retry: 0, // 오류로 인한 refetch 횟수 제한
     }
   );
 
