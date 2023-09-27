@@ -1,0 +1,47 @@
+package com.realfinal.toot.api.stock.response;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
+
+import java.util.List;
+
+@Getter
+@ToString
+public class SpecificStockRes {
+
+    private String stockName;
+    private List<MinuteRes> minCandle;
+    private List<DayWeekRes> dayCandle;
+    private List<DayWeekRes> weekCandle;
+    private String totalPrice;
+    private Integer currentPrice;
+    private Long totalStock;
+    private String industryClass;
+    private String wics;
+    private String min52;
+    private String max52;
+    private String outline;
+    private Boolean interested;
+
+    @Builder
+
+    public SpecificStockRes(String stockName, List<MinuteRes> minCandle, List<DayWeekRes> dayCandle,
+        List<DayWeekRes> weekCandle, String totalPrice, Integer currentPrice, Long totalStock,
+        String industryClass, String wics, String min52, String max52, String outline,
+        Boolean interested) {
+        this.stockName = stockName;
+        this.minCandle = minCandle;
+        this.dayCandle = dayCandle;
+        this.weekCandle = weekCandle;
+        this.totalPrice = totalPrice;
+        this.currentPrice = currentPrice;
+        this.totalStock = totalStock;
+        this.industryClass = industryClass;
+        this.wics = wics;
+        this.min52 = min52;
+        this.max52 = max52;
+        this.outline = outline;
+        this.interested = interested;
+    }
+}

@@ -6,6 +6,7 @@ import com.realfinal.toot.api.kis.util.OpenCronUtil;
 import com.realfinal.toot.api.kis.util.TimeToStringUtil;
 import com.realfinal.toot.common.exception.kis.KisApiCallDeniedException;
 import com.realfinal.toot.common.exception.kis.KisApiCallTooManyException;
+import com.realfinal.toot.common.util.PriceUtil;
 import com.realfinal.toot.config.KisConfig;
 import com.realfinal.toot.config.Kospi32Config;
 import lombok.RequiredArgsConstructor;
@@ -19,28 +20,28 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class MinutePriceService {
 
     private final KisConfig kisConfig;
     private final Kospi32Config kospi32Config;
     private final OpenCronUtil openCronUtil;
     private final KisAccessTokenUtil kisAccessTokenUtil;
-    private final String kisUri = "https://openapi.koreainvestment.com:9443";
-    private final WebClient kisWebClient = WebClient.builder().baseUrl(kisUri).build();
+    private final PriceUtil priceUtil;
+    private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
+    private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
 
-//    @Scheduled(fixedDelay = 30000, initialDelay = 1000)
+    // @Scheduled(fixedDelay = 30000, initialDelay = 1000)
     public void getMinutePrice() {
         fetchMinutePrice(kospi32Config.totalCompany);
     }
 
     private void fetchMinutePrice(List<String> companies) {
         if (!openCronUtil.shouldRun()) return;
-
+        log.info("MinutePriceService_fetchMinutePrice_start:" + companies.toString());
         for (int i = 0; i < companies.size(); i++) {
             int finalI = i;
-            long start = System.currentTimeMillis();
             try {
                 MinutePriceRes result = kisWebClient
                         .get()
@@ -64,9 +65,7 @@ public class MinutePriceService {
                         .bodyToMono(MinutePriceRes.class)
                         .block();
                 result.setCorp(companies.get(finalI));
-
-                long end = System.currentTimeMillis();
-                log.info("분봉 기업" + (finalI + 1) + " 수행시간: " + (end - start) + " ms");
+                priceUtil.updateMinCandle(result);
 
                 // 마지막 원소가 아닐 때만 1초 대기
                 if (i < companies.size() - 1) {
@@ -74,18 +73,19 @@ public class MinutePriceService {
                         Thread.sleep(1000);  // 1초 대기
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
-                        log.error("Sleep was interrupted", e);
+                        log.info("MinutePriceService_fetchMinutePrice_mid: Sleep Interrupt");
                     }
                 }
             } catch (HttpServerErrorException.InternalServerError e) {
-                log.info("호출 횟수 초과");
+                log.info("MinutePriceService_fetchMinutePrice_mid: 호출 횟수 초과");
                 throw new KisApiCallTooManyException();
             } catch (HttpClientErrorException.NotFound e) {
-                log.info("접근 거부");
+                log.info("MinutePriceService_fetchMinutePrice_mid: 접근 거부");
                 throw new KisApiCallDeniedException();
             }
 
         }
+        log.info("MinutePriceService_fetchMinutePrice_end: 1분 32개 호출");
     }
 
 }
