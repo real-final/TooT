@@ -78,4 +78,10 @@ public class User extends BaseEntity {
     public void updateCash(Long cash) {
         this.cash = cash;
     }
+
+    public void resetAfterBankruptcy() {
+        this.bankruptcyNo += 1;
+        this.seedMoney = 900000L;
+        this.cash = 900000L;
+    }
 }
