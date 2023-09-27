@@ -4,15 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import lombok.Builder;
 import lombok.Getter;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
+
 import org.hibernate.annotations.DynamicInsert;
 
 @DynamicInsert
@@ -57,7 +56,7 @@ public class User extends BaseEntity {
 
     @Builder
     public User(String providerId, Long seedMoney, Long cash, String profileImage, String name,
-                Integer bankruptcyNo, LocalDate lastQuizDate) {
+            Integer bankruptcyNo, LocalDate lastQuizDate) {
         this.providerId = providerId;
         this.seedMoney = seedMoney;
         this.cash = cash;
