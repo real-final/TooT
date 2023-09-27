@@ -6,10 +6,8 @@ const UserRanking = ({
 }: {
   index: number;
   user: {
-    id?: string;
     name: string;
     profileImage: string;
-    favorite: boolean;
     bankruptcyNo: number;
     netProfit: number;
   };

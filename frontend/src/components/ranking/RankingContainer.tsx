@@ -19,7 +19,6 @@ const RankingContainer = ({ title }: { size: string; title: string }) => {
   const [myInfo, setMyInfo] = useState({
     name: "",
     profileImage: "",
-    favorite: false,
     bankruptcyNo: 0,
     netProfit: 0,
   });
