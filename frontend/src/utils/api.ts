@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // 카카오 Redirect URI
-// const REDIRECT_URI = "http://localhost:3000";
-const REDIRECT_URI = "https://too-t.com";
+// const REDIRECT_URI = "http://localhost:3000/loading";
+const REDIRECT_URI = "https://too-t.com/loading";
 
 // 서버 API URI
 // const REACT_APP_SERVER = "http://localhost:8080";

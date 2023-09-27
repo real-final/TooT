@@ -54,7 +54,7 @@ const RankingContainer = ({ title }: { size: string; title: string }) => {
         return (window.location.href = kakaoFriendsUrl);
       }
       setFriendList(responseData?.data?.list);
-      setMyInfo(responseData?.data?.myinfo);
+      setMyInfo(responseData?.data?.myInfo);
     },
     {
       enabled: fetchData,
@@ -62,11 +62,7 @@ const RankingContainer = ({ title }: { size: string; title: string }) => {
   );
 
   if (isLoading) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <CustomCircularProgress />
-      </div>
-    );
+    return <CustomCircularProgress />;
   }
 
   return (
