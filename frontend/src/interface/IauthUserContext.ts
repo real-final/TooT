@@ -12,12 +12,12 @@ export interface IuserInfo {
 }
 
 export interface Idata {
-  success?: boolean;
-  data?: IuserInfo;
-  error?: null | string; // 에러 메시지의 형식을 모르므로 null 또는 문자열로 추정합니다.
+  success: boolean;
+  data: IuserInfo;
+  error: null | string; // 에러 메시지의 형식을 모르므로 null 또는 문자열로 추정합니다.
 }
 
 export interface IuserAuthContext {
-  accessToken?: string;
-  userInfo?: IuserInfo;
+  accessToken: string;
+  userInfo: IuserInfo;
 }

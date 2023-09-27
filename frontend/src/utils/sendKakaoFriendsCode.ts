@@ -5,7 +5,6 @@ export const sendKakaoFriendsCode = async (
   accessToken: string
 ) => {
   try {
-    console.log("카카오 친구들 실행");
     await api.get(`/rank/reissue/kakao?code=${code}`, {
       headers: {
         accesstoken: accessToken,
