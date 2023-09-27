@@ -3,11 +3,20 @@ import { UserAuthContext } from "../../../App";
 import { IuserInfo } from "../../../interface/IauthUserContext";
 
 import Avatar from "@mui/joy/Avatar";
+import { useGetSearchParam } from "../../../hooks/useGetSearchParam";
+import { sendKakaoFriendsCode } from "../../../utils/sendKakaoFriendsCode";
 
 const UserInfomation: React.FC = () => {
   const userAuthContext = useContext(UserAuthContext);
-  // console.log(userAuthContext?.userInfo)
   const userInfo = userAuthContext?.userInfo as IuserInfo;
+  const accessToken = userAuthContext?.accessToken as string;
+  
+  // 1. 카카오 인증코드 읽기
+  const code = useGetSearchParam("code");
+  // 2. 서버로 카카오 친구목록 Auth코드 전송
+  if (code?.length) {
+    sendKakaoFriendsCode(code, accessToken);
+  }
 
   return (
     <div className="h-full overflow-hidden">

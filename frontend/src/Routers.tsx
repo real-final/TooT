@@ -10,6 +10,7 @@ import Bankrupt from "./components/user/bankrupt/Bankrupt";
 import BankruptDetail from "./components/user/bankrupt/BankruptDetail";
 import UserTrade from "./components/user/trade/UserTrade";
 import QuizContainer from "./components/quiz/QuizContainer";
+import CustomCircularProgress from "./common/circularProgress/CustomCircularProgress";
 
 const Routers = () => {
   return (
@@ -37,6 +38,7 @@ const Routers = () => {
       </Route>
       <Route path="/quiz" element={<QuizContainer />}></Route>
       <Route path="/tutorials" element={<Example />}></Route>
+      <Route path="/loading" element={<CustomCircularProgress />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
