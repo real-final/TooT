@@ -41,7 +41,7 @@ const Routers = () => {
       <Route path="/loading" element={<CustomCircularProgress />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
-  );
+  ); 
 };
 
 export default Routers;
