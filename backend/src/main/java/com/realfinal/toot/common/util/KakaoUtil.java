@@ -8,6 +8,7 @@ import com.realfinal.toot.api.user.response.OauthTokenRes;
 import com.realfinal.toot.common.exception.user.KakaoHTTPProtocolException;
 import com.realfinal.toot.common.exception.user.KakaoIOException;
 import com.realfinal.toot.common.exception.user.KakaoJSONEncodingException;
+import com.realfinal.toot.common.exception.user.KakaoTokenRequestException;
 import com.realfinal.toot.common.exception.user.NotProvidedProviderException;
 import com.realfinal.toot.db.entity.User;
 import com.realfinal.toot.db.repository.UserRepository;
@@ -42,6 +43,8 @@ public class KakaoUtil {
 
     private final InMemoryClientRegistrationRepository inMemoryRepository;
     private final UserRepository userRepository;
+    private final JwtProviderUtil jwtProviderUtil;
+    private final RedisUtil redisUtil;
 
     /**
      * 인가 코드와 api key 정보 등으로 카카오에 토큰 요청 메서드
@@ -52,7 +55,7 @@ public class KakaoUtil {
      */
     public OauthTokenRes getOauthTokens(String authorizeCode, String providerName) {
         log.info("KakaoUtil_getAccessToken_start:\ncode: " + authorizeCode + "\nproviderName: "
-            + providerName);
+                + providerName);
 
         /*
           accessToken을 받기 위해 kakao에 전달할 정보들 객체 생성 과정
@@ -65,11 +68,11 @@ public class KakaoUtil {
         final List<NameValuePair> postParams = new ArrayList<NameValuePair>();
         postParams.add(new BasicNameValuePair("grant_type", "authorization_code")); // 인증 타입을 지정합니다.
         postParams.add(new BasicNameValuePair("client_id",
-            provider.getClientId())); // 제공자의 정보에서 클라이언트 ID를 추가합니다.
+                provider.getClientId())); // 제공자의 정보에서 클라이언트 ID를 추가합니다.
         postParams.add(new BasicNameValuePair("client_secret",
-            provider.getClientSecret())); // 제공자의 정보에서 클라이언트 비밀번호를 추가합니다.
+                provider.getClientSecret())); // 제공자의 정보에서 클라이언트 비밀번호를 추가합니다.
         postParams.add(new BasicNameValuePair("redirect_uri",
-            provider.getRedirectUri())); // 제공자의 정보에서 리다이렉트 URI를 추가합니다.
+                provider.getRedirectUri())); // 제공자의 정보에서 리다이렉트 URI를 추가합니다.
         postParams.add(new BasicNameValuePair("code", authorizeCode)); // 로그인 과정 중에 얻은 인증 코드를 추가합니다.
 
         // POST 요청을 보낼 HTTP 클라이언트를 생성합니다.
@@ -84,14 +87,14 @@ public class KakaoUtil {
             final HttpResponse response = client.execute(post);    // 여기서 카카오에게 요청
             final int responseCode = response.getStatusLine().getStatusCode();
             log.info("KakaoUtil_getAccessToken_mid Sending 'POST' request to URL : "
-                + RequestUrl);
+                    + RequestUrl);
             log.info("KakaoUtil_getAccessToken_mid Post parameters : " + postParams);
             log.info("KakaoUtil_getAccessToken_mid Response Code : " + responseCode);
 
             // 응답을 OauthTokenResponse 객체로 바로 매핑
             ObjectMapper mapper = new ObjectMapper();
             tokenResponse = mapper.readValue(response.getEntity().getContent(),
-                OauthTokenRes.class);
+                    OauthTokenRes.class);
 
         } catch (UnsupportedEncodingException e) {
             // 문자 인코딩이 지원되지 않을 때 발생하는 예외입니다. 예를 들면, UrlEncodedFormEntity에서 지원하지 않는 인코딩을 사용할 때 발생합니다.
@@ -105,7 +108,7 @@ public class KakaoUtil {
         }
         log.info("KakaoUtil_getAccessToken_end:\ntokenResponse: " + tokenResponse.toString());
         log.info(
-            "KakaoUtil_getAccessToken_end: ===================================================================");
+                "KakaoUtil_getAccessToken_end: ===================================================================");
         return tokenResponse;
     }
 
@@ -118,8 +121,9 @@ public class KakaoUtil {
     @Transactional
     public String getUserIdAndRegistIfNot(String providerName, OauthTokenRes tokenResponse) {
         log.info(
-            "KakaoUtil_getUserProfile_start:\nproviderName: " + providerName + "\ntokenResponse: "
-                + tokenResponse.toString());
+                "KakaoUtil_getUserProfile_start:\nproviderName: " + providerName
+                        + "\ntokenResponse: "
+                        + tokenResponse);
 
         ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
         // 토큰으로 다시 kakao에게 유저 정보 받아오기
@@ -141,7 +145,7 @@ public class KakaoUtil {
 
         // kakao가 아닌 경우
         log.info(
-            "KakaoUtil_getUserProfile_mid: failed to access kakao, wrong provider name");
+                "KakaoUtil_getUserProfile_mid: failed to access kakao, wrong provider name");
         throw new NotProvidedProviderException();
     }
 
@@ -154,25 +158,52 @@ public class KakaoUtil {
      * @return 사용자 정보 json으로
      */
     private Map<String, Object> getUserAttributes(ClientRegistration provider,
-        OauthTokenRes tokenRes) {
+            OauthTokenRes tokenRes) {
         log.info("KakaoUtil_getUserAttributes_start: " + provider.toString() + " "
-            + tokenRes.toString());
+                + tokenRes.toString());
         // WebClient 인스턴스 생성 (WebFlux의 비동기 웹 클라이언트)
         Map<String, Object> userAttributes = WebClient.create()
-            // HTTP GET 요청 설정
-            .get()
-            // 요청할 URI 설정 (OAuth2.0 제공자의 사용자 정보 엔드포인트 URI)
-            .uri(provider.getProviderDetails().getUserInfoEndpoint().getUri())
-            // 요청 헤더에 Bearer Authentication 토큰 설정
-            .headers(header -> header.setBearerAuth(tokenRes.getAccessToken()))
-            // 웹 요청 실행하고 응답을 반환
-            .retrieve()
-            // 응답 본문을 Map<String, Object> 형태로 변환
-            .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
-            })
-            // 비동기 작업 완료를 기다리고 결과를 반환
-            .block();
+                // HTTP GET 요청 설정
+                .get()
+                // 요청할 URI 설정 (OAuth2.0 제공자의 사용자 정보 엔드포인트 URI)
+                .uri(provider.getProviderDetails().getUserInfoEndpoint().getUri())
+                // 요청 헤더에 Bearer Authentication 토큰 설정
+                .headers(header -> header.setBearerAuth(tokenRes.getAccessToken()))
+                // 웹 요청 실행하고 응답을 반환
+                .retrieve()
+                // 응답 본문을 Map<String, Object> 형태로 변환
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                })
+                // 비동기 작업 완료를 기다리고 결과를 반환
+                .block();
         log.info("KakaoUtil_getUserAttributes_end: " + userAttributes.toString());
         return userAttributes;
+    }
+
+    /**
+     * 친구 목록 추가 동의 인가코드로 토큰 재발급 요청
+     *
+     * @param code        친구 목록 공유 동의한 인가코드
+     * @param provider    카카오
+     * @param accessToken 유저 id
+     */
+    public void reissue(String code, String provider, String accessToken) {
+        log.info("KakaoUtil_reissue_start: " + code + provider + accessToken);
+        if (provider.equals("kakao")) {
+            OauthTokenRes jsonToken = getOauthTokens(code, "kakao");
+            if (jsonToken.getError() != null) {
+                log.info("FriendServiceImpl_reissue_mid: kakao 데이터 요청, 에러 반환, 에러코드: "
+                        + jsonToken.getErrorCode() + " " + jsonToken.getErrorDescription());
+                throw new KakaoTokenRequestException();
+            }
+            String id = jwtProviderUtil.getUserIdFromToken(accessToken).toString();
+            //바뀐 accesstoken으로 redis 업데이트
+            redisUtil.setDataWithExpire(id, jsonToken.getAccessToken(), 21599);
+            log.info("KakaoUtil_reissue_end: accesstoken updated");
+
+        } else {
+            log.info("KakaoUtil_reissue_mid: failed to reissue kakao OAuth token");
+            throw new NotProvidedProviderException();
+        }
     }
 }
