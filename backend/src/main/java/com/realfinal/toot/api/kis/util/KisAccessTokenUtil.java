@@ -23,11 +23,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class KisAccessTokenUtil {
 
-  private final String kisUri = "https://openapi.koreainvestment.com:9443";
+  private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
   private final WebClient kisWebClient =
       WebClient
           .builder()
-          .baseUrl(kisUri)
+          .baseUrl(KIS_URI)
           .build();
   private final KisConfig kisConfig;
 

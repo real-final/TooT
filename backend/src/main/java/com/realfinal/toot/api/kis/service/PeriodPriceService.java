@@ -4,6 +4,7 @@ import com.realfinal.toot.api.kis.response.CurrentPriceRes;
 import com.realfinal.toot.api.kis.response.PeriodPriceRes;
 import com.realfinal.toot.api.kis.util.KisAccessTokenUtil;
 import com.realfinal.toot.api.kis.util.TimeToStringUtil;
+import com.realfinal.toot.common.util.PriceUtil;
 import com.realfinal.toot.config.KisConfig;
 import com.realfinal.toot.config.Kospi32Config;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,9 @@ public class PeriodPriceService {
     private final KisConfig kisConfig;
     private final Kospi32Config kospi32Config;
     private final KisAccessTokenUtil kisAccessTokenUtil;
-    private final String kisUri = "https://openapi.koreainvestment.com:9443";
-    private final WebClient kisWebClient = WebClient.builder().baseUrl(kisUri).build();
+    private final PriceUtil priceUtil;
+    private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
+    private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
 
     // 주중 매일 7시 0분 1초에 실행
     @Scheduled(cron = "1 0 7 ? * MON-FRI")
@@ -77,7 +79,11 @@ public class PeriodPriceService {
     private void getPeriodPrice(List<String> companies, String div) {
         for (String company : companies) {
             PeriodPriceRes periodPriceRes = fetchPeriodPriceForCompany(company, div);
-            // 여기에 배열에 넣는 작업 들어감
+            if(div == "D") {
+                priceUtil.updateDayCandle(periodPriceRes);
+            } else {
+                priceUtil.updateWeekCandle(periodPriceRes);
+            }
         }
     }
 

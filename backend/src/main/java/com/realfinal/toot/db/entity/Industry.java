@@ -3,19 +3,22 @@ package com.realfinal.toot.db.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name="industry")
 @Getter
 @NoArgsConstructor
-public class Industry extends BaseEntity{
+@Table(name = "industry")
+@Entity
+public class Industry extends BaseEntity {
 
-  @Column(name="industry_class", nullable = false, length = 50)
-  private String industry_class;
+    @Column(name = "industry_class", length = 50)
+    @NotNull
+    private String industryClass;
 
-  @Column(name="wics", nullable = false, length = 50)
-  private String wics;
+    @Column(name = "wics", length = 50)
+    @NotNull
+    private String wics;
 
 }

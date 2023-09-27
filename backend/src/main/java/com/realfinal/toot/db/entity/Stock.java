@@ -1,42 +1,52 @@
 package com.realfinal.toot.db.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name="stock")
 @Getter
 @NoArgsConstructor
-public class Stock extends BaseEntity{
+@Table(name = "stock")
+@Entity
+public class Stock {
 
-  @ManyToOne
-  @JoinColumn(name="industry_id")
-  private Industry industry;
+    @Id
+    private String id;
 
-  @Column(name="stock_name", nullable = false, length = 50)
-  private String stockName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "industry_id")
+    private Industry industry;
 
-  @Column(name="outline", nullable = false, length = 500)
-  private String outline;
+    @Column(name = "stock_name", length = 50)
+    @NotNull
+    private String stockName;
 
-  @Column(name="per")
-  private Float per;
+    @Column(name = "total_stock")
+    @NotNull
+    private Long totalStock;
 
-  @Column(name="pbr")
-  private Float pbr;
+    @Column(name = "outline", length = 500)
+    @NotNull
+    private String outline;
 
-  @Column(name="roe")
-  private Float roe;
+    @Column(name = "eps")
+    @NotNull
+    private String eps;
 
-  @Column(name="roa")
-  private Float roa;
+    @Column(name = "bps")
+    @NotNull
+    private String bps;
 
-  @Column(name="dept_ratio")
-  private Float deptRatio;
-
+    @Builder
+    public Stock(String id, Industry industry, String stockName, Long totalStock, String outline, String eps, String bps) {
+        this.id = id;
+        this.industry = industry;
+        this.stockName = stockName;
+        this.totalStock = totalStock;
+        this.outline = outline;
+        this.eps = eps;
+        this.bps = bps;
+    }
 }

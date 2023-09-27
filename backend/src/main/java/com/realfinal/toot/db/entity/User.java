@@ -4,8 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import lombok.Builder;
 import lombok.Getter;
 import jakarta.persistence.Table;
@@ -43,10 +45,6 @@ public class User extends BaseEntity {
     @Column(name = "bankruptcy_no")
     @NotNull
     private Integer bankruptcyNo = 0;
-    //    resign_no      int      default 0                 not null,
-    @Column(name = "resign_no")
-    @NotNull
-    private Integer resignNo = 0;
     //    last_quiz_date date                               null,
     @Column(name = "last_quiz_date")
     private LocalDate lastQuizDate;
@@ -55,21 +53,17 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private LocalDateTime joinAt;
-    //    delete_at      datetime                           null
-    @Column(name = "delete_at")
-    private LocalDateTime deleteAt;
 
 
     @Builder
     public User(String providerId, Long seedMoney, Long cash, String profileImage, String name,
-            Integer bankruptcyNo, Integer resignNo, LocalDate lastQuizDate) {
+                Integer bankruptcyNo, LocalDate lastQuizDate) {
         this.providerId = providerId;
         this.seedMoney = seedMoney;
         this.cash = cash;
         this.profileImage = profileImage;
         this.name = name;
         this.bankruptcyNo = bankruptcyNo;
-        this.resignNo = resignNo;
         this.lastQuizDate = lastQuizDate;
     }
 
@@ -80,5 +74,9 @@ public class User extends BaseEntity {
     public void updateQuizResult() {
         this.seedMoney += 10000;
         this.cash += 10000;
+    }
+
+    public void updateCash(Long cash) {
+        this.cash = cash;
     }
 }

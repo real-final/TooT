@@ -1,19 +1,191 @@
 package com.realfinal.toot.api.stock.controller;
 
+import com.realfinal.toot.api.stock.request.StockReq;
+import com.realfinal.toot.api.stock.response.*;
 import com.realfinal.toot.api.stock.service.StockService;
 import com.realfinal.toot.common.model.CommonResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/stock")
+import java.util.List;
+
+@Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/stock")
+@RestController
 public class StockController {
+
     private final StockService stockService;
-    public CommonResponse<Integer> buyStock(@RequestParam String accessToken, @RequestParam String stockId,
-                                            @RequestParam int count) {
-        return CommonResponse.success(stockService.buyStock(accessToken, stockId, count));
+
+    /**
+     * 전체 주식의 주가 정보를 제공
+     *
+     * @param accessToken
+     * @return [ 종목 번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률, 관심 종목으로 등록 여부 ] 리스트
+     */
+    @PostMapping("/showall")
+    public CommonResponse<List<AllStockRes>> showAll(
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_showAll_start: " + accessToken);
+        List<AllStockRes> stockData = stockService.showAll(accessToken);
+        log.info("StockController_showAll_end" + stockData);
+        return CommonResponse.success(stockData);
+    }
+
+    /**
+     * 주식 매수
+     *
+     * @param accessToken
+     * @param stockReq    주식 종목번호 + 매수할 주식 수
+     * @return 매수에 성공한 주식 수(잔고가 부족할 경우 매수를 신청한 주식 수보다 적게 구매)
+     */
+    @PostMapping("/buy")
+    public CommonResponse<Integer> buyStock(
+        @RequestHeader(value = "accesstoken", required = false) String accessToken,
+        @RequestBody StockReq stockReq) {
+        log.info("StockController_buyStock_start: " + accessToken + " " + stockReq);
+        Integer boughtStock = stockService.buyStock(accessToken, stockReq);
+        log.info("StockController_buyStock_end: return " + boughtStock);
+        return CommonResponse.success(boughtStock);
+    }
+
+    /**
+     * 사용자의 평가액 계산
+     *
+     * @param accessToken
+     * @return 시드머니, 계좌 잔고, 주식을 반영한 총 평가액
+     */
+    @PostMapping("/value")
+    public CommonResponse<UserValueRes> calculateValue(
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_calculateValue_start: " + accessToken);
+        UserValueRes userValueRes = stockService.calculateValue(accessToken);
+        log.info("StockController_calculateValue_end: " + userValueRes);
+        return CommonResponse.success(userValueRes);
+    }
+
+    /**
+     * 거래량 상위 10개 종목 조회
+     *
+     * @return [ 등수, 종목번호, 종목명, 현재가, 전일 대비 등락률 ] 리스트(10개)
+     */
+    @PostMapping("/rank")
+    public CommonResponse<List<StockRankRes>> rankByVolume() {
+        log.info("StockController_rankByVolume_start: no required argument");
+        List<StockRankRes> stockRankResList = stockService.rankByVolume();
+        log.info("StockController_rankByVolume_end" + stockRankResList);
+        return CommonResponse.success(stockRankResList);
+    }
+
+    /**
+     * 사용자가 등록한 관심 종목 목록 조회
+     *
+     * @param accessToken
+     * @return [ 종목번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률 ] 리스트
+     */
+    @PostMapping("/interest/show")
+    public CommonResponse<List<InterestRes>> showInterest(
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_showInterest_start: " + accessToken);
+        List<InterestRes> interestResList = stockService.showInterest(accessToken);
+        log.info("StockController_showInterest_end: " + interestResList);
+        return CommonResponse.success(interestResList);
+    }
+
+    /**
+     * 상세 주식 조회
+     *
+     * @param stockId
+     * @param accessToken
+     * @return 종목명, 분봉 리스트, 일봉 리스트, 주봉 리스트, 시가총액, 현재가, 총 주식 수, 산업군, 세부 산업군, 52주 최저가, 52주 최고가, 상세설명,
+     * 관심 종목 등록 여부
+     */
+    @GetMapping("/{stockId}")
+    public CommonResponse<SpecificStockRes> getStockInfo(@PathVariable("stockId") String stockId,
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_getStockInfo_start: " + stockId + " " + accessToken);
+        SpecificStockRes specificStockRes = stockService.getStockInfo(stockId, accessToken);
+        log.info("StockController_getStockInfo_end: " + specificStockRes);
+        return CommonResponse.success(specificStockRes);
+    }
+
+    /**
+     * 사용자 보유 종목 조회
+     *
+     * @param accessToken
+     * @return [ 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 ] 리스트
+     */
+    @PostMapping("/my")
+    public CommonResponse<List<MyStockRes>> myStocks(
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_myStocks_start: " + accessToken);
+        List<MyStockRes> myStockResList = stockService.myStocks(accessToken);
+        log.info("StockController_myStock_end: " + myStockResList);
+        return CommonResponse.success(myStockResList);
+    }
+
+    /**
+     * 사용자 거래 내역
+     *
+     * @param accessToken
+     * @return [ 거래일시, 매수여부, 종목번호, 종목명, 거래 주식 수, 거래가격, 총 거래가격 ] 리스트
+     */
+    @PostMapping("/execution")
+    public CommonResponse<List<ExecutionRes>> myAllExecution(
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_myAllExecution_start: " + accessToken);
+        List<ExecutionRes> executionResList = stockService.myAllExecution(accessToken);
+        log.info("StockController_myAllExecution_end: " + executionResList);
+        return CommonResponse.success(executionResList);
+    }
+
+    /**
+     * 사용자 특정 주식 거래 내역
+     *
+     * @param stockId
+     * @param accessToken
+     * @return [ 거래일시, 매수여부, 종목번호, 종목명, 거래 주식 수, 거래가격, 총 거래가격 ] 리스트
+     */
+    @GetMapping("/execution/{stockId}")
+    public CommonResponse<List<ExecutionRes>> myExecution(@PathVariable("stockId") String stockId,
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_myExecution_start: " + stockId + " " + accessToken);
+        List<ExecutionRes> executionResList = stockService.myExecution(stockId, accessToken);
+        log.info("StockController_myExecution_end: " + executionResList);
+        return CommonResponse.success(executionResList);
+    }
+
+    /**
+     * 주식 매도
+     *
+     * @param accessToken
+     * @param stockReq    종목번호, 매도할 주식 수
+     * @return 매도 성공한 주식 수(보유 주식보다 많은 주식을 판매하려는 경우 보유한 주식 수만 반환)
+     */
+    @PostMapping("/sell")
+    public CommonResponse<Integer> sellStock(
+        @RequestHeader(value = "accesstoken", required = false) String accessToken,
+        @RequestBody StockReq stockReq) {
+        log.info("StockController_sellStock_start: " + accessToken + " " + stockReq);
+        Integer soldStock = stockService.sellStock(accessToken, stockReq);
+        log.info("StockController_sellStock_end: " + soldStock);
+        return CommonResponse.success(soldStock);
+    }
+
+    /**
+     * 관심 종목 추가/삭제
+     *
+     * @param stockId
+     * @param accessToken
+     * @return true(관심 종목 추가), false(관심 종목 삭제)
+     */
+    @GetMapping("/interest/{stockId}")
+    public CommonResponse<Boolean> attributeInterest(@PathVariable("stockId") String stockId,
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_attributeInterest_start: " + stockId + " " + accessToken);
+        Boolean isInterested = stockService.attributeInterest(stockId, accessToken);
+        log.info("StockController_attributeInterest_end: " + isInterested);
+        return CommonResponse.success(isInterested);
     }
 }

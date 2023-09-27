@@ -5,6 +5,7 @@ import com.realfinal.toot.api.kis.util.KisAccessTokenUtil;
 import com.realfinal.toot.api.kis.util.OpenCronUtil;
 import com.realfinal.toot.common.exception.kis.KisApiCallDeniedException;
 import com.realfinal.toot.common.exception.kis.KisApiCallTooManyException;
+import com.realfinal.toot.common.util.PriceUtil;
 import com.realfinal.toot.config.KisConfig;
 import com.realfinal.toot.config.Kospi32Config;
 import lombok.RequiredArgsConstructor;
@@ -18,48 +19,54 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class CurrentPriceService {
 
     private final KisConfig kisConfig;
     private final Kospi32Config kospi32Config;
     private final OpenCronUtil openCronUtil;
     private final KisAccessTokenUtil kisAccessTokenUtil;
-    private final String kisUri = "https://openapi.koreainvestment.com:9443";
-    private final WebClient kisWebClient = WebClient.builder().baseUrl(kisUri).build();
+    private final PriceUtil priceUtil;
+    private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
+    private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
 
-//    @Scheduled(fixedRate = 4000, initialDelay = 1000)
+//    @Scheduled(fixedRate = 5000, initialDelay = 1250)
     public void fetchCurrentPriceForBatch1() {
         getCurrentPrice(kospi32Config.company1, "현재가 기업1");
     }
 
-//    @Scheduled(fixedRate = 4000, initialDelay = 2000)
+//    @Scheduled(fixedRate = 5000, initialDelay = 2500)
     public void fetchCurrentPriceForBatch2() {
         getCurrentPrice(kospi32Config.company2, "현재가 기업2");
     }
 
-//    @Scheduled(fixedRate = 4000, initialDelay = 3000)
+//    @Scheduled(fixedRate = 5000, initialDelay = 3750)
     public void fetchCurrentPriceForBatch3() {
         getCurrentPrice(kospi32Config.company3, "현재가 기업3");
     }
 
-//    @Scheduled(fixedRate = 4000, initialDelay = 4000)
+//    @Scheduled(fixedRate = 5000, initialDelay = 5000)
     public void fetchCurrentPriceForBatch4() {
         getCurrentPrice(kospi32Config.company4, "현재가 기업4");
     }
 
-    private void getCurrentPrice(List<String> companies, String logInfo) {
+    private void getCurrentPrice(List<String> companies, String companyInfo) {
+        log.info("CurrentPriceService_getCurrentPrice_start: " + companyInfo + " " + companies.toString());
         if (!openCronUtil.shouldRun()) {
             return;
         }
         long start = System.currentTimeMillis();
-        for (String company : companies) {
-            CurrentPriceRes result = fetchCurrentPriceForCompany(company);
-            // 여기에 배열에 넣는 작업 들어감
+        CurrentPriceRes[] resList = new CurrentPriceRes[companies.size()];
+        for (int i = 0; i < companies.size(); i++) {
+            CurrentPriceRes result = fetchCurrentPriceForCompany(companies.get(i));
+            resList[i] = result;
         }
-        long end = System.currentTimeMillis();
-        log.info(logInfo + " 수행시간: " + (end - start) + " ms");
+        priceUtil.updatePrice(resList); //8개 단위로 업데이트
+        if(companyInfo.equals("현재가 기업4")) { // 32개 모두 갱신할 때 state 바꿔주기
+            priceUtil.updateState();
+        }
+        log.info("CurrentPriceService_getCurrentPrice_end: 8개씩 호출");
     }
 
     private CurrentPriceRes fetchCurrentPriceForCompany(String companyId) {
@@ -83,10 +90,10 @@ public class CurrentPriceService {
             currentPriceRes.setCorp(companyId);
             return currentPriceRes;
         } catch (HttpServerErrorException.InternalServerError e) {
-            log.info("호출 횟수 초과");
+            log.info("CurrentPriceService_fetchCurrentPriceForCompany_mid: 호출 횟수 초과");
             throw new KisApiCallTooManyException();
         } catch (HttpClientErrorException.NotFound e) {
-            log.info("접근 거부");
+            log.info("CurrentPriceService_fetchCurrentPriceForCompany_mid: 접근 거부");
             throw new KisApiCallDeniedException();
         }
     }
