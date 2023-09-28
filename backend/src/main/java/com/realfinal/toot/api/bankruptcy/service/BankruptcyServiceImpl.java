@@ -59,10 +59,9 @@ public class BankruptcyServiceImpl implements BankruptcyService {
         Integer bankruptcyNo = user.getBankruptcyNo();
         Long lastCash = user.getCash();
         Long lastSeedMoney = user.getSeedMoney();
-        Long lastStockValue = calculateValue(user);
-
+        Long lastTotalAsset = calculateValue(user) + lastCash;
         Bankruptcy bankruptcy = new Bankruptcy(user, bankruptcyNo, lastCash, lastSeedMoney,
-            lastStockValue, LocalDateTime.now());
+            lastTotalAsset, LocalDateTime.now());
         bankruptcyRepository.save(bankruptcy);
         // 파산 후 시드머니, 보유현금, 파산횟수 업데이트
         user.resetAfterBankruptcy();
