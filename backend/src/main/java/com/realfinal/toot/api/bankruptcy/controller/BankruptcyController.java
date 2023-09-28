@@ -24,7 +24,7 @@ public class BankruptcyController {
     private final String SUCCESS = "success";
 
     @GetMapping("/filing")
-    public CommonResponse<?> isBankruptcyAvailable(@RequestHeader String accessToken) {
+    public CommonResponse<?> isBankruptcyAvailable(@RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("BankruptcyController_isBankruptcyAvailable_start");
         Boolean isAvailable = bankruptcyService.isBankruptcyAvailable(accessToken);
         log.info("BankruptcyController_isBankruptcyAvailable_end: 파산 가능 여부 " + isAvailable);
@@ -32,7 +32,7 @@ public class BankruptcyController {
     }
 
     @PostMapping("/proceed")
-    public CommonResponse<?> proceedBankrupt(@RequestHeader String accessToken) {
+    public CommonResponse<?> proceedBankrupt(@RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("BankruptcyController_proceedBankrupt_start");
         bankruptcyService.proceedBankrupt(accessToken);
         log.info("BankruptcyController_proceedBankrupt_end");
@@ -40,7 +40,7 @@ public class BankruptcyController {
     }
 
     @GetMapping("/all")
-    public CommonResponse<List<AllBankruptcyRes>> getAllBankruptcy(@RequestHeader String accessToken) {
+    public CommonResponse<List<AllBankruptcyRes>> getAllBankruptcy(@RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("BankruptcyController_getAllBankruptcy_start");
         List<AllBankruptcyRes> allBankruptcyResList = bankruptcyService.getAllBankruptcy(accessToken);
         log.info("BankruptcyController_getAllBankruptcy_end: 전체 파산 기록 " + allBankruptcyResList);
@@ -48,7 +48,7 @@ public class BankruptcyController {
     }
 
     @GetMapping("/detail/{bankruptcyNo}")
-    public CommonResponse<DetailBankruptcyRes> getDetailBankruptcy(@RequestHeader String accessToken, @RequestParam Integer bankruptcyNo) {
+    public CommonResponse<DetailBankruptcyRes> getDetailBankruptcy(@RequestHeader(value = "accesstoken", required = false) String accessToken, @RequestParam Integer bankruptcyNo) {
         log.info("BankruptcyController_getDetailBankruptcy_start");
         DetailBankruptcyRes detailBankruptcyRes = bankruptcyService.getDetailBankruptcy(accessToken, bankruptcyNo);
         log.info("BankruptcyController_getDetailBankruptcy_end: 상세 파산 기록 " + detailBankruptcyRes);
