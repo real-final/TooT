@@ -14,8 +14,8 @@ const Input = () => {
 
   const handleBubble = async () => {
     await sendBubble(inputText, dispatch);
-    await getBubble(inputText, dispatch);
     setInputText("");
+    await getBubble(inputText, dispatch);
   };
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
