@@ -32,14 +32,14 @@ public class MinutePriceService {
     private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
 
-    // @Scheduled(fixedDelay = 30000, initialDelay = 1000)
+     @Scheduled(fixedDelay = 30000, initialDelay = 1000)
     public void getMinutePrice() {
         fetchMinutePrice(kospi32Config.totalCompany);
     }
 
     private void fetchMinutePrice(List<String> companies) {
         if (!openCronUtil.shouldRun()) return;
-        log.info("MinutePriceService_fetchMinutePrice_start:" + companies.toString());
+//        log.info("MinutePriceService_fetchMinutePrice_start:" + companies.toString());
         for (int i = 0; i < companies.size(); i++) {
             int finalI = i;
             try {
@@ -85,7 +85,7 @@ public class MinutePriceService {
             }
 
         }
-        log.info("MinutePriceService_fetchMinutePrice_end: 1분 32개 호출");
+//        log.info("MinutePriceService_fetchMinutePrice_end: 1분 32개 호출");
     }
 
 }

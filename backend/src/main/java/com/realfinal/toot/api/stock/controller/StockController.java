@@ -70,7 +70,7 @@ public class StockController {
      *
      * @return [ 등수, 종목번호, 종목명, 현재가, 전일 대비 등락률 ] 리스트(10개)
      */
-    @PostMapping("/rank")
+    @GetMapping("/rank")
     public CommonResponse<List<StockRankRes>> rankByVolume() {
         log.info("StockController_rankByVolume_start: no required argument");
         List<StockRankRes> stockRankResList = stockService.rankByVolume();
