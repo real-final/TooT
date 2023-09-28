@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -22,48 +23,49 @@ public class Bankruptcy extends BaseEntity{
     private User user;
 
     // 파산 횟수
-    @Column(name = "bankruptcy_no", nullable = false)
-    private Integer bankruptyNo;
+    @Column(name = "bankruptcy_no")
+    @NotNull
+    private Integer bankruptcyNo;
 
     // 마지막 보유현금
-    @Column(name = "last_cash", nullable = false)
+    @Column(name = "last_cash")
+    @NotNull
     private Long lastCash;
 
     // 마지막 시드머니
-    @Column(name = "last_seed_money", nullable = false)
+    @Column(name = "last_seed_money")
+    @NotNull
     private Long lastSeedMoney;
 
-    // 최종 평가액
-    @Column(name = "last_stock_value", nullable = false)
-    private Long lastStockValue;
-
     // 최종 총자산
-    @Column(name = "last_total_asset", nullable = false)
+    @Column(name = "last_total_asset")
+    @NotNull
     private Long lastTotalAsset;
 
     // 순수익
-    @Column(name = "net_income", nullable = false)
+    @Column(name = "net_income")
+    @NotNull
     private Long netIncome;
 
     // 손익률(수익률)
-    @Column(name = "roi", nullable = false)
+    @Column(name = "roi")
+    @NotNull
     private Double roi;
 
     // 파산 일시
-    @Column(name = "bankrupt_at", nullable = false)
+    @Column(name = "bankrupt_at")
+    @NotNull
     private LocalDateTime bankruptAt;
 
     @Builder
-    public Bankruptcy(User user, Integer bankruptyNo, Long lastCash, Long lastSeedMoney,
-        Long lastStockValue, LocalDateTime current) {
+    public Bankruptcy(User user, Integer bankruptcyNo, Long lastCash, Long lastSeedMoney, Long lastTotalAsset, LocalDateTime bankruptAt) {
         this.user = user;
-        this.bankruptyNo = bankruptyNo;
+        this.bankruptcyNo = bankruptcyNo;
         this.lastCash = lastCash;
         this.lastSeedMoney = lastSeedMoney;
-        this.lastStockValue = lastStockValue;
-        this.lastTotalAsset = lastStockValue + lastCash;
+        this.lastTotalAsset = lastTotalAsset;
         this.roi = (double) this.lastTotalAsset / lastSeedMoney * 100;
         this.netIncome = this.lastTotalAsset - lastSeedMoney;
-        this.bankruptAt = current;
+        this.bankruptAt = bankruptAt;
     }
 }
