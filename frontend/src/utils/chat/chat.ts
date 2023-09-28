@@ -39,24 +39,24 @@ export const getBubble = async (text:string, dispatch: any) => {
     speaker: false
   };
 
-  await axios.post("https://clovachatbot.ncloud.com/api/chatbot/messenger/v1/11717/4341b324382837bdd4e3484b0ba438beb6f358968d0a6d09cfcacd9396c11ce6/message", sendData).then(
-    (response) => { 
-      console.log(response);
-      const data = response.data;
-      const bubbleType = data.content[0].type;
-      newBubble.type = bubbleType;
-      if(bubbleType === "text"){
-        const bubbleSlices = data.content[0].data.details.split('|');
-        bubbleData = bubbleSlices.slice(0, -1);
-        bubble = bubbleSlices.slice(-1);
-        newBubble.message = bubble;
-      }
-      else if(bubbleType === "image"){
-        const bubbleSlices = data.content[0].data.description.split('|');
-        newBubble.url = data.content[0].data.url;
-        bubble = bubbleSlices.slice(-1);
-        newBubble.message = bubble;
-      }
+  // TODO: 배포 url로 바꾸기
+  await axios.post("https://too-t.com/express/chatbot", {sendData}).then((res) => {
+    console.log(res);
+    const data = res.data.chatResponse;
+    const bubbleType = data.content[0].type;
+    newBubble.type = bubbleType;
+    if(bubbleType === "text"){
+      const bubbleSlices = data.content[0].data.details.split('|');
+      bubbleData = bubbleSlices.slice(0, -1);
+      bubble = bubbleSlices.slice(-1);
+      newBubble.message = bubble;
+    }
+    else if(bubbleType === "image"){
+      const bubbleSlices = data.content[0].data.description.split('|');
+      newBubble.url = data.content[0].data.url;
+      bubble = bubbleSlices.slice(-1);
+      newBubble.message = bubble;
+    }
   });
   await dispatch(add(newBubble));
   await codeSwitch(bubble, bubbleData);

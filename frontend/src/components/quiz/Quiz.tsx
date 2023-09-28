@@ -56,6 +56,7 @@ const Quiz = () => {
         navigate("/");
       }, 5000);
     }
+    // eslint-disable-next-line
   }, [isAnswer]);
 
   return (
