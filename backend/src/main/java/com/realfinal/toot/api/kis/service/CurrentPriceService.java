@@ -31,28 +31,28 @@ public class CurrentPriceService {
     private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
 
-//    @Scheduled(fixedRate = 5000, initialDelay = 1250)
+    @Scheduled(fixedRate = 5000, initialDelay = 1250)
     public void fetchCurrentPriceForBatch1() {
         getCurrentPrice(kospi32Config.company1, "현재가 기업1");
     }
 
-//    @Scheduled(fixedRate = 5000, initialDelay = 2500)
+    @Scheduled(fixedRate = 5000, initialDelay = 2500)
     public void fetchCurrentPriceForBatch2() {
         getCurrentPrice(kospi32Config.company2, "현재가 기업2");
     }
 
-//    @Scheduled(fixedRate = 5000, initialDelay = 3750)
+    @Scheduled(fixedRate = 5000, initialDelay = 3750)
     public void fetchCurrentPriceForBatch3() {
         getCurrentPrice(kospi32Config.company3, "현재가 기업3");
     }
 
-//    @Scheduled(fixedRate = 5000, initialDelay = 5000)
+    @Scheduled(fixedRate = 5000, initialDelay = 5000)
     public void fetchCurrentPriceForBatch4() {
         getCurrentPrice(kospi32Config.company4, "현재가 기업4");
     }
 
     private void getCurrentPrice(List<String> companies, String companyInfo) {
-        log.info("CurrentPriceService_getCurrentPrice_start: " + companyInfo + " " + companies.toString());
+//        log.info("CurrentPriceService_getCurrentPrice_start: " + companyInfo + " " + companies.toString());
         if (!openCronUtil.shouldRun()) {
             return;
         }
@@ -66,7 +66,7 @@ public class CurrentPriceService {
         if(companyInfo.equals("현재가 기업4")) { // 32개 모두 갱신할 때 state 바꿔주기
             priceUtil.updateState();
         }
-        log.info("CurrentPriceService_getCurrentPrice_end: 8개씩 호출");
+//        log.info("CurrentPriceService_getCurrentPrice_end: 8개씩 호출");
     }
 
     private CurrentPriceRes fetchCurrentPriceForCompany(String companyId) {
