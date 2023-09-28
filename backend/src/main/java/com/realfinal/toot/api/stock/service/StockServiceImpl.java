@@ -391,7 +391,7 @@ public class StockServiceImpl implements StockService {
             count = hold;
         }
 
-        Integer price = PriceUtil.getCurrentPrice(stockId);
+        Integer price = priceUtil.getCurrentPrice(stockId);
         Long totalPrice = Long.valueOf((long) priceUtil.getCurrentPrice(stockId) * count);
         totalPrice *= 99685;
         totalPrice /= 100000;
