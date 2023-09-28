@@ -64,7 +64,7 @@ public class Bankruptcy extends BaseEntity{
         this.lastCash = lastCash;
         this.lastSeedMoney = lastSeedMoney;
         this.lastTotalAsset = lastTotalAsset;
-        this.roi = (double) this.lastTotalAsset / lastSeedMoney * 100;
+        this.roi = 100.0 * this.lastTotalAsset / lastSeedMoney;
         this.netIncome = this.lastTotalAsset - lastSeedMoney;
         this.bankruptAt = bankruptAt;
     }

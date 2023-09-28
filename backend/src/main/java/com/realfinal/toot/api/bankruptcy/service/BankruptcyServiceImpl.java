@@ -32,17 +32,17 @@ public class BankruptcyServiceImpl implements BankruptcyService {
     private final BankruptcyRepository bankruptcyRepository;
     private final UserRepository userRepository;
     private final UserStockRepository userStockRepository;
-    private final Double RATIO = 30D;
+    private final Double RATIO = 70D;
 
     @Override
     public Boolean isBankruptcyAvailable(String accessToken) {
         log.info("BankruptcyServiceImpl_isBankruptcyAvailable_start: " + accessToken);
-        Long id = jwtProviderUtil.getUserIdFromToken(accessToken);
-        User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Long stockValue = calculateValue(user);
         Long totalAsset = stockValue + user.getCash();
         Long seedMoney = user.getSeedMoney();
-        if (totalAsset / seedMoney * 100 < RATIO) { // 시드머니 대비 총자산 비율이 30% 미만
+        if (100L * totalAsset / seedMoney < RATIO) { // 시드머니 대비 총자산 비율이 30% 미만
             log.info("BankruptcyServiceImpl_isBankruptcyAvailable_end: true(파산 가능)");
             return true;
         } else {
@@ -54,27 +54,25 @@ public class BankruptcyServiceImpl implements BankruptcyService {
     @Override
     public void proceedBankrupt(String accessToken) {
         log.info("BankruptcyServiceImpl_goBankrupt_start: " + accessToken);
-        Long id = jwtProviderUtil.getUserIdFromToken(accessToken);
-        User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
-        if (isBankruptcyAvailable(accessToken)) {
-            Integer bankruptcyNo = user.getBankruptcyNo();
-            Long lastCash = user.getCash();
-            Long lastSeedMoney = user.getSeedMoney();
-            Long lastTotalAsset = calculateValue(user) + lastCash;
-            Bankruptcy bankruptcy = new Bankruptcy(user, bankruptcyNo, lastCash, lastSeedMoney,
-                lastTotalAsset, LocalDateTime.now());
-            bankruptcyRepository.save(bankruptcy);
-            // 파산 후 시드머니, 보유현금, 파산횟수 업데이트
-            user.resetAfterBankruptcy();
-            log.info("BankruptcyServiceImpl_goBankrupt_end: 파산 완료");
-        }
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
+        Integer bankruptcyNo = user.getBankruptcyNo();
+        Long lastCash = user.getCash();
+        Long lastSeedMoney = user.getSeedMoney();
+        Long lastTotalAsset = calculateValue(user) + lastCash;
+        Bankruptcy bankruptcy = new Bankruptcy(user, bankruptcyNo, lastCash, lastSeedMoney,
+            lastTotalAsset, LocalDateTime.now());
+        bankruptcyRepository.save(bankruptcy);
+        // 파산 후 시드머니, 보유현금, 파산횟수 업데이트
+        user.resetAfterBankruptcy();
+        log.info("BankruptcyServiceImpl_goBankrupt_end: 파산 완료");
     }
 
     @Override
     public List<AllBankruptcyRes> getAllBankruptcy(String accessToken) {
         log.info("BankruptcyServiceImpl_getAllBankruptcy_start: " + accessToken);
-        Long id = jwtProviderUtil.getUserIdFromToken(accessToken);
-        User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         List<AllBankruptcyRes> allBankruptcyResList = new ArrayList<>();
         List<Bankruptcy> bankruptcyList = bankruptcyRepository.findAllByUser(user);
         if (bankruptcyList.isEmpty()) {
@@ -92,8 +90,8 @@ public class BankruptcyServiceImpl implements BankruptcyService {
     @Override
     public DetailBankruptcyRes getDetailBankruptcy(String accessToken, Integer bankruptcyNo) {
         log.info("BankruptcyServiceImpl_getDetailBankruptcy_start: " + accessToken);
-        Long id = jwtProviderUtil.getUserIdFromToken(accessToken);
-        User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Bankruptcy userBankruptcy = bankruptcyRepository.findByUserAndBankruptcyNo(user,
             bankruptcyNo);
         if (userBankruptcy == null) {
@@ -108,10 +106,10 @@ public class BankruptcyServiceImpl implements BankruptcyService {
     public Long calculateValue(User user) {
         log.info("BankruptcyServiceImpl_calculateValue_start: " + user);
         Long stockValue = 0L;
-        List<UserStock> userStocks = userStockRepository.findAllByUserAndBankruptcyNo(user,
+        List<UserStock> userStockList = userStockRepository.findAllByUserAndBankruptcyNo(user,
             user.getBankruptcyNo());
-        if (userStocks != null) {
-            for (UserStock userStock : userStocks) {
+        if (!userStockList.isEmpty()) {
+            for (UserStock userStock : userStockList) {
                 stockValue += (long) priceUtil.getCurrentPrice(userStock.getStock().getId())
                     * userStock.getHold();
             }
