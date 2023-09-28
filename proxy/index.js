@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 //     }
 // })
 
-app.post("/express/chatbot", async (req, res) => {
+app.post("/chatbot", async (req, res) => {
     const sendData = req.body.sendData;
     try {
         const response = await axios.post("https://clovachatbot.ncloud.com/api/chatbot/messenger/v1/11717/4341b324382837bdd4e3484b0ba438beb6f358968d0a6d09cfcacd9396c11ce6/message", sendData);
