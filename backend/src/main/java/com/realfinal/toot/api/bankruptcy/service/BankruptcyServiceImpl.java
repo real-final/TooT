@@ -3,6 +3,7 @@ package com.realfinal.toot.api.bankruptcy.service;
 import com.realfinal.toot.api.bankruptcy.mapper.BankruptcyMapper;
 import com.realfinal.toot.api.bankruptcy.response.AllBankruptcyRes;
 import com.realfinal.toot.api.bankruptcy.response.DetailBankruptcyRes;
+import com.realfinal.toot.common.exception.bankruptcy.NoBankruptcyDataException;
 import com.realfinal.toot.common.exception.user.MySQLSearchException;
 import com.realfinal.toot.common.util.JwtProviderUtil;
 import com.realfinal.toot.common.util.PriceUtil;
@@ -75,6 +76,9 @@ public class BankruptcyServiceImpl implements BankruptcyService {
         User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
         List<AllBankruptcyRes> allBankruptcyResList = new ArrayList<>();
         List<Bankruptcy> bankruptcyList = bankruptcyRepository.findAllByUser(user);
+        if(bankruptcyList.isEmpty()) {
+            throw new NoBankruptcyDataException();
+        }
         for (Bankruptcy userBankruptcy : bankruptcyList) {
             AllBankruptcyRes allBankruptcyRes = BankruptcyMapper.INSTANCE.toAllBankruptcyRes(
                 userBankruptcy);
@@ -91,6 +95,9 @@ public class BankruptcyServiceImpl implements BankruptcyService {
         User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
         Bankruptcy userBankruptcy = bankruptcyRepository.findByUserAndBankruptcyNo(user,
             bankruptcyNo);
+        if(userBankruptcy == null) {
+            throw new NoBankruptcyDataException();
+        }
         DetailBankruptcyRes detailBankruptcyRes = BankruptcyMapper.INSTANCE.toDetailBankruptcyRes(
             userBankruptcy);
         log.info("BankruptcyServiceImpl_getDetailBankruptcy_end: 파산 상세 기록 조회 완료");
