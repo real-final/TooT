@@ -234,8 +234,8 @@ public class StockServiceImpl implements StockService {
         List<DayWeekRes> dayCandle = priceUtil.getDayCandle(stockId);
         List<DayWeekRes> weekCandle = priceUtil.getWeekCandle(stockId);
         Integer currentPrice = priceUtil.getCurrentPrice(stockId);
-        String min52 = priceUtil.getMin52(stockId);
-        String max52 = priceUtil.getMax52(stockId);
+        Integer min52 = priceUtil.getMin52(stockId);
+        Integer max52 = priceUtil.getMax52(stockId);
         String totalPrice = priceUtil.getTotalPrice(stockId);
         SpecificStockRes specificStockRes = StockMapper.INSTANCE.toSpecificStockRes(stock,
             minCandle, dayCandle, weekCandle, totalPrice, currentPrice, min52, max52,

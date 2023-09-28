@@ -19,16 +19,15 @@ public class SpecificStockRes {
     private Long totalStock;
     private String industryClass;
     private String wics;
-    private String min52;
-    private String max52;
+    private Integer min52;
+    private Integer max52;
     private String outline;
     private Boolean interested;
 
     @Builder
-
     public SpecificStockRes(String stockName, List<MinuteRes> minCandle, List<DayWeekRes> dayCandle,
         List<DayWeekRes> weekCandle, String totalPrice, Integer currentPrice, Long totalStock,
-        String industryClass, String wics, String min52, String max52, String outline,
+        String industryClass, String wics, Integer min52, Integer max52, String outline,
         Boolean interested) {
         this.stockName = stockName;
         this.minCandle = minCandle;

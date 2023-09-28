@@ -42,9 +42,11 @@ public interface StockMapper {
         String rateDifference) throws MapperException;
 
 
+    @Mapping(source = "stock.industry.industryClass", target = "industryClass")
+    @Mapping(source = "stock.industry.wics", target = "wics")
     SpecificStockRes toSpecificStockRes(Stock stock, List<MinuteRes> minCandle,
         List<DayWeekRes> dayCandle, List<DayWeekRes> weekCandle, String totalPrice,
-        Integer currentPrice, String min52, String max52, Boolean interested)
+        Integer currentPrice, Integer min52, Integer max52, Boolean interested)
         throws MapperException;
 
     @Mapping(source = "stock.id", target = "stockId")

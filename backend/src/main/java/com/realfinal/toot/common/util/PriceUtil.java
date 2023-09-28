@@ -66,8 +66,8 @@ public class PriceUtil {
     private String[][] priceDifferencce = new String[32][2];    //전일 대비 가격 증감
     private String[][] rateDifference = new String[32][2];  //전일 대비 증가율
     private Long[][] tradingVolume = new Long[32][2];    //누적 거래량
-    private String[] min52 = new String[32];    //52주 최저가
-    private String[] max52 = new String[32];    //52주 최고가
+    private Integer[] min52 = new Integer[32];    //52주 최저가
+    private Integer[] max52 = new Integer[32];    //52주 최고가
     private String[][] per = new String[32][2]; //PER
     private String[][] pbr = new String[32][2]; //PBR
     private MinuteRes[][] minCandle = new MinuteRes[32][30]; //분봉
@@ -104,14 +104,13 @@ public class PriceUtil {
 
     public void updateTradingVolume(int index, Long volume) {
         this.tradingVolume[index][this.nextState] = volume;
-
     }
 
-    public void updateMin52(int index, String price) {
+    public void updateMin52(int index, Integer price) {
         this.min52[index] = price;
     }
 
-    public void updateMax52(int index, String price) {
+    public void updateMax52(int index, Integer price) {
         this.max52[index] = price;
     }
 
@@ -143,11 +142,11 @@ public class PriceUtil {
         return this.tradingVolume[this.getStockIndex(stockId)][this.currentState];
     }
 
-    public String getMin52(String stockId) {
+    public Integer getMin52(String stockId) {
         return this.min52[this.getStockIndex(stockId)];
     }
 
-    public String getMax52(String stockId) {
+    public Integer getMax52(String stockId) {
         return this.max52[this.getStockIndex(stockId)];
     }
 
@@ -162,7 +161,7 @@ public class PriceUtil {
     public void updateMinCandle(MinutePriceRes minutePriceRes) {
         int index = this.getStockIndex(minutePriceRes.getCorp());
 
-        if(this.minState[index] == null) {
+        if (this.minState[index] == null) {
             this.minState[index] = 0;
         }
         // 슬라이딩 윈도우 적용: 2분 전 ~ 30분 전 데이터는 변동이 없으므로 31분 전 데이터만 1분 전 데이터로 변환
@@ -256,13 +255,13 @@ public class PriceUtil {
             int index = this.getStockIndex(stock.getCorp());
             CurrentPriceRes.Output output = stock.getOutput();
 
-            this.updateCurrentPrice(index, Integer.valueOf(output.getStck_prpr()));
+            this.updateCurrentPrice(index, Integer.parseInt(output.getStck_prpr()));
             this.updateTotalPrice(index, output.getHts_avls());
             this.updatePriceDifference(index, output.getPrdy_vrss());
             this.updateRateDifference(index, output.getPrdy_ctrt());
             this.updateTradingVolume(index, Long.valueOf(output.getAcml_vol()));
-            this.updateMin52(index, output.getW52_lwpr());
-            this.updateMax52(index, output.getW52_hgpr());
+            this.updateMin52(index, Integer.parseInt(output.getW52_lwpr()));
+            this.updateMax52(index, Integer.parseInt(output.getW52_hgpr()));
             this.updatePer(index, output.getPer());
             this.updatePbr(index, output.getPbr());
         }
