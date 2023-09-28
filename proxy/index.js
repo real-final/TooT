@@ -5,12 +5,14 @@ const axios = require("axios");
 
 
 const app = express();
-app.use(cors({
-    origin: [
-        "http://localhost:3000",
-        "https://too-t.com"
-    ]
-}));
+app.use(cors(
+//     {
+//     origin: [
+//         "http://localhost:3000",
+//         "https://too-t.com"
+//     ]
+// }
+));
 
 app.use(bodyParser.json());
 
