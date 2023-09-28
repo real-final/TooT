@@ -39,8 +39,14 @@ public class Stock {
     @NotNull
     private String bps;
 
+    @Column(name = "image_url")
+    @NotNull
+    private String imageUrl;
+
     @Builder
-    public Stock(String id, Industry industry, String stockName, Long totalStock, String outline, String eps, String bps) {
+
+    public Stock(String id, Industry industry, String stockName, Long totalStock, String outline,
+        String eps, String bps, String imageUrl) {
         this.id = id;
         this.industry = industry;
         this.stockName = stockName;
@@ -48,5 +54,6 @@ public class Stock {
         this.outline = outline;
         this.eps = eps;
         this.bps = bps;
+        this.imageUrl = imageUrl;
     }
 }
