@@ -12,11 +12,11 @@ import lombok.ToString;
 public class DetailBankruptcyRes {
 
     private Integer bankruptcyNo;
-    private Long lastCash;
-    private Long lastSeedMoney;
-    private Long lastTotalAsset;
-    private Long netIncome;
-    private Double roi;
+    private Long lastCash; // 마지막 보유 현금
+    private Long lastSeedMoney; // 마지막 시드 머니
+    private Long netIncome; // 마지막 순수익
+    private Double roi; // 마지막 수익률
+    private Long lastTotalAsset; // 마지막 총 자산
     @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime bankruptAt;
 
@@ -26,9 +26,9 @@ public class DetailBankruptcyRes {
         this.bankruptcyNo = bankruptcyNo;
         this.lastCash = lastCash;
         this.lastSeedMoney = lastSeedMoney;
-        this.lastTotalAsset = lastTotalAsset;
         this.netIncome = netIncome;
         this.roi = roi;
+        this.lastTotalAsset = lastTotalAsset;
         this.bankruptAt = bankruptAt;
     }
 }

@@ -14,9 +14,9 @@ public class AllBankruptcyRes {
     private Integer bankruptcyNo;
     @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime bankruptAt;
-    private Long lastTotalAsset;
-    private Long netIncome;
-    private Double roi;
+    private Long lastTotalAsset; // 총자산
+    private Long netIncome; // 순수익
+    private Double roi; // 수익률
 
     @Builder
     public AllBankruptcyRes(Integer bankruptcyNo, LocalDateTime bankruptAt, Long lastTotalAsset,
