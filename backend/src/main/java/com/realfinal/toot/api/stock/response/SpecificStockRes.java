@@ -23,12 +23,14 @@ public class SpecificStockRes {
     private Integer max52;
     private String outline;
     private Boolean interested;
+    private String imageUrl;
 
     @Builder
+
     public SpecificStockRes(String stockName, List<MinuteRes> minCandle, List<DayWeekRes> dayCandle,
         List<DayWeekRes> weekCandle, String totalPrice, Integer currentPrice, Long totalStock,
         String industryClass, String wics, Integer min52, Integer max52, String outline,
-        Boolean interested) {
+        Boolean interested, String imageUrl) {
         this.stockName = stockName;
         this.minCandle = minCandle;
         this.dayCandle = dayCandle;
@@ -42,5 +44,6 @@ public class SpecificStockRes {
         this.max52 = max52;
         this.outline = outline;
         this.interested = interested;
+        this.imageUrl = imageUrl;
     }
 }
