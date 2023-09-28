@@ -56,16 +56,18 @@ public class BankruptcyServiceImpl implements BankruptcyService {
         log.info("BankruptcyServiceImpl_goBankrupt_start: " + accessToken);
         Long id = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
-        Integer bankruptcyNo = user.getBankruptcyNo();
-        Long lastCash = user.getCash();
-        Long lastSeedMoney = user.getSeedMoney();
-        Long lastTotalAsset = calculateValue(user) + lastCash;
-        Bankruptcy bankruptcy = new Bankruptcy(user, bankruptcyNo, lastCash, lastSeedMoney,
-            lastTotalAsset, LocalDateTime.now());
-        bankruptcyRepository.save(bankruptcy);
-        // 파산 후 시드머니, 보유현금, 파산횟수 업데이트
-        user.resetAfterBankruptcy();
-        log.info("BankruptcyServiceImpl_goBankrupt_end: 파산 완료");
+        if (isBankruptcyAvailable(accessToken)) {
+            Integer bankruptcyNo = user.getBankruptcyNo();
+            Long lastCash = user.getCash();
+            Long lastSeedMoney = user.getSeedMoney();
+            Long lastTotalAsset = calculateValue(user) + lastCash;
+            Bankruptcy bankruptcy = new Bankruptcy(user, bankruptcyNo, lastCash, lastSeedMoney,
+                lastTotalAsset, LocalDateTime.now());
+            bankruptcyRepository.save(bankruptcy);
+            // 파산 후 시드머니, 보유현금, 파산횟수 업데이트
+            user.resetAfterBankruptcy();
+            log.info("BankruptcyServiceImpl_goBankrupt_end: 파산 완료");
+        }
     }
 
     @Override
@@ -75,7 +77,7 @@ public class BankruptcyServiceImpl implements BankruptcyService {
         User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
         List<AllBankruptcyRes> allBankruptcyResList = new ArrayList<>();
         List<Bankruptcy> bankruptcyList = bankruptcyRepository.findAllByUser(user);
-        if(bankruptcyList.isEmpty()) {
+        if (bankruptcyList.isEmpty()) {
             throw new NoBankruptcyDataException();
         }
         for (Bankruptcy userBankruptcy : bankruptcyList) {
@@ -94,7 +96,7 @@ public class BankruptcyServiceImpl implements BankruptcyService {
         User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
         Bankruptcy userBankruptcy = bankruptcyRepository.findByUserAndBankruptcyNo(user,
             bankruptcyNo);
-        if(userBankruptcy == null) {
+        if (userBankruptcy == null) {
             throw new NoBankruptcyDataException();
         }
         DetailBankruptcyRes detailBankruptcyRes = BankruptcyMapper.INSTANCE.toDetailBankruptcyRes(
