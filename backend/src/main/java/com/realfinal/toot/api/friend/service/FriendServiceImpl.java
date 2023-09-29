@@ -126,7 +126,7 @@ public class FriendServiceImpl implements FriendService {
             rankList.add(rankRes);
         }
         RankRes rankRes = null;
-        if (accessToken != null) {
+        if (accessToken != null && !accessToken.isEmpty()) {
             Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
             User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
             Long netProfit = priceUtil.calNetProfit(user.getId());

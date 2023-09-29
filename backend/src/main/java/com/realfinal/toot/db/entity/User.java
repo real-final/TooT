@@ -16,7 +16,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 @DynamicInsert
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 @Getter
 @NoArgsConstructor
 public class User extends BaseEntity {
