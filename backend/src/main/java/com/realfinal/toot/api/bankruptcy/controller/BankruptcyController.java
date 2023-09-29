@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +50,7 @@ public class BankruptcyController {
     }
 
     @GetMapping("/detail/{bankruptcyNo}")
-    public CommonResponse<DetailBankruptcyRes> getDetailBankruptcy(@RequestHeader(value = "accesstoken", required = false) String accessToken, @RequestParam Integer bankruptcyNo) {
+    public CommonResponse<DetailBankruptcyRes> getDetailBankruptcy(@RequestHeader(value = "accesstoken", required = false) String accessToken, @PathVariable Integer bankruptcyNo) {
         log.info("BankruptcyController_getDetailBankruptcy_start");
         DetailBankruptcyRes detailBankruptcyRes = bankruptcyService.getDetailBankruptcy(accessToken, bankruptcyNo);
         log.info("BankruptcyController_getDetailBankruptcy_end: 상세 파산 기록 " + detailBankruptcyRes);
@@ -57,7 +58,7 @@ public class BankruptcyController {
     }
 
     @GetMapping("/detail/{bankruptcyNo}/execution")
-    public CommonResponse<List<ExecutionRes>> getAllExecutionByBankruptcy(@RequestHeader(value = "accesstoken", required = false) String accessToken, @RequestParam Integer bankruptcyNo) {
+    public CommonResponse<List<ExecutionRes>> getAllExecutionByBankruptcy(@RequestHeader(value = "accesstoken", required = false) String accessToken, @PathVariable Integer bankruptcyNo) {
         log.info("BankruptcyController_getAllExecutionByBankruptcy_start");
         List<ExecutionRes> bankruptcyExecutionResList = bankruptcyService.getAllExecutionByBankruptcy(accessToken, bankruptcyNo);
         log.info("BankruptcyController_getAllExecutionByBankruptcy_end: 파산 횟수에 따른 거래 내역 " + bankruptcyExecutionResList);
