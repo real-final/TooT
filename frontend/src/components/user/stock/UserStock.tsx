@@ -18,7 +18,6 @@ const UserStock = () => {
         accesstoken: accessToken,
       },
     });
-    console.log(response);
     setUserStockList(response.data.data);
   });
 

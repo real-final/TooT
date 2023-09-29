@@ -12,16 +12,14 @@ const UserTrade = () => {
 
   const [userTrade, setUserTrade] = useState([]);
 
-  const { data, isLoading } = useQuery("user-trade", async () => {
+  const { isLoading } = useQuery("user-trade", async () => {
     const response = await api.get("/stock/execution", {
       headers: {
         accesstoken: accessToken,
       },
     });
-    return response?.data?.data;
+    setUserTrade(response.data.data);
   });
-
-  setUserTrade(data);
 
   return(
     <div className="w-full h-full p-8 min-h-0">
