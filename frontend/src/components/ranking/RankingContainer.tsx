@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { UserAuthContext } from "../../App";
 import { REACT_APP_SERVER, REDIRECT_URI } from "../../utils/api";
@@ -14,53 +13,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 
 const RankingContainer = ({ title }: { size: string; title: string }) => {
-  const [friendAPI, setFriendAPI] = useState("");
-  const [friendList, setFriendList] = useState([]);
-  const [myInfo, setMyInfo] = useState({
-    name: "",
-    profileImage: "",
-    bankruptcyNo: 0,
-    netProfit: 0,
-  });
-  const [fetchData, setFetchData] = useState(false);
   const userAuthContext = useContext(UserAuthContext);
   const accessToken = userAuthContext?.accessToken;
+  let rankingAPI = `${REACT_APP_SERVER}/rank/list`;
 
-  useEffect(() => {
-    if (title === "친구 랭킹")
-      setFriendAPI(`${REACT_APP_SERVER}/rank/list/kakao`);
-    else {
-      setFriendAPI(`${REACT_APP_SERVER}/rank/list`);
+  if (title === "친구 랭킹") {
+    rankingAPI += "/kakao";
+  }
+
+  const { data, isLoading, isError } = useQuery("ranking-list", async () => {
+    const response = await axios.get(rankingAPI, {
+      headers: {
+        accesstoken: accessToken,
+      },
+    });
+
+    // 카카오 친구목록 공개 미동의? 동의 화면으로 이동
+    if (response?.data.success === false) {
+      const CLIENT_ID = "d1fc52f81b5a4dd2f6ae29b5fb7d6932";
+      const kakaoFriendsUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=friends`;
+      return (window.location.href = kakaoFriendsUrl);
     }
-    setFetchData(true);
-  }, []);
 
-  const { isLoading } = useQuery<any>(
-    "friend-list",
-    async () => {
-      const response = await axios.get(friendAPI, {
-        headers: {
-          accesstoken: accessToken,
-        },
-      });
+    return response?.data?.data;
+  });
 
-      const responseData = response?.data;
-      console.log(responseData);
-
-      if (responseData.success === false) {
-        const CLIENT_ID = "d1fc52f81b5a4dd2f6ae29b5fb7d6932";
-        const kakaoFriendsUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=friends`;
-        return (window.location.href = kakaoFriendsUrl);
-      }
-      setFriendList(responseData?.data?.list);
-      setMyInfo(responseData?.data?.myInfo);
-    },
-    {
-      enabled: fetchData,
-    }
-  );
-
-  if (isLoading) {
+  if (isLoading || isError) {
     return <CustomCircularProgress />;
   }
 
@@ -74,11 +52,11 @@ const RankingContainer = ({ title }: { size: string; title: string }) => {
         />
       </div>
       <div className="w-full flex justify-center mt-2.5 mb-8">
-        <UserRanking index={0} user={myInfo} />
+        <UserRanking index={0} user={data?.myInfo} userRank={data?.myRank} />
       </div>
       <hr />
       <div className="w-[95%] h-[70%] h-min-0">
-        <Ranking size="big" friendList={friendList} />
+        <Ranking size="big" rankingList={data?.list} />
       </div>
     </div>
   );
