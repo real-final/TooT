@@ -42,7 +42,7 @@ public class FriendController {
      * @return 전체 랭킹 리스트, 내 정보, 내 등수
      */
     @GetMapping("/list")
-    public CommonResponse<?> getRank(@RequestHeader(value = "accessToken") String accessToken) {
+    public CommonResponse<?> getRank(@RequestHeader(value = "accessToken", required = false) String accessToken) {
         log.info("FriendController_getRank_start: " + accessToken);
         RankListRes rankResList = friendService.getRank(accessToken);
         log.info("FriendController_getRank_end: " + rankResList);

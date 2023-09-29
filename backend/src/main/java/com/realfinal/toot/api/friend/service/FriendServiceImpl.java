@@ -118,7 +118,6 @@ public class FriendServiceImpl implements FriendService {
     public RankListRes getRank(String accessToken) {
         log.info("FriendServiceImpl_getRank_start: " + accessToken);
         List<User> userList = userRepository.findAll();
-        Long id = jwtProviderUtil.getUserIdFromToken(accessToken);
 
         List<RankRes> rankList = new ArrayList<>();
         for (User user : userList) {
@@ -126,10 +125,13 @@ public class FriendServiceImpl implements FriendService {
             RankRes rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
             rankList.add(rankRes);
         }
-
-        User user = userRepository.findById(id).orElseThrow(MySQLSearchException::new);
-        Long netProfit = priceUtil.calNetProfit(user.getId());
-        RankRes rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
+        RankRes rankRes = null;
+        if (accessToken != null) {
+            Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+            User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
+            Long netProfit = priceUtil.calNetProfit(user.getId());
+            rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
+        }
 
         RankListRes rankListRes = sortListAndGetMyRankAndMap(rankList, rankRes);
         log.info("FriendServiceImpl_getRank_end: " + rankListRes);
@@ -147,7 +149,9 @@ public class FriendServiceImpl implements FriendService {
     private RankListRes sortListAndGetMyRankAndMap(List<RankRes> rankList, RankRes rankRes) {
         log.info("FriendServiceImpl_sortListAndGetMyRankAndMap_start: " + rankList + rankRes);
         rankList = rankList.stream()
-                .sorted(Comparator.comparing(RankRes::getNetProfit).reversed()) // 내림차순
+                .sorted(Comparator.comparing(RankRes::getNetProfit).reversed() // 내림차순으로 netProfit 정렬
+                        .thenComparing(RankRes::getBankruptcyNo) // netProfit이 같을 경우, 오름차순으로 bankruptcyNo 정렬
+                        .thenComparing(RankRes::getId)) // bankruptcyNo가 같을 경우, 오름차순으로 id 정렬
                 .collect(Collectors.toList());
         int index = -1; // -1은 "찾지 못함"을 의미합니다.
         for (int i = 0; i < rankList.size(); i++) {
