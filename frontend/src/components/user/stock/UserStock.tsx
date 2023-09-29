@@ -32,7 +32,7 @@ const UserStock = () => {
       <Title title="보유 주식" />
       <div className="h-[90%] no-scrollbar overflow-y-auto">
         {userStockList.map((item, index) => (
-          <UserStockItem key={index} stock={item} index={index} />
+          <UserStockItem key={index} stock={item} />
         ))}
       </div>
     </div>
