@@ -3,6 +3,7 @@ import Avatar from "@mui/joy/Avatar";
 const UserRanking = ({
   index,
   user,
+  userRank,
 }: {
   index: number;
   user: {
@@ -11,17 +12,18 @@ const UserRanking = ({
     bankruptcyNo: number;
     netProfit: number;
   };
+  userRank: number;
 }) => {
   return (
     <div className="flex items-center justify-around w-[80%] p-2 bg-lightYellow border-solid border rounded-lg border-gray-200">
       <div
         className={`text-[52px] align-middle ${
-          index === 0 ? "text-first " : " "
-        }${index === 1 ? "text-second " : " "}${
-          index === 2 ? "text-third " : " "
+          userRank === 0 ? "text-first " : " "
+        }${userRank === 1 ? "text-second " : " "}${
+          userRank === 2 ? "text-third " : " "
         }`}
       >
-        {index + 1}
+        {userRank + 1}
       </div>
       <div className="align-middle">
         <Avatar

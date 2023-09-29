@@ -1,6 +1,8 @@
 import ItemFinancialDetails from "./ItemFinancialDetails";
 import ItemSummary from "./ItemSummary";
 
+import { IstockItem } from "../../../interface/IstockDetails";
+
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
@@ -8,7 +10,13 @@ import TabPanel from "@mui/joy/TabPanel";
 import Avatar from "@mui/joy/Avatar";
 
 /** 상세조회 페이지 종목요약 & 재무정보 */
-const StockInfoTabs: React.FC = () => {
+const StockInfoTabs: React.FC<{ stockId?: string; stockItem?: IstockItem }> = ({
+  stockId,
+  stockItem,
+}) => {
+  if (typeof stockId === "undefined" || typeof stockItem === "undefined")
+    return <></>;
+
   return (
     <Tabs
       variant="outlined"
@@ -47,11 +55,11 @@ const StockInfoTabs: React.FC = () => {
       </TabList>
       <TabPanel value={0} sx={{ overflowY: "auto" }} className="no-scrollbar">
         {/* 종목요약 */}
-        <ItemSummary />
+        <ItemSummary stockId={stockId} stockItem={stockItem} />
       </TabPanel>
       <TabPanel value={1}>
         {/* 재무정보 */}
-        <ItemFinancialDetails />
+        <ItemFinancialDetails stockId={stockId} stockItem={stockItem} />
       </TabPanel>
     </Tabs>
   );
@@ -60,23 +68,24 @@ const StockInfoTabs: React.FC = () => {
 export default StockInfoTabs;
 
 /** 종목 타이틀 */
-export const ItemOverviewHeader: React.FC = () => {
+export const ItemOverviewHeader: React.FC<{
+  stockId: string;
+  stockItem: IstockItem;
+}> = ({ stockId, stockItem }) => {
   return (
-    <>
+    <div className="mb-3">
       <div className="flex items-center gap-2 mb-3">
         <Avatar
           alt="회사로고"
-          src={
-            "https://images.samsung.com/kdp/aboutsamsung/brand_identity/logo/256_144_3.png?$512_288_PNG$"
-          }
+          src={stockItem.imageUrl}
           size="sm"
         />
         <div>
-          <h2 className="text-md font-bold">삼성전자</h2>
-          <p className="text-xs text-gray-500">코스피 001230</p>
+          <h2 className="text-md font-bold">{stockItem.stockName}</h2>
+          <p className="text-xs text-gray-500">코스피32 {stockId}</p>
         </div>
       </div>
       <hr />
-    </>
+    </div>
   );
 };

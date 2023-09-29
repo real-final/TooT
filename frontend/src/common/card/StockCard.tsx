@@ -15,7 +15,7 @@ type Item = {
 };
 
 type StockCardProps = {
-  item?: Item; // TODO: 나중에 optional modifier("?") 지워야함!!!!!
+  item: Item;
 };
 
 /** 주식종목 카드 */

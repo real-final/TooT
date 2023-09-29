@@ -1,17 +1,10 @@
 import { ReactNode } from "react";
-import TopStocks from "./TopStocks";
-import Ranking from "../ranking/Ranking";
+import TopStocks from "./topTrandingStocks/TopStocks";
 import FavoriteItemsCarousel from "./FavoriteItemsCarousel";
+import TotalRanking from "./totalRanking/TotalRanking";
 
 const Home: React.FC = () => {
-  // let item = {
-  //   id: "001230",
-  //   name: "삼성전자",
-  //   price: "100,000",
-  //   difference: "200",
-  //   percentage: "-0.80",
-  // };
-  // let items = Array(10).fill(<StockCard item={item} />);
+  // TODO: 좋아요 목록 가져오기
   let items = Array(0);
 
   return (
@@ -20,32 +13,31 @@ const Home: React.FC = () => {
       <div className="h-1/5">
         <FavoriteItemsCarousel items={items} />
       </div>
-      <div className="h-2/5 flex px-6 pt-6">
-        <Container className="pr-2">
+      <div className="h-2/5 flex px-8 pt-6">
+        {/* 거래량 순위 */}
+        <Container>
           <Title>
             거래량 순위
             <span className="text-sm text-slate-600 ml-2">
               한국투자증권 기준
             </span>
           </Title>
-          <Content className="pr-6">
+          <Content>
             <TopStocks />
           </Content>
         </Container>
-        <Container>
-          <Title>코스피 200</Title>
-          <Content>세부내용</Content>
-        </Container>
       </div>
-      <div className="h-2/5 flex px-6 pb-6">
+      <div className="h-2/5 flex px-8 pb-6">
+        {/* 퀴즈 */}
         <Container>
           <Title>퀴즈</Title>
           <Content>세부내용</Content>
         </Container>
+        {/* 전체랭킹 */}
         <Container>
           <Title>전체랭킹</Title>
-          <Content className="min-h-0">
-            {/* <Ranking size="small" /> */}
+          <Content className="min-h-0 overflow-y-auto">
+            <TotalRanking />
           </Content>
         </Container>
       </div>
@@ -66,12 +58,13 @@ const Container = (props: Icontainer) => {
 };
 
 const Title = (props: Icontainer) => {
-  const { children } = props;
-  return <h2 className="text-lg font-bold mb-4">{children}</h2>;
+  const { children, className } = props;
+  const combinedClassName = "text-lg font-bold mb-2 " + (className || "");
+  return <h2 className={combinedClassName}>{children}</h2>;
 };
 
 const Content = (props: Icontainer) => {
   const { children, className } = props;
-  const combinedClassName = "flex-grow " + (className || "");
+  const combinedClassName = "flex-grow mb-4 " + (className || "");
   return <div className={combinedClassName}>{children}</div>;
 };
