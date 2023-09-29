@@ -17,26 +17,23 @@ const BankruptDetail = () => {
   const [userBankruptTotal, setUserBankruptTotal] = useState<IuserBankrupt>();
   const [userBankruptTrade, setUserBankruptTrade] = useState([]);
 
-  const { data:bankruptTotal, isLoading:isBankruptTotalLoading } = useQuery("user-bankrupt-detail-total", async () => {
+  const { isLoading:isBankruptTotalLoading } = useQuery("user-bankrupt-detail-total", async () => {
     const response = await api.get(`/bankruptcy/${bankruptNo}`, {
       headers: {
         accesstoken: accessToken,
       },
     });
-    return response?.data?.data;
+    setUserBankruptTotal(response.data.data);
   });
 
-  const { data:bankruptTrade, isLoading:isBankruptTradeLoading } = useQuery("user-bankrupt-detail-trade", async () => {
+  const { isLoading:isBankruptTradeLoading } = useQuery("user-bankrupt-detail-trade", async () => {
     const response = await api.get(`/detail/${bankruptNo}`, {
       headers: {
         accesstoken: accessToken,
       },
     });
-    return response?.data?.data;
+    setUserBankruptTrade(response.data.data);
   });
-
-  setUserBankruptTotal(bankruptTotal);
-  setUserBankruptTrade(bankruptTrade);
 
   return(
     <div className="w-full h-full p-8 min-h-0">

@@ -13,16 +13,14 @@ const Bankrupt = () => {
 
   const [userBankrupt, setUserBankrupt] = useState<IuserBankrupt[]>([]);
 
-  const { data, isLoading } = useQuery("user-bankrupt", async () => {
+  const { isLoading } = useQuery("user-bankrupt", async () => {
     const response = await api.get("/bankruptcy/all", {
       headers: {
         accesstoken: accessToken,
       },
     });
-    return response?.data?.data;
+    setUserBankrupt(response.data.data);
   });
-
-  setUserBankrupt(data);
 
   return (
     <div className="w-full h-full p-8 min-h-0">

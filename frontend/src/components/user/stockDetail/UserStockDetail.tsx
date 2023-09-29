@@ -19,26 +19,23 @@ const UserStockDetail = () => {
   const [userDetailTotal, setUserDetailTotal] = useState<IuserStock | undefined>();
   const [userDetailTrade, setUserDetailTrade] = useState([]);
 
-  const { data: totalData, isLoading: isTotalLoading } = useQuery("user-stock-detail-trade", async () => {
+  const { isLoading: isTotalLoading } = useQuery("user-stock-detail-trade", async () => {
     const response = await api.get(`/my/${stockId}`, {
       headers: {
         accesstoken: accessToken,
       },
     });
-    return response?.data?.data;
+    setUserDetailTotal(response.data.data);
   });
 
-  const { data: tradeData, isLoading: isTradeLoading } = useQuery("user-stock-detail-trade", async () => {
+  const { isLoading: isTradeLoading } = useQuery("user-stock-detail-trade", async () => {
     const response = await api.get(`/stock/execution/${stockId}`, {
       headers: {
         accesstoken: accessToken,
       },
     });
-    return response?.data?.data;
+    setUserDetailTrade(response.data.data);
   });
-
-  setUserDetailTotal(totalData);
-  setUserDetailTrade(tradeData);
 
   return(
     <div className="w-full h-full p-8 min-h-0">
