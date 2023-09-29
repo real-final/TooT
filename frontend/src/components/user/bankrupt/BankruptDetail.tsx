@@ -1,22 +1,52 @@
-import { useLocation, useParams } from "react-router-dom";
 import Title from "../../../common/etc/Title";
 import BankruptDetailTotal from "./BankruptDetailTotal";
-import stockTradeTestData from "../../../test/data/stockTradeTestData";
 import UserStockTrade from "../UserStockTrade";
+import { useGetSearchParam } from "../../../hooks/useGetSearchParam";
+import { useContext, useState } from "react";
+import { UserAuthContext } from "../../../App";
+import { useQuery } from "react-query";
+import { api } from "../../../utils/api";
+import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
+import { IuserBankrupt } from "../../../interface/IuserBankrupt";
 
 const BankruptDetail = () => {
-  const {index} = useParams();
-  const location = useLocation();
-  const bankrupt = location.state.bankrupt;
+  const bankruptNo = useGetSearchParam("bankruptNo");
+  const userAuthContext = useContext(UserAuthContext);
+  const accessToken = userAuthContext?.accessToken;
+
+  const [userBankruptTotal, setUserBankruptTotal] = useState<IuserBankrupt>();
+  const [userBankruptTrade, setUserBankruptTrade] = useState([]);
+
+  const { data:bankruptTotal, isLoading:isBankruptTotalLoading } = useQuery("user-bankrupt-detail-total", async () => {
+    const response = await api.get(`/bankruptcy/${bankruptNo}`, {
+      headers: {
+        accesstoken: accessToken,
+      },
+    });
+    return response?.data?.data;
+  });
+
+  const { data:bankruptTrade, isLoading:isBankruptTradeLoading } = useQuery("user-bankrupt-detail-trade", async () => {
+    const response = await api.get(`/detail/${bankruptNo}`, {
+      headers: {
+        accesstoken: accessToken,
+      },
+    });
+    return response?.data?.data;
+  });
+
+  setUserBankruptTotal(bankruptTotal);
+  setUserBankruptTrade(bankruptTrade);
+
   return(
     <div className="w-full h-full p-8 min-h-0">
-      <Title title={`${index}회차 파산 기록`} />
-      <BankruptDetailTotal bankruptInfo={bankrupt} />
-      <div className="h-[70%] no-scrollbar overflow-y-auto">
-      {stockTradeTestData.map((item, index) => (
+      <Title title={`${bankruptNo}회차 파산 기록`} />
+      { isBankruptTotalLoading ? <CustomCircularProgress /> : <BankruptDetailTotal bankruptTotal={userBankruptTotal} />}
+      { isBankruptTradeLoading ? <CustomCircularProgress /> : <div className="h-[70%] no-scrollbar overflow-y-auto">
+      {userBankruptTrade.map((item, index) => (
           <UserStockTrade index={index} trade={item} isName={true} />
         ))}
-      </div>
+      </div>}
     </div>
   );
 };
