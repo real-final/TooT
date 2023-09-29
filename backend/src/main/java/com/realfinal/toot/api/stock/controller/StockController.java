@@ -111,7 +111,7 @@ public class StockController {
     }
 
     /**
-     * 사용자 보유 종목 조회
+     * 사용자 보유 종목 목록 조회
      *
      * @param accessToken
      * @return [ 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 ] 리스트
@@ -138,6 +138,21 @@ public class StockController {
         List<ExecutionRes> executionResList = stockService.myAllExecution(accessToken);
         log.info("StockController_myAllExecution_end: " + executionResList);
         return CommonResponse.success(executionResList);
+    }
+
+    /**
+     * 사용자 보유 종목 회사별 조회
+     *
+     * @param accessToken, stockId
+     * @return { 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 }
+     */
+    @GetMapping("/my/{stockId}")
+    public CommonResponse<MyStockRes> myStock(
+        @RequestHeader(value = "accesstoken", required = false) String accessToken, @PathVariable("stockId") String stockId) {
+        log.info("StockController_myStocks_start: " + accessToken);
+        MyStockRes myStockRes = stockService.myStock(accessToken, stockId);
+        log.info("StockController_myStock_end: " + myStockRes);
+        return CommonResponse.success(myStockRes);
     }
 
     /**

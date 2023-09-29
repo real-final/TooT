@@ -12,13 +12,12 @@ import com.realfinal.toot.db.entity.User;
 import com.realfinal.toot.db.entity.UserStock;
 import com.realfinal.toot.db.repository.UserRepository;
 import com.realfinal.toot.db.repository.UserStockRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
@@ -122,7 +121,7 @@ public class PriceUtil {
         this.pbr[index][this.nextState] = newPbr;
     }
 
-    public int getCurrentPrice(String stockId) {
+    public Integer getCurrentPrice(String stockId) {
         return this.currentPrice[getStockIndex(stockId)][this.currentState];
     }
 

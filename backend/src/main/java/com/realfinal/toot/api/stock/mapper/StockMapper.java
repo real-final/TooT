@@ -53,6 +53,8 @@ public interface StockMapper {
     MyStockRes toMyStockRes(Stock stock, Integer hold, Integer averagePrice, Integer currentPrice,
         Long totalPrice, Long profit, Double profitRate) throws MapperException;
 
+    @Mapping(source = "execution.stock.id", target = "stockId")
+    @Mapping(source = "execution.stock.stockName", target = "stockName")
     ExecutionRes toExecutionRes(Execution execution, Long totalPrice) throws MapperException;
 
     Interest toInterest(User user, Stock stock) throws MapperException;
