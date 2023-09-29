@@ -40,7 +40,7 @@ const BankruptDetail = () => {
       <Title title={`${bankruptNo}회차 파산 기록`} />
       { isBankruptTotalLoading ? <CustomCircularProgress /> : <BankruptDetailTotal bankruptTotal={userBankruptTotal} />}
       { isBankruptTradeLoading ? <CustomCircularProgress /> : <div className="h-[70%] no-scrollbar overflow-y-auto">
-      {userBankruptTrade.map((item, index) => (
+      {userBankruptTrade?.map((item, index) => (
           <UserStockTrade index={index} trade={item} isName={true} />
         ))}
       </div>}
