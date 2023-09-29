@@ -3,14 +3,18 @@ package com.realfinal.toot.api.bankruptcy.service;
 import com.realfinal.toot.api.bankruptcy.mapper.BankruptcyMapper;
 import com.realfinal.toot.api.bankruptcy.response.AllBankruptcyRes;
 import com.realfinal.toot.api.bankruptcy.response.DetailBankruptcyRes;
+import com.realfinal.toot.api.stock.mapper.StockMapper;
+import com.realfinal.toot.api.stock.response.ExecutionRes;
 import com.realfinal.toot.common.exception.bankruptcy.NoBankruptcyDataException;
 import com.realfinal.toot.common.exception.user.MySQLSearchException;
 import com.realfinal.toot.common.util.JwtProviderUtil;
 import com.realfinal.toot.common.util.PriceUtil;
 import com.realfinal.toot.db.entity.Bankruptcy;
+import com.realfinal.toot.db.entity.Execution;
 import com.realfinal.toot.db.entity.User;
 import com.realfinal.toot.db.entity.UserStock;
 import com.realfinal.toot.db.repository.BankruptcyRepository;
+import com.realfinal.toot.db.repository.ExecutionRepository;
 import com.realfinal.toot.db.repository.UserRepository;
 import com.realfinal.toot.db.repository.UserStockRepository;
 import java.time.LocalDateTime;
@@ -32,6 +36,7 @@ public class BankruptcyServiceImpl implements BankruptcyService {
     private final BankruptcyRepository bankruptcyRepository;
     private final UserRepository userRepository;
     private final UserStockRepository userStockRepository;
+    private final ExecutionRepository executionRepository;
     private final Double RATIO = 70D;
 
     @Override
@@ -101,6 +106,31 @@ public class BankruptcyServiceImpl implements BankruptcyService {
             userBankruptcy);
         log.info("BankruptcyServiceImpl_getDetailBankruptcy_end: 파산 상세 기록 조회 완료");
         return detailBankruptcyRes;
+    }
+
+    @Override
+    public List<ExecutionRes> getAllExecutionByBankruptcy(String accessToken,
+        Integer bankruptcyNo) {
+        log.info("BankruptcyServiceImpl_getAllExecutionByBankruptcy_start: " + accessToken + " " + bankruptcyNo);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
+        List<Execution> bankruptcyExecutionList = executionRepository.findAllByUserAndBankruptcyNo(user,
+            bankruptcyNo);
+
+        if (bankruptcyExecutionList.isEmpty()) {
+            log.info("BankruptcyServiceImpl_getAllExecutionByBankruptcy_mid: " + userId + "("
+                + bankruptcyNo + ") has no history -> return null");
+            throw new NoBankruptcyDataException();
+        }
+
+        List<ExecutionRes> bankruptcyExecutionResList = new ArrayList<>();
+        for (Execution execution : bankruptcyExecutionList) {
+            bankruptcyExecutionResList.add(StockMapper.INSTANCE.toExecutionRes(execution,
+                Long.valueOf((long) execution.getPrice() * execution.getAmount())));
+        }
+
+        log.info("BankruptcyServiceImpl_getAllExecutionByBankruptcy_end: " + bankruptcyExecutionResList);
+        return bankruptcyExecutionResList;
     }
 
     public Long calculateValue(User user) {
