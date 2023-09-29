@@ -21,6 +21,8 @@ public interface StockService {
 
     List<MyStockRes> myStocks(String accessToken);
 
+    MyStockRes myStock(String accessToken, String stockId);
+
     List<ExecutionRes> myAllExecution(String accessToken);
 
     List<ExecutionRes> myExecution(String stockId, String accessToken);

@@ -325,6 +325,54 @@ public class StockServiceImpl implements StockService {
     }
 
     /**
+     * 사용자 보유 종목 회사별 조회
+     *
+     * @param accessToken
+     * @param stockId
+     * @return { 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 }
+     */
+    public MyStockRes myStock(String accessToken, String stockId) {
+        log.info("StockServiceImpl_myStocks_start: " + accessToken);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
+        Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
+        UserStock userStock = userStockRepository.findByUserAndStockAndBankruptcyNo(user, stock,
+            user.getBankruptcyNo());
+
+        String userName = user.getName();
+        Integer bankruptcyNo = user.getBankruptcyNo();
+
+        if (userStock == null) {
+            log.info(
+                "StockServiceImpl_myStock_end: " + userName + "(" + bankruptcyNo
+                    + ") has no stock -> return null");
+            return null;
+        }
+
+        MyStockRes myStockRes = null;
+
+        if (userStock.getHold() > 0) {
+            //주식 정보
+            Integer currentPrice = priceUtil.getCurrentPrice(stockId);
+
+            //사용자 보유 주식 정보
+            Integer averagePrice = userStock.getAveragePrice();
+            Integer hold = userStock.getHold();
+            Long totalPrice = Long.valueOf((long) currentPrice * hold);
+            Long profit = Long.valueOf((long) averagePrice * hold) - totalPrice;
+            Double profitRate = Double.valueOf(
+                100.0 * (currentPrice - averagePrice) / averagePrice);
+
+            //사용자가 보유 중인 주식 정보 반환
+            myStockRes = StockMapper.INSTANCE.toMyStockRes(stock, hold, averagePrice,
+                currentPrice, totalPrice, profit, profitRate);
+        }
+
+        log.info("StockServiceImpl_myStock_end: " + myStockRes);
+        return myStockRes;
+    }
+
+    /**
      * 사용자 특정 주식 거래 내역
      *
      * @param stockId
