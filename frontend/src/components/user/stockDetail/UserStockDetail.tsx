@@ -26,6 +26,8 @@ const UserStockDetail = () => {
       },
     });
     setUserDetailTotal(response.data.data);
+    console.log("상세 유저 주식 api");
+    console.log(response);
   });
 
   const { isLoading: isTradeLoading } = useQuery("user-stock-detail-trade", async () => {
@@ -35,6 +37,8 @@ const UserStockDetail = () => {
       },
     });
     setUserDetailTrade(response.data.data);
+    console.log("상세 유저 주식 거래 api");
+    console.log(response);
   });
 
   return(
