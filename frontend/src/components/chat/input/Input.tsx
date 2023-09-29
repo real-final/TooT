@@ -33,7 +33,6 @@ const Input = () => {
 
   return (
     <div className="w-full h-9 pl-2.5 pr-1 flex items-center justify-between rounded-full bg-gray-300">
-      <VoiceButton />
       <input type="text" autoFocus value={inputText} onChange={handleInputTextChange} className="w-full h-full font-light text-[14px] bg-gray-300 focus:outline-none" onKeyDown={handleKeyDown} ></input>
       <SendButton handleSendClick={handleSendClick} />
     </div>

@@ -12,16 +12,14 @@ const UserStock = () => {
 
   const [userStockList, setUserStockList] = useState([]);
 
-  const { data, isLoading, isError } = useQuery("user-stock", async () => {
+  const { isLoading, isError } = useQuery("user-stock", async () => {
     const response = await api.get("/stock/my", {
       headers: {
         accesstoken: accessToken,
       },
     });
-    return response?.data?.data;
+    setUserStockList(response.data.data);
   });
-
-  setUserStockList(data);
 
   if (isLoading || isError) {
     return <CustomCircularProgress />;

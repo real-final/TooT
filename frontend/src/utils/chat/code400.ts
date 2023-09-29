@@ -5,9 +5,6 @@ export const code400 = (stock:IResponseStockData) => {
   const userInfoString = localStorage.getItem("userInfo");
   const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
   const userId = userInfo ? userInfo.id : null;
-  if(userId === null) {
-    window.location.href = "/error";
-  }
   switch(stock.code){
     case 401:
       // TODO: localstorage의 userId 가져와서 넣기
