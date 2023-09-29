@@ -42,7 +42,7 @@ const UserStockDetail = () => {
       <Title title={`보유 주식 - ${userDetailTotal?.stockName}`} />
       { isTotalLoading ? <CustomCircularProgress /> : <UserStockDetailTotal stock={userDetailTotal} />}
       { isTradeLoading ? <CustomCircularProgress /> : <div className="h-[60%] no-scrollbar overflow-y-auto">
-        {userDetailTrade.map((item, index) => (
+        {userDetailTrade?.map((item, index) => (
           <UserStockTrade index={index} trade={item} />
         ))}
       </div>}

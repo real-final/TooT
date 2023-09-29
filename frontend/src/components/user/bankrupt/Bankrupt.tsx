@@ -27,7 +27,7 @@ const Bankrupt = () => {
       <Title title="파산 기록" />
       { isLoading ? <CustomCircularProgress /> : <div className="h-[90%] no-scrollbar overflow-y-auto">
         {/* TODO: 파산 기록 조회 데이터 BE 연동하기 */}
-        {userBankrupt.map((item) => (
+        {userBankrupt?.map((item) => (
           <BankruptItem key={item.bankruptcyNo} bankrupt={item} />
         ))}
       </div>}

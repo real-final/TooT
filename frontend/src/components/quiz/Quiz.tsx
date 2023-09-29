@@ -9,6 +9,7 @@ import { add } from "../../store/slices/bubbleSlice";
 import QuizSuccess from "./QuizSuccess";
 import QuizFail from "./QuizFail";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../utils/api";
 
 const Quiz = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const Quiz = () => {
   const [answer, setAnswer] = useState("");
   const [answerIndex, setAnwserIndex] = useState(-1);
   const {isFetching} = useQuery<any>("daily-quiz", async () => {
-    await axios.get("http://localhost:8080/quiz/").then(({data}) => {
+    await api.get("/quiz").then(({data}) => {
       console.log(data);
       setQuizList(data.data.quizList);
       setAnswer(data.data.answerString);
