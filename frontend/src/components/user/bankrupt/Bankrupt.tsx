@@ -20,6 +20,8 @@ const Bankrupt = () => {
       },
     });
     setUserBankrupt(response.data.data);
+    console.log("파산 내역 api");
+    console.log(response);
   });
 
   return (

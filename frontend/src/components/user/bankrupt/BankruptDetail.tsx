@@ -24,6 +24,8 @@ const BankruptDetail = () => {
       },
     });
     setUserBankruptTotal(response.data.data);
+    console.log("상세 파산 내역 종합 api");
+    console.log(response);
   });
 
   const { isLoading:isBankruptTradeLoading } = useQuery("user-bankrupt-detail-trade", async () => {
@@ -33,6 +35,8 @@ const BankruptDetail = () => {
       },
     });
     setUserBankruptTrade(response.data.data);
+    console.log("상세 파산 내역 거래 api");
+    console.log(response);
   });
 
   return(

@@ -19,6 +19,8 @@ const UserTrade = () => {
       },
     });
     setUserTrade(response.data.data);
+    console.log("주식 거래 내역 api");
+    console.log(response);
   });
 
   return(
