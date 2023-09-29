@@ -12,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class UserRes {
 
-    private String providerId;
+    private Long id;
     private Long seedMoney;
     private Long cash;
     private String profileImage;
@@ -22,10 +22,10 @@ public class UserRes {
     private LocalDateTime joinAt;
 
     @Builder
-    public UserRes(String providerId, Long seedMoney, Long cash, String profileImage, String name,
+    public UserRes(Long id, Long seedMoney, Long cash, String profileImage, String name,
             Integer bankruptcyNo, LocalDate lastQuizDate,
             LocalDateTime joinAt) {
-        this.providerId = providerId;
+        this.id = id;
         this.seedMoney = seedMoney;
         this.cash = cash;
         this.profileImage = profileImage;
