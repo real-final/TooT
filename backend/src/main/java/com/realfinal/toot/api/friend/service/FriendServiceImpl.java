@@ -149,16 +149,21 @@ public class FriendServiceImpl implements FriendService {
     private RankListRes sortListAndGetMyRankAndMap(List<RankRes> rankList, RankRes rankRes) {
         log.info("FriendServiceImpl_sortListAndGetMyRankAndMap_start: " + rankList + rankRes);
         rankList = rankList.stream()
-                .sorted(Comparator.comparing(RankRes::getNetProfit).reversed() // 내림차순으로 netProfit 정렬
-                        .thenComparing(RankRes::getBankruptcyNo) // netProfit이 같을 경우, 오름차순으로 bankruptcyNo 정렬
+                .sorted(Comparator.comparing(RankRes::getNetProfit)
+                        .reversed() // 내림차순으로 netProfit 정렬
+                        .thenComparing(
+                                RankRes::getBankruptcyNo) // netProfit이 같을 경우, 오름차순으로 bankruptcyNo 정렬
                         .thenComparing(RankRes::getId)) // bankruptcyNo가 같을 경우, 오름차순으로 id 정렬
                 .collect(Collectors.toList());
+
         int index = -1; // -1은 "찾지 못함"을 의미합니다.
-        for (int i = 0; i < rankList.size(); i++) {
-            if (rankList.get(i).getId()
-                    .equals(rankRes.getId())) { // targetId는 찾고자 하는 ID입니다.
-                index = i;
-                break;
+        if (rankRes != null) {
+            for (int i = 0; i < rankList.size(); i++) {
+                if (rankList.get(i).getId()
+                        .equals(rankRes.getId())) { // targetId는 찾고자 하는 ID입니다.
+                    index = i;
+                    break;
+                }
             }
         }
         RankListRes rankListRes = FriendMapper.INSTANCE.toRankListRes(
