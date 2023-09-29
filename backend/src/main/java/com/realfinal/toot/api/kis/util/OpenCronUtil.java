@@ -14,7 +14,7 @@ public class OpenCronUtil {
   @PostConstruct
   public void init() {   // 프로젝트 용
     LocalTime now = LocalTime.now();
-    if (now.isAfter(LocalTime.of(9, 0)) && now.isBefore(LocalTime.of(15, 30))) {
+    if (now.isAfter(LocalTime.of(10, 0)) && now.isBefore(LocalTime.of(23, 00))) {
       shouldRun = true;
     }
   }
