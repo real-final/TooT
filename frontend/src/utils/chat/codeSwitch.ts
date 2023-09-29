@@ -6,7 +6,7 @@ import { code400 } from "./code400";
 import { code600 } from "./code600";
 import { code900 } from "./code900";
 
-export const codeSwitch = (bubble:string, responseData:string[]) => {
+export const codeSwitch = (bubble:string, responseData:string[], userMessage:string, dispatch:any) => {
   const code = parseInt(responseData[0]);
   const stockData:IResponseStockData = {
     code: code,
@@ -46,7 +46,7 @@ export const codeSwitch = (bubble:string, responseData:string[]) => {
     // TODO: 이스터에그 추가 처리 필요하면 넣기
       break;
     case 900 <= code && code < 1000:
-      code900(code, bubble);
+      code900(code, userMessage, dispatch);
       break;
   };
 };

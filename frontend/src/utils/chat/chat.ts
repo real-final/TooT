@@ -59,5 +59,5 @@ export const getBubble = async (text:string, dispatch: any) => {
     }
   });
   await dispatch(add(newBubble));
-  await codeSwitch(bubble, bubbleData);
+  await codeSwitch(bubble, bubbleData, text, dispatch);
 };
