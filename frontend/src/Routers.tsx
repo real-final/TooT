@@ -11,6 +11,7 @@ import BankruptDetail from "./components/user/bankrupt/BankruptDetail";
 import UserTrade from "./components/user/trade/UserTrade";
 import QuizContainer from "./components/quiz/QuizContainer";
 import CustomCircularProgress from "./common/circularProgress/CustomCircularProgress";
+import MainUserContainer from "./components/user/MainUserContainer";
 
 const Routers = () => {
   return (
@@ -18,7 +19,7 @@ const Routers = () => {
       <Route path="/" element={<Home />}></Route>
       <Route path="/stock/:stockId" element={<StockDetails />}></Route>
       {/* TODO: /user 대신 /:userID 사용 예정, user/bankrupt/:userID 대신 :userId/bankrupt */}
-      <Route path="/:userId" element={<Example />}>
+      <Route path="/:userId" element={<MainUserContainer />}>
         <Route path="stock" element={<UserStock />}></Route>
         {/* TODO: stockId로 바꾸기 */}
         <Route path="stock/:stockName" element={<UserStockDetail />}></Route>

@@ -5,7 +5,7 @@ const BankruptItem = ({bankrupt}: {bankrupt:IuserBankrupt}) => {
   const navigate = useNavigate();
 
   const handleBankruptClick = () => {
-    navigate(bankrupt.bankruptcyNo.toString(), {state:{bankrupt:bankrupt}});
+    navigate(bankrupt.bankruptcyNo.toString());
   };
 
   return (

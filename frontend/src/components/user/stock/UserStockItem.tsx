@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { IuserStock } from "../../../interface/IuserStock";
 
-const UserStockItem = ({index, stock}: {index:number, stock:IuserStock}
+const UserStockItem = ({ stock}: { stock:IuserStock}
 ) => {
   const navigate = useNavigate();
   const handleStockClick = () => {
-    navigate(`/stock/execution${stock.stockId}`, {state:{stock:stock}});
+    navigate(`${stock.stockId}`);
   };
 
   return (
