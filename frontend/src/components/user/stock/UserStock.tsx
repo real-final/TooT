@@ -18,6 +18,7 @@ const UserStock = () => {
         accesstoken: accessToken,
       },
     });
+    console.log(response);
     setUserStockList(response.data.data);
   });
 
@@ -29,7 +30,7 @@ const UserStock = () => {
     <div className="w-full h-full p-8 min-h-0">
       <Title title="보유 주식" />
       <div className="h-[90%] no-scrollbar overflow-y-auto">
-        {userStockList.map((item, index) => (
+        {userStockList?.map((item, index) => (
           <UserStockItem key={index} stock={item} />
         ))}
       </div>
