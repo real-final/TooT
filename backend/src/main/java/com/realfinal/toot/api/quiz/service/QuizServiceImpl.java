@@ -96,11 +96,10 @@ public class QuizServiceImpl implements QuizService {
      * 퀴즈 결과 저장. 맞은 경우에만 호출된다 가정.
      *
      * @param accessToken id 추출 위해
-     * @param result      문자열.
      */
     @Override
     @Transactional
-    public void saveQuizResult(String accessToken, String result) {
+    public void saveQuizResult(String accessToken) {
         log.info("QuizServiceImpl_saveQuizResult_start");
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);

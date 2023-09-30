@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +29,7 @@ public class QuizController {
     public CommonResponse<?> getQuestion() {
         log.info("QuizController_getQuestion_start");
         QuizQuestionRes quizQuestionRes = quizService.getQuestion();
-        log.info("QuizController_getQuestion_end: "+quizQuestionRes);
+        log.info("QuizController_getQuestion_end: " + quizQuestionRes);
         return CommonResponse.success(quizQuestionRes);
     }
 
@@ -54,15 +53,13 @@ public class QuizController {
      * 정답일때 호출되는 api. cash랑 seedmoney 10000원씩 증가
      *
      * @param accessToken id 추출 위해
-     * @param result      결과 스트링. 추후 뺄지말지 정해야함
      * @return 성공 스트링.
      */
     @PostMapping("/")
     public CommonResponse<?> applyQuizResult(
-            @RequestHeader(value = "accesstoken", required = false) String accessToken,
-            @RequestBody String result) {
-        log.info("QuizController_applyQuizResult_start: " + accessToken + " " + result);
-        quizService.saveQuizResult(accessToken, result);
+            @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("QuizController_applyQuizResult_start: " + accessToken);
+        quizService.saveQuizResult(accessToken);
         log.info("QuizController_applyQuizResult_end: " + SUCCESS);
         return CommonResponse.success(SUCCESS);
     }
