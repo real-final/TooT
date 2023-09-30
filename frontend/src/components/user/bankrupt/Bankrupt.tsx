@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Title from "../../../common/etc/Title";
 import BankruptItem from "./BankruptItem";
 import { UserAuthContext } from "../../../App";
@@ -8,11 +8,8 @@ import CustomCircularProgress from "../../../common/circularProgress/CustomCircu
 import { IuserBankrupt } from "../../../interface/IuserBankrupt";
 
 const Bankrupt = () => {
-  let accessToken:string | undefined;
-  useEffect(() => {
-    const userAuthContext = useContext(UserAuthContext);
-    accessToken = userAuthContext?.accessToken;
-  }, []);
+  const userAuthContext = useContext(UserAuthContext);
+  const accessToken = userAuthContext?.accessToken;
 
   const [userBankrupt, setUserBankrupt] = useState<IuserBankrupt[]>([]);
 
