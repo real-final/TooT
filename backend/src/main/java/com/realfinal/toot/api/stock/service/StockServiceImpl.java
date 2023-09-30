@@ -212,7 +212,10 @@ public class StockServiceImpl implements StockService {
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
+        UserStock userStock = userStockRepository.findByUserAndStockAndBankruptcyNo(user, stock,
+            user.getBankruptcyNo());
         Interest interest = interestRepository.findByUserAndStock(user, stock);
+        Integer hold = userStock == null ? 0 : userStock.getHold();
 
         List<MinuteRes> minCandle = priceUtil.getMinCandle(stockId);
         List<DayWeekRes> dayCandle = priceUtil.getDayCandle(stockId);
@@ -223,7 +226,7 @@ public class StockServiceImpl implements StockService {
         String totalPrice = priceUtil.getTotalPrice(stockId);
         SpecificStockRes specificStockRes = StockMapper.INSTANCE.toSpecificStockRes(stock,
             minCandle, dayCandle, weekCandle, totalPrice, currentPrice, min52, max52,
-            interest != null);
+            interest != null, hold);
         log.info("StockServiceImpl_getStockInfo_end: " + specificStockRes);
         return specificStockRes;
     }
