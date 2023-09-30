@@ -71,8 +71,8 @@ public class User extends BaseEntity {
     }
 
     public void updateQuizResult() {
-        this.seedMoney += 10000;
-        this.cash += 10000;
+        this.seedMoney += 10000L;
+        this.cash += 10000L;
     }
 
     public void updateCash(Long cash) {
