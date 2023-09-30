@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState } from "react";
-import { QueryClient,QueryClientProvider, useQuery } from 'react-query'
+import { createContext } from "react";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { Provider } from "react-redux";
 import store from "./store";
 import Grid from "./Grid";
@@ -15,34 +15,28 @@ export const UserAuthContext = createContext<IuserAuthContext | undefined>(
 
 function App() {
   const queryClient = new QueryClient();
-  const [shouldFetch, setShouldFetch] = useState(false);
-
-  useEffect(() => {
-    setShouldFetch(true);
-  }, []);
 
   // 유저정보 & Access 토큰 요청하기
   const { data: contextData, isLoading } = useQuery(
     "userAuthData",
     fetchUserAuthData,
     {
-      enabled: shouldFetch, // shouldFetch가 true일 때만 useQuery 실행
       refetchOnWindowFocus: false, // 다른 탭에서 다시 페이지 접근 시 refetch 취소
       retry: 0, // 오류로 인한 refetch 횟수 제한
     }
   );
 
   return (
-  <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <UserAuthContext.Provider value={contextData}>
-        <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
-          <Nav />
-          {isLoading ? <CustomCircularProgress /> : <Grid />}
-        </div>
-      </UserAuthContext.Provider>
-    </QueryClientProvider>
-  </Provider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <UserAuthContext.Provider value={contextData}>
+          <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
+            <Nav />
+            {isLoading ? <CustomCircularProgress /> : <Grid />}
+          </div>
+        </UserAuthContext.Provider>
+      </QueryClientProvider>
+    </Provider>
   );
 }
 

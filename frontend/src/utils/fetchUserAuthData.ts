@@ -13,7 +13,6 @@ export const fetchUserAuthData = async () => {
     // 3. Access토큰 & 사용자정보 저장
     if (userInfo && Object.keys(userInfo).length > 0) {
       localStorage.setItem("userInfo", JSON.stringify(userInfo)); // LocalStorage에 userInfo 저장
-
       return {
         accessToken: accessToken,
         userInfo: userInfo,

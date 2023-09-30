@@ -20,6 +20,9 @@ const ItemSummary: React.FC<{ stockId?: string; stockItem?: IstockItem }> = ({
       <div className="h-5/12">
         <ItemData data={stockItem} />
       </div>
+      <div className="h-5/12">
+        <ItemData data={stockItem} />
+      </div>
       {/* 기업개요 */}
       <div className="h-4/12">
         <ItemOutline outline={stockItem?.outline} />
@@ -87,7 +90,7 @@ const ItemDataElement: React.FC<{
 
   return (
     <div>
-      <h3 className="text-xs text-neutral-500">{title}</h3>
+      <h3 className="text-sm text-neutral-500">{title}</h3>
       <p className={"text-sm " + textColor}>{displayValue}</p>
     </div>
   );
