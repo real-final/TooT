@@ -46,7 +46,7 @@ public interface StockMapper {
     @Mapping(source = "stock.industry.wics", target = "wics")
     SpecificStockRes toSpecificStockRes(Stock stock, List<MinuteRes> minCandle,
         List<DayWeekRes> dayCandle, List<DayWeekRes> weekCandle, String totalPrice,
-        Integer currentPrice, Integer min52, Integer max52, Boolean interested)
+        Integer currentPrice, Integer min52, Integer max52, Boolean interested, Integer hold)
         throws MapperException;
 
     @Mapping(source = "stock.id", target = "stockId")

@@ -56,7 +56,7 @@ public class StockController {
      * @param accessToken
      * @return 시드머니, 계좌 잔고, 주식을 반영한 총 평가액
      */
-    @PostMapping("/value")
+    @GetMapping("/value")
     public CommonResponse<UserValueRes> calculateValue(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_calculateValue_start: " + accessToken);
@@ -104,7 +104,7 @@ public class StockController {
     @GetMapping("/{stockid}")
     public CommonResponse<SpecificStockRes> getStockInfo(@PathVariable("stockid") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_getStockInfo_start: " + stockId + " " + accessToken);
+        log.info("StockController_getStockInfo_start: stockId = " + stockId + " accessToken = " + accessToken);
         SpecificStockRes specificStockRes = stockService.getStockInfo(stockId, accessToken);
         log.info("StockController_getStockInfo_end: " + specificStockRes);
         return CommonResponse.success(specificStockRes);
