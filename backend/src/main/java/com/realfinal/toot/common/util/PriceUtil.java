@@ -289,13 +289,14 @@ public class PriceUtil {
     public List<MinuteRes> getMinCandle(String stockId) {
         List<MinuteRes> candle = new ArrayList<MinuteRes>();
         int index = this.getStockIndex(stockId);
+        int state = this.minState[index] == null ? 0 : this.minState[index];
 
-        for (int i = index; i < 30; ++i) {
+        for (int i = state; i < 30; ++i) {
             if (this.minCandle[index][i] != null) {
                 candle.add(this.minCandle[index][i]);
             }
         }
-        for (int i = 0; i < index; ++i) {
+        for (int i = 0; i < state; ++i) {
             if (this.minCandle[index][i] != null) {
                 candle.add(this.minCandle[index][i]);
             }
