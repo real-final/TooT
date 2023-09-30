@@ -4,16 +4,22 @@ import com.realfinal.toot.api.kis.response.CurrentPriceRes;
 import com.realfinal.toot.api.kis.response.MinutePriceRes;
 import com.realfinal.toot.api.kis.response.PeriodPriceRes;
 import com.realfinal.toot.api.stock.mapper.StockMapper;
+import com.realfinal.toot.api.stock.response.AllStockRes;
 import com.realfinal.toot.api.stock.response.DayWeekRes;
 import com.realfinal.toot.api.stock.response.MinuteRes;
+import com.realfinal.toot.api.stock.response.StockRankRes;
+import com.realfinal.toot.api.stock.response.StockVolumeRes;
 import com.realfinal.toot.api.stock.response.UserValueRes;
 import com.realfinal.toot.common.exception.user.MySQLSearchException;
+import com.realfinal.toot.db.entity.Stock;
 import com.realfinal.toot.db.entity.User;
 import com.realfinal.toot.db.entity.UserStock;
+import com.realfinal.toot.db.repository.StockRepository;
 import com.realfinal.toot.db.repository.UserRepository;
 import com.realfinal.toot.db.repository.UserStockRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +31,7 @@ public class PriceUtil {
 
     private final UserRepository userRepository;
     private final UserStockRepository userStockRepository;
+    private final StockRepository stockRepository;
 
     private final Map<String, Integer> stockIndex = Map.ofEntries(
         Map.entry("010950", 0),
@@ -75,49 +82,148 @@ public class PriceUtil {
     private Integer[] minState = new Integer[32];  //분봉의 시작 인덱스를 저장하는 배열
     private volatile Integer currentState = 0;
     private volatile Integer nextState = 1;
+    private StockRankRes[][] stockRankResList = new StockRankRes[2][10];
 
     public Integer getStockIndex(String stockId) {
         return this.stockIndex.get(stockId);
     }
 
     public void updateState() {
+        this.calculateTradingVolume(this.nextState);
         this.currentState ^= 1;
         this.nextState ^= 1;
     }
 
-    public void updateCurrentPrice(int index, int price) {
+    private String getStockIdByIndex(int index) {
+        switch (index) {
+            case 0:
+                return "010950";
+            case 1:
+                return "005930";
+            case 2:
+                return "000660";
+            case 3:
+                return "035720";
+            case 4:
+                return "035420";
+            case 5:
+                return "034220";
+            case 6:
+                return "036570";
+            case 7:
+                return "251270";
+            case 8:
+                return "005490";
+            case 9:
+                return "000880";
+            case 10:
+                return "352820";
+            case 11:
+                return "090430";
+            case 12:
+                return "003490";
+            case 13:
+                return "005380";
+            case 14:
+                return "139480";
+            case 15:
+                return "028260";
+            case 16:
+                return "097950";
+            case 17:
+                return "000080";
+            case 18:
+                return "068270";
+            case 19:
+                return "207940";
+            case 20:
+                return "000720";
+            case 21:
+                return "047040";
+            case 22:
+                return "006360";
+            case 23:
+                return "096770";
+            case 24:
+                return "034020";
+            case 25:
+                return "015760";
+            case 26:
+                return "017670";
+            case 27:
+                return "030200";
+            case 28:
+                return "032640";
+            case 29:
+                return "051900";
+            case 30:
+                return "373220";
+            case 31:
+                return "000120";
+            default:
+                return null;
+        }
+    }
+
+    private void calculateTradingVolume(Integer nextState) {
+        List<Stock> stockList = stockRepository.findAll();
+        List<StockVolumeRes> stockVolumeResList = new ArrayList<>();
+
+        for (Stock stock : stockList) {
+            Long volume = this.tradingVolume[this.getStockIndex(stock.getId())][nextState];
+            StockVolumeRes stockVolumeRes = StockMapper.INSTANCE.toStockVolumeRes(stock,
+                volume);
+            stockVolumeResList.add(stockVolumeRes);
+        }
+        stockVolumeResList.sort(Comparator.comparing(StockVolumeRes::getVolume).reversed());
+
+        for (int i = 0; i < 10; ++i) {
+            if (stockVolumeResList.get(i) == null) {
+                break;
+            }
+            Stock stock = stockVolumeResList.get(i).getStock();
+            String stockId = stock.getId();
+            Integer price = this.currentPrice[this.getStockIndex(stockId)][nextState];
+            String rate = this.rateDifference[this.getStockIndex(stockId)][nextState];
+            StockRankRes stockRankRes = StockMapper.INSTANCE.toRankRes(i + 1, stock, price,
+                rate);
+            this.stockRankResList[nextState][i] = stockRankRes;
+        }
+    }
+
+    private void updateCurrentPrice(int index, Integer price) {
         this.currentPrice[index][this.nextState] = price;
     }
 
-    public void updateTotalPrice(int index, String price) {
+    private void updateTotalPrice(int index, String price) {
         this.totalPrice[index][this.nextState] = price;
     }
 
-    public void updatePriceDifference(int index, String difference) {
+    private void updatePriceDifference(int index, String difference) {
         this.priceDifferencce[index][this.nextState] = difference;
     }
 
-    public void updateRateDifference(int index, String difference) {
+    private void updateRateDifference(int index, String difference) {
         this.rateDifference[index][this.nextState] = difference;
     }
 
-    public void updateTradingVolume(int index, Long volume) {
+    private void updateTradingVolume(int index, Long volume) {
         this.tradingVolume[index][this.nextState] = volume;
     }
 
-    public void updateMin52(int index, Integer price) {
+    private void updateMin52(int index, Integer price) {
         this.min52[index] = price;
     }
 
-    public void updateMax52(int index, Integer price) {
+    private void updateMax52(int index, Integer price) {
         this.max52[index] = price;
     }
 
-    public void updatePer(int index, String newPer) {
+    private void updatePer(int index, String newPer) {
         this.per[index][this.nextState] = newPer;
     }
 
-    public void updatePbr(int index, String newPbr) {
+    private void updatePbr(int index, String newPbr) {
         this.pbr[index][this.nextState] = newPbr;
     }
 
@@ -292,5 +398,9 @@ public class PriceUtil {
         UserValueRes userValueRes = this.calculateUserValue(userId);
 
         return userValueRes.getTotalValue() - userValueRes.getSeedMoney();
+    }
+
+    public List<StockRankRes> getRankByVolume() {
+        return Arrays.stream(this.stockRankResList[currentState]).toList();
     }
 }

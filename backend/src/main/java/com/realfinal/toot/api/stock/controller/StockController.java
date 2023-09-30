@@ -101,8 +101,8 @@ public class StockController {
      * @return 종목명, 분봉 리스트, 일봉 리스트, 주봉 리스트, 시가총액, 현재가, 총 주식 수, 산업군, 세부 산업군, 52주 최저가, 52주 최고가, 상세설명,
      * 관심 종목 등록 여부
      */
-    @GetMapping("/{stockId}")
-    public CommonResponse<SpecificStockRes> getStockInfo(@PathVariable("stockId") String stockId,
+    @GetMapping("/{stockid}")
+    public CommonResponse<SpecificStockRes> getStockInfo(@PathVariable("stockid") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_getStockInfo_start: " + stockId + " " + accessToken);
         SpecificStockRes specificStockRes = stockService.getStockInfo(stockId, accessToken);
@@ -146,9 +146,9 @@ public class StockController {
      * @param accessToken, stockId
      * @return { 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 }
      */
-    @GetMapping("/my/{stockId}")
+    @GetMapping("/my/{stockid}")
     public CommonResponse<MyStockRes> myStock(
-        @RequestHeader(value = "accesstoken", required = false) String accessToken, @PathVariable("stockId") String stockId) {
+        @RequestHeader(value = "accesstoken", required = false) String accessToken, @PathVariable("stockid") String stockId) {
         log.info("StockController_myStocks_start: " + accessToken);
         MyStockRes myStockRes = stockService.myStock(accessToken, stockId);
         log.info("StockController_myStock_end: " + myStockRes);
@@ -162,8 +162,8 @@ public class StockController {
      * @param accessToken
      * @return [ 거래일시, 매수여부, 종목번호, 종목명, 거래 주식 수, 거래가격, 총 거래가격 ] 리스트
      */
-    @GetMapping("/execution/{stockId}")
-    public CommonResponse<List<ExecutionRes>> myExecution(@PathVariable("stockId") String stockId,
+    @GetMapping("/execution/{stockid}")
+    public CommonResponse<List<ExecutionRes>> myExecution(@PathVariable("stockid") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_myExecution_start: " + stockId + " " + accessToken);
         List<ExecutionRes> executionResList = stockService.myExecution(stockId, accessToken);
@@ -195,8 +195,8 @@ public class StockController {
      * @param accessToken
      * @return true(관심 종목 추가), false(관심 종목 삭제)
      */
-    @GetMapping("/interest/{stockId}")
-    public CommonResponse<Boolean> attributeInterest(@PathVariable("stockId") String stockId,
+    @GetMapping("/interest/{stockid}")
+    public CommonResponse<Boolean> attributeInterest(@PathVariable("stockid") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_attributeInterest_start: " + stockId + " " + accessToken);
         Boolean isInterested = stockService.attributeInterest(stockId, accessToken);

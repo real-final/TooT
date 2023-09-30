@@ -160,30 +160,7 @@ public class StockServiceImpl implements StockService {
      */
     public List<StockRankRes> rankByVolume() {
         log.info("StockServiceImpl_rankByVolume_start: no arguments");
-        List<Stock> stockList = stockRepository.findAll();
-        List<StockVolumeRes> priceInfo = new ArrayList<>();
-
-        for (Stock stock : stockList) {
-            Long tradingVoume = priceUtil.getTradingVolume(stock.getId());
-            StockVolumeRes stockVolumeRes = StockMapper.INSTANCE.toStockVolumeRes(stock,
-                tradingVoume);
-            priceInfo.add(stockVolumeRes);
-        }
-        priceInfo.sort(Comparator.comparing(StockVolumeRes::getVolume).reversed());
-        log.info("StockServiceImpl_rankByVolume_mid: sort stock by volume " + priceInfo);
-
-        List<StockRankRes> stockRankResList = new ArrayList<>();
-
-        for (int i = 0; i < 10; ++i) {
-            Stock stock = priceInfo.get(i).getStock();
-            String stockId = stock.getId();
-            Integer currentPrice = priceUtil.getCurrentPrice(stockId);
-            String rateDifference = priceUtil.getRateDifference(stockId);
-            StockRankRes stockRankRes = StockMapper.INSTANCE.toRankRes(i + 1, stock, currentPrice,
-                rateDifference);
-            stockRankResList.add(stockRankRes);
-        }
-
+        List<StockRankRes> stockRankResList = priceUtil.getRankByVolume();
         log.info("StockServiceImpl_rankByVolume_end: " + stockRankResList);
         return stockRankResList;
     }
