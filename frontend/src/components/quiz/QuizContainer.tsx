@@ -26,7 +26,7 @@ const QuizContainer = () => {
       },
     }).then(({data}) => {
       console.log(data);
-      setIsSolved(data.data.success);
+      setIsSolved(data.data);
     });
   }, []);
 
