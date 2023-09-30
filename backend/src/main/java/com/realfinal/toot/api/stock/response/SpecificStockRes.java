@@ -27,7 +27,6 @@ public class SpecificStockRes {
     private Integer hold;
 
     @Builder
-
     public SpecificStockRes(String stockName, List<MinuteRes> minCandle, List<DayWeekRes> dayCandle,
         List<DayWeekRes> weekCandle, String totalPrice, Integer currentPrice, Long totalStock,
         String industryClass, String wics, Integer min52, Integer max52, String outline,
