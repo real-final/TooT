@@ -50,7 +50,7 @@ const Quiz = () => {
     };
     await setIsDisabled(true);
     if(answer === word){
-      await api.post("/quiz/", {} ,{
+      await api.post("/quiz/", null ,{
         headers: {
           accesstoken: accessToken,
         }
