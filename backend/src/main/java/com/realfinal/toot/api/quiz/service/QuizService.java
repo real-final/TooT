@@ -8,5 +8,5 @@ public interface QuizService {
 
     QuizQuestionRes getQuestion();
 
-    void saveQuizResult(String accessToken, String result);
+    void saveQuizResult(String accessToken);
 }
