@@ -12,10 +12,14 @@ const QuizContainer = () => {
   const [isSolved, setIsSolved] = useState<boolean | null>(null);
   const userAuthContext = useContext(UserAuthContext);
   const accessToken = userAuthContext?.accessToken;
+  console.log("컨테이너 안");
+  console.log(accessToken);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("useEffect 안");
+    console.log(accessToken);
     api.get("/quiz/today", {
       headers: {
         accesstoken: accessToken,
