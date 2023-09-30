@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import QuizHeader from "./QuizHeader";
@@ -16,12 +15,8 @@ const Quiz = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  let accessToken:string | undefined;
-
-  useEffect(() => {
   const userAuthContext = useContext(UserAuthContext);
-  accessToken = userAuthContext?.accessToken;
-  }, []);
+  const accessToken = userAuthContext?.accessToken;
 
   const [isDisabled, setIsDisabled] = useState(false);
   const [isAnswer, setIsAnswer] = useState<boolean|null>(null);
@@ -50,7 +45,9 @@ const Quiz = () => {
     };
     await setIsDisabled(true);
     if(answer === word){
-      await api.post("/quiz/", null, {
+      await api.post("/quiz/", {
+        data: null,
+      }, {
         headers: {
           accesstoken: accessToken,
         }

@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import Quiz from "./Quiz";
-// import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { pushBotBubble } from "../../utils/chat/chat";
@@ -10,25 +9,26 @@ import { UserAuthContext } from "../../App";
 
 const QuizContainer = () => {
   const [isSolved, setIsSolved] = useState<boolean | null>(null);
-  let accessToken:string | undefined;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const userAuthContext = useContext(UserAuthContext);
-    accessToken = userAuthContext?.accessToken;
+  const userAuthContext = useContext(UserAuthContext);
+  const accessToken = userAuthContext?.accessToken;
 
-    console.log("useEffect 안");
-    console.log(accessToken);
-    api.get("/quiz/today", {
-      headers: {
-        accesstoken: accessToken,
-      },
-    }).then(({data}) => {
-      console.log(data);
-      setIsSolved(data.data);
-    });
-  }, []);
+  useEffect(() => {
+    if(accessToken){
+      api
+        .get("/quiz/today", {
+          headers: {
+            accesstoken: accessToken,
+          },
+        })
+        .then(({ data }) => {
+          console.log(data);
+          setIsSolved(data.data);
+        });
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     if(isSolved === false){

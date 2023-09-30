@@ -1,6 +1,6 @@
 import UserStockItem from "./UserStockItem";
 import Title from "../../../common/etc/Title";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserAuthContext } from "../../../App";
 import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
@@ -9,12 +9,9 @@ import CustomCircularProgress from "../../../common/circularProgress/CustomCircu
 const UserStock = () => {
   
   const [userStockList, setUserStockList] = useState([]);
-  
-  let accessToken:string | undefined;
-  useEffect(() => {
-    const userAuthContext = useContext(UserAuthContext);
-    accessToken = userAuthContext?.accessToken;
-  }, []);
+  const userAuthContext = useContext(UserAuthContext);
+  const accessToken = userAuthContext?.accessToken;
+
 
   const { isLoading, isError } = useQuery("user-stock", async () => {
     const response = await api.get("/stock/my", {
