@@ -54,7 +54,11 @@ const Quiz = () => {
         headers: {
           accesstoken: accessToken,
         }
-      }, );
+      }).then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        console.log(err);
+      });
       await setIsAnswer(true);
       newBubble.message = "정답입니다! 시드머니 10,000원을 지급해드립니다."
     }
