@@ -8,16 +8,16 @@ export const code400 = (stock:IResponseStockData) => {
   switch(stock.code){
     case 401:
       // TODO: localstorage의 userId 가져와서 넣기
-      window.location.href = `/${userId}/stock`;
+      window.location.href = `/user/${userId}/stock`;
       break;
     case 402:
-      window.location.href = `/${userId}/stock/${stock.name}`;
+      window.location.href = `/user/${userId}/stock/${stock.name}`;
       break;
     case 403:
-      window.location.href = `/${userId}/bankrupt`;
+      window.location.href = `/user/${userId}/bankrupt`;
       break;
     case 404:
-      window.location.href = `/${userId}/trade`;
+      window.location.href = `/user/${userId}/trade`;
       break;
   };
 };

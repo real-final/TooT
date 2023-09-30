@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import QuizHeader from "./QuizHeader";
 import QuizContent from "./QuizContent";
@@ -10,17 +10,22 @@ import QuizSuccess from "./QuizSuccess";
 import QuizFail from "./QuizFail";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../utils/api";
+import { UserAuthContext } from "../../App";
 
 const Quiz = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const userAuthContext = useContext(UserAuthContext);
+  const accessToken = userAuthContext?.accessToken;
+
   const [isDisabled, setIsDisabled] = useState(false);
   const [isAnswer, setIsAnswer] = useState<boolean|null>(null);
   const [quizList, setQuizList] = useState<{word: string, meaning: string}[]>([]);
   const [answer, setAnswer] = useState("");
   const [answerIndex, setAnwserIndex] = useState(-1);
   const {isFetching} = useQuery<any>("daily-quiz", async () => {
-    await api.get("/quiz").then(({data}) => {
+    await api.get("/quiz/").then(({data}) => {
       console.log(data);
       setQuizList(data.data.quizList);
       setAnswer(data.data.answerString);
@@ -30,25 +35,26 @@ const Quiz = () => {
     staleTime: Infinity,
   });
 
-  const getUserAnswer = (word:string) => {
-    setIsDisabled(true);
+  const getUserAnswer = async (word:string) => {
     const newBubble: Ibubble = {
       message: "",
       speaker: false,
     };
+    await setIsDisabled(true);
     if(answer === word){
-      setIsAnswer(true);
+      await api.post("/quiz/", {
+        headers: {
+          accesstoken: accessToken,
+        }
+      }, );
+      await setIsAnswer(true);
       newBubble.message = "정답입니다! 시드머니 10,000원을 지급해드립니다."
-      // TODO: 로그인 고친 후 id 대신 accesstoken으로 백엔드 보내기로 수정하기
-      // axios.post("http://localhost:8080/quiz/?id=36", {
-      //   "id": 36,
-      // });
     }
     else {
-      setIsAnswer(false);
+      await setIsAnswer(false);
       newBubble.message = "오답입니다! 내일 다시 도전해주세요!";
     }
-    dispatch(add(newBubble));
+    await dispatch(add(newBubble));
   };
   
   useEffect(() => {
