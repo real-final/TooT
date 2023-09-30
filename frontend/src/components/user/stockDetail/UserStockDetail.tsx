@@ -4,7 +4,7 @@ import Title from "../../../common/etc/Title";
 
 import UserStockDetailTotal from "./UserStockDetailTotal";
 import UserStockTrade from "../UserStockTrade";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserAuthContext } from "../../../App";
 import { api } from "../../../utils/api";
 import { useQuery } from "react-query";
@@ -13,11 +13,14 @@ import { IuserStock } from "../../../interface/IuserStock";
 
 const UserStockDetail = () => {
   const stockId = useSearchParams("stockId");
-  const userAuthContext = useContext(UserAuthContext);
-  const accessToken = userAuthContext?.accessToken;
-
   const [userDetailTotal, setUserDetailTotal] = useState<IuserStock | undefined>();
   const [userDetailTrade, setUserDetailTrade] = useState([]);
+
+  let accessToken:string | undefined;
+  useEffect(() => {
+    const userAuthContext = useContext(UserAuthContext);
+    accessToken = userAuthContext?.accessToken;
+  }, []);
 
   const { isLoading: isTotalLoading } = useQuery("user-stock-detail-trade", async () => {
     const response = await api.get(`/my/${stockId}`, {
