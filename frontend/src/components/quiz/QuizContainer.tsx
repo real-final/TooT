@@ -46,7 +46,8 @@ const QuizContainer = () => {
 
   return(
   <div className="w-full h-full p-8 min-h-0 flex justify-center items-center bg-white">
-    {(isSolved === false) ? <QuizEnd /> : <Quiz />}
+    {(isSolved === false) ? <QuizEnd /> : null}
+    {(isSolved === true) ? <Quiz /> : null}
   </div>
   );
 };
