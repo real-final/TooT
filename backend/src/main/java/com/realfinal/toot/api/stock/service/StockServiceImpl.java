@@ -205,7 +205,7 @@ public class StockServiceImpl implements StockService {
      * @param stockId
      * @param accessToken
      * @return 종목명, 분봉 리스트, 일봉 리스트, 주봉 리스트, 시가총액, 현재가, 총 주식 수, 산업군, 세부 산업군, 52주 최저가, 52주 최고가, 상세설명,
-     * 관심 종목 등록 여부
+     * 관심 종목 등록 여부, 사용자 보유 주식 수
      */
     public SpecificStockRes getStockInfo(String stockId, String accessToken) {
         log.info("StockServiceImpl_getStockInfo_start: " + stockId + " " + accessToken);
