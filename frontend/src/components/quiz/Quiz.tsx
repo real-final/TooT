@@ -16,8 +16,12 @@ const Quiz = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  let accessToken:string | undefined;
+
+  useEffect(() => {
   const userAuthContext = useContext(UserAuthContext);
-  const accessToken = userAuthContext?.accessToken;
+  accessToken = userAuthContext?.accessToken;
+  }, []);
 
   const [isDisabled, setIsDisabled] = useState(false);
   const [isAnswer, setIsAnswer] = useState<boolean|null>(null);
