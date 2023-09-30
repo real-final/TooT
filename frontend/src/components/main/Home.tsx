@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         {/* 전체랭킹 */}
         <Container>
           <Title>전체랭킹</Title>
-          <Content className="min-h-0 overflow-y-auto no-scrollbar">
+          <Content className="min-h-0 overflow-y-auto">
             <TotalRanking />
           </Content>
         </Container>

@@ -1,7 +1,6 @@
 import { api } from "./api";
 import { Idata } from "../interface/IauthUserContext";
 
-
 /** 서버로 사용자정보 요청 */
 export const requestUserInfo = async (accessToken: string) => {
   try {

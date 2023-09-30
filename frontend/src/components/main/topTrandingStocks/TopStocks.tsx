@@ -4,6 +4,7 @@ import { api } from "../../../utils/api";
 import { useQuery } from "react-query";
 
 import StockRow from "./StockRow";
+import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 
 type rowType = {
   rank: number;
@@ -17,19 +18,26 @@ type rowType = {
 const TopStocks: React.FC = () => {
   const navigate = useNavigate();
 
+  // 거래량 순위 요청하기
   const fetchStockRank = async () => {
     const response = await api.get("/stock/rank");
     return response?.data?.data;
   };
 
-  const { data: rows, isError } = useQuery("stockRank", fetchStockRank, {
+  const {
+    data: rows,
+    isLoading,
+    isError,
+  } = useQuery("stockRank", fetchStockRank, {
     refetchInterval: 5000, // 5초마다 요청
   });
 
-  if (isError) {
+  if (isLoading || isError) {
     console.error("위치: TopStocks.tsx, 거래량 순위 불러오기 실패");
+    return <CustomCircularProgress />;
   }
 
+  // 랭킹 5위씩 끊어서 저장하기
   const rowTop5 = rows?.slice(0, 5);
   const rowTop10 = rows?.slice(5);
 
