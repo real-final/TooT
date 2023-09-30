@@ -1,23 +1,29 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Quiz from "./Quiz";
 // import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { pushBotBubble } from "../../utils/chat/chat";
 import QuizEnd from "./QuizEnd";
+import { api } from "../../utils/api";
+import { UserAuthContext } from "../../App";
 
 const QuizContainer = () => {
   const [isSolved, setIsSolved] = useState<boolean | null>(null);
+  const userAuthContext = useContext(UserAuthContext);
+  const accessToken = userAuthContext?.accessToken;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // axios.get("http://localhost:8080/quiz/today?id=36").then(({data}) => {
-    //   setIsSolved(data.data);
-    //   console.log(data);
-    // }).catch((err) => console.log(err));
-    //setIsSolved(true);
-    setIsSolved(false);
+    api.get("/quiz/today", {
+      headers: {
+        accesstoken: accessToken,
+      },
+    }).then(({data}) => {
+      console.log(data);
+      setIsSolved(data.data.success);
+    });
   }, []);
 
   useEffect(() => {

@@ -19,7 +19,7 @@ const Routers = () => {
       <Route path="/" element={<Home />}></Route>
       <Route path="/stock/:stockId" element={<StockDetails />}></Route>
       {/* TODO: /user 대신 /:userID 사용 예정, user/bankrupt/:userID 대신 :userId/bankrupt */}
-      <Route path="/:userId" element={<MainUserContainer />}>
+      <Route path="/user/:userId" element={<MainUserContainer />}>
         <Route path="stock" element={<UserStock />}></Route>
         {/* TODO: stockId로 바꾸기 */}
         <Route path="stock/:stockName" element={<UserStockDetail />}></Route>
