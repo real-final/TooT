@@ -27,7 +27,6 @@ const QuizContainer = () => {
   }, []);
 
   useEffect(() => {
-
     if(isSolved === false){
       const message = "오늘의 주식 용어 데일리 퀴즈에 이미 도전하셨습니다.\n내일 다시 도전해주세요!";
       pushBotBubble(message, dispatch);
@@ -43,7 +42,7 @@ const QuizContainer = () => {
 
   return(
   <div className="w-full h-full p-8 min-h-0 flex justify-center items-center bg-white">
-    {(isSolved === true) ? <QuizEnd /> : <Quiz />}
+    {(isSolved === false) ? <QuizEnd /> : <Quiz />}
   </div>
   );
 };
