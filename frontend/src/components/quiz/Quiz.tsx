@@ -25,7 +25,11 @@ const Quiz = () => {
   const [answer, setAnswer] = useState("");
   const [answerIndex, setAnwserIndex] = useState(-1);
   const {isFetching} = useQuery<any>("daily-quiz", async () => {
-    await api.get("/quiz/").then(({data}) => {
+    await api.get("/quiz/", {
+      headers: {
+        accesstoken: accessToken,
+      },
+    }).then(({data}) => {
       console.log(data);
       setQuizList(data.data.quizList);
       setAnswer(data.data.answerString);
