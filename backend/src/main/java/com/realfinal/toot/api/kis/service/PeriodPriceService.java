@@ -28,50 +28,42 @@ public class PeriodPriceService {
     private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
 
-    // 주중 매일 7시 0분 1초에 실행
-    @Scheduled(cron = "1 0 7 ? * MON-FRI")
+    @Scheduled(cron = "0 0 7 ? * *")
     public void fetchPeriodPriceForBatch1_D() {
         getPeriodPrice(kospi32Config.company1, "D");
     }
 
-    // 주중 매일 7시 0분 2초에 실행
-    @Scheduled(cron = "2 0 7 ? * MON-FRI")
+    @Scheduled(cron = "3 0 7 ? * *")
     public void fetchPeriodPriceForBatch2_D() {
         getPeriodPrice(kospi32Config.company2, "D");
     }
 
-    // 주중 매일 7시 0분 3초에 실행
-    @Scheduled(cron = "3 0 7 ? * MON-FRI")
+    @Scheduled(cron = "6 0 7 ? * *")
     public void fetchPeriodPriceForBatch3_D() {
         getPeriodPrice(kospi32Config.company3, "D");
     }
 
-    // 주중 매일 7시 0분 4초에 실행
-    @Scheduled(cron = "4 0 7 ? * MON-FRI")
+    @Scheduled(cron = "9 0 7 ? * *")
     public void fetchPeriodPriceForBatch4_D() {
         getPeriodPrice(kospi32Config.company4, "D");
     }
 
-    // 매주 토요일 7시 0분 1초에 실행
-    @Scheduled(cron = "1 0 7 ? * SAT")
+    @Scheduled(cron = "12 0 7 ? * *")
     public void fetchPeriodPriceForBatch1_W() {
         getPeriodPrice(kospi32Config.company1, "W");
     }
 
-    // 매주 토요일 7시 0분 2초에 실행
-    @Scheduled(cron = "2 0 7 ? * SAT")
+    @Scheduled(cron = "15 0 7 ? * *")
     public void fetchPeriodPriceForBatch2_W() {
         getPeriodPrice(kospi32Config.company2, "W");
     }
 
-    // 매주 토요일 7시 0분 3초에 실행
-    @Scheduled(cron = "3 0 7 ? * SAT")
+    @Scheduled(cron = "18 0 7 ? * *")
     public void fetchPeriodPriceForBatch3_W() {
         getPeriodPrice(kospi32Config.company3, "W");
     }
 
-    // 매주 토요일 7시 0분 4초에 실행
-    @Scheduled(cron = "4 0 7 ? * SAT")
+    @Scheduled(cron = "21 0 7 ? * *")
     public void fetchPeriodPriceForBatch4_W() {
         getPeriodPrice(kospi32Config.company4, "W");
     }
