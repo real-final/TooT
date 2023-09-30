@@ -24,7 +24,7 @@ public class StockController {
      * @param accessToken
      * @return [ 종목 번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률, 관심 종목으로 등록 여부 ] 리스트
      */
-    @PostMapping("/showall")
+    @GetMapping("/showall")
     public CommonResponse<List<AllStockRes>> showAll(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_showAll_start: " + accessToken);
@@ -84,7 +84,7 @@ public class StockController {
      * @param accessToken
      * @return [ 종목번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률 ] 리스트
      */
-    @PostMapping("/interest/show")
+    @GetMapping("/interest/show")
     public CommonResponse<List<InterestRes>> showInterest(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_showInterest_start: " + accessToken);
@@ -116,7 +116,7 @@ public class StockController {
      * @param accessToken
      * @return [ 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 ] 리스트
      */
-    @PostMapping("/my")
+    @GetMapping("/my")
     public CommonResponse<List<MyStockRes>> myStocks(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_myStocks_start: " + accessToken);
@@ -131,7 +131,7 @@ public class StockController {
      * @param accessToken
      * @return [ 거래일시, 매수여부, 종목번호, 종목명, 거래 주식 수, 거래가격, 총 거래가격 ] 리스트
      */
-    @PostMapping("/execution")
+    @GetMapping("/execution")
     public CommonResponse<List<ExecutionRes>> myAllExecution(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_myAllExecution_start: " + accessToken);
@@ -195,7 +195,7 @@ public class StockController {
      * @param accessToken
      * @return true(관심 종목 추가), false(관심 종목 삭제)
      */
-    @GetMapping("/interest/{stockId}")
+    @PostMapping("/interest/{stockId}")
     public CommonResponse<Boolean> attributeInterest(@PathVariable("stockId") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_attributeInterest_start: " + stockId + " " + accessToken);
