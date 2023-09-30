@@ -20,11 +20,11 @@ public class UserRes {
     private Integer bankruptcyNo;
     private LocalDate lastQuizDate;
     private LocalDateTime joinAt;
+    private Long totalValue;
 
     @Builder
     public UserRes(Long id, Long seedMoney, Long cash, String profileImage, String name,
-            Integer bankruptcyNo, LocalDate lastQuizDate,
-            LocalDateTime joinAt) {
+        Integer bankruptcyNo, LocalDate lastQuizDate, LocalDateTime joinAt, Long totalValue) {
         this.id = id;
         this.seedMoney = seedMoney;
         this.cash = cash;
@@ -33,5 +33,6 @@ public class UserRes {
         this.bankruptcyNo = bankruptcyNo;
         this.lastQuizDate = lastQuizDate;
         this.joinAt = joinAt;
+        this.totalValue = totalValue;
     }
 }

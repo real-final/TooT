@@ -29,6 +29,6 @@ public interface UserMapper {
                 .build();
     }
 
-    UserRes userToUserRes(User user) throws MapperException;
+    UserRes userToUserRes(User user, Long totalValue) throws MapperException;
 
 }

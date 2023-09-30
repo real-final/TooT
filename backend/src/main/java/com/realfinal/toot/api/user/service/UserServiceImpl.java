@@ -1,6 +1,7 @@
 package com.realfinal.toot.api.user.service;
 
 
+import com.realfinal.toot.api.stock.response.UserValueRes;
 import com.realfinal.toot.api.user.mapper.UserMapper;
 import com.realfinal.toot.api.user.response.OauthTokenRes;
 import com.realfinal.toot.api.user.response.UserRes;
@@ -10,6 +11,7 @@ import com.realfinal.toot.common.exception.user.MySQLSearchException;
 import com.realfinal.toot.common.exception.user.NotProvidedProviderException;
 import com.realfinal.toot.common.util.JwtProviderUtil;
 import com.realfinal.toot.common.util.KakaoUtil;
+import com.realfinal.toot.common.util.PriceUtil;
 import com.realfinal.toot.common.util.RedisUtil;
 import com.realfinal.toot.db.entity.User;
 import com.realfinal.toot.db.repository.UserRepository;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final RedisUtil redisUtil;
     private final UserRepository userRepository;
     private final KakaoUtil kakaoUtil;
+    private final PriceUtil priceUtil;
 
     /**
      * 로그인 서비스 - kakao 로그인
@@ -94,7 +97,8 @@ public class UserServiceImpl implements UserService {
 
         if (jwtProviderUtil.validateToken(accessToken)) {
             User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
-            UserRes userRes = UserMapper.INSTANCE.userToUserRes(user);
+            UserValueRes userValueRes = priceUtil.calculateUserValue(userId);
+            UserRes userRes = UserMapper.INSTANCE.userToUserRes(user, userValueRes.getTotalValue());
             log.info("UserServiceImpl_getUserInfo_end: " + userRes.toString());
             return userRes;
         }
