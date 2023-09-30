@@ -28,13 +28,13 @@ const QuizContainer = () => {
 
   useEffect(() => {
 
-    if(isSolved === true){
+    if(isSolved === false){
       const message = "오늘의 주식 용어 데일리 퀴즈에 이미 도전하셨습니다.\n내일 다시 도전해주세요!";
       pushBotBubble(message, dispatch);
       setTimeout(() => {
         navigate("/");
       }, 5000);
-    } else if(isSolved === false){
+    } else if(isSolved === true){
       const message = "오늘의 주식 용어 데일리 퀴즈를 진행합니다.";
       pushBotBubble(message, dispatch);
     }
