@@ -1,7 +1,6 @@
 import Title from "../../../common/etc/Title";
 import BankruptDetailTotal from "./BankruptDetailTotal";
 import UserStockTrade from "../UserStockTrade";
-import { useGetSearchParam } from "../../../hooks/useGetSearchParam";
 import { useContext, useState } from "react";
 import { UserAuthContext } from "../../../App";
 import { useQuery } from "react-query";
@@ -9,9 +8,10 @@ import { api } from "../../../utils/api";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 import { IuserBankrupt } from "../../../interface/IuserBankrupt";
 import UserNoItem from "../UserNoItem";
+import { useParams } from "react-router-dom";
 
 const BankruptDetail = () => {
-  const bankruptNo = useGetSearchParam("bankruptNo");
+  const { bankruptcyNo } = useParams<{ bankruptcyNo: string }>();
   const userAuthContext = useContext(UserAuthContext);
   const accessToken = userAuthContext?.accessToken;
 
@@ -19,7 +19,7 @@ const BankruptDetail = () => {
   const [userBankruptTrade, setUserBankruptTrade] = useState([]);
 
   const { isLoading:isBankruptTotalLoading } = useQuery("user-bankrupt-detail-total", async () => {
-    const response = await api.get(`/bankruptcy/${bankruptNo}`, {
+    const response = await api.get(`/bankruptcy/${bankruptcyNo}`, {
       headers: {
         accesstoken: accessToken,
       },
@@ -30,7 +30,7 @@ const BankruptDetail = () => {
   });
 
   const { isLoading:isBankruptTradeLoading } = useQuery("user-bankrupt-detail-trade", async () => {
-    const response = await api.get(`/detail/${bankruptNo}`, {
+    const response = await api.get(`/detail/${bankruptcyNo}`, {
       headers: {
         accesstoken: accessToken,
       },
@@ -42,7 +42,7 @@ const BankruptDetail = () => {
 
   return(
     <div className="w-full h-full p-8 min-h-0">
-      <Title title={`${bankruptNo}회차 파산 기록`} />
+      <Title title={`${bankruptcyNo}회차 파산 기록`} />
       { (isBankruptTotalLoading || isBankruptTradeLoading) ? 
       <CustomCircularProgress /> : 
       ((userBankruptTotal && userBankruptTrade) ? 

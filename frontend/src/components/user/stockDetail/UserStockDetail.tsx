@@ -1,5 +1,5 @@
 // import { useLocation, useParams } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Title from "../../../common/etc/Title";
 
 import UserStockDetailTotal from "./UserStockDetailTotal";
@@ -14,9 +14,7 @@ import UserNoItem from "../UserNoItem";
 import { IuserTrade } from "../../../interface/IuserTrade";
 
 const UserStockDetail = () => {
-  const stockId = useSearchParams("stockId");
-  console.log("stockId:");
-  console.log(stockId);
+  const { stockId } = useParams<{ stockId: string }>();
   const [userDetailTotal, setUserDetailTotal] = useState<IuserStock | undefined>();
   const [userDetailTrade, setUserDetailTrade] = useState<any>([]);
 
@@ -26,7 +24,7 @@ const UserStockDetail = () => {
   const { isLoading: isTotalLoading } = useQuery("user-stock-detail-trade", async () => {
     const response = await api.get(`/my/${stockId}`, {
       headers: {
-        accesstoken: accessToken,
+        accesstoken: accessToken, 
       },
     });
     setUserDetailTotal(response.data.data);
