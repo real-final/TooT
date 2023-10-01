@@ -13,7 +13,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(2); // 여기서 쓰레드 풀 크기를 설정합니다.
+        threadPoolTaskScheduler.setPoolSize(10); // 여기서 쓰레드 풀 크기를 설정합니다.
         threadPoolTaskScheduler.initialize();
         taskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
     }
