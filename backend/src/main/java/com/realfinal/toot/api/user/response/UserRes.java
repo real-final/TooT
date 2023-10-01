@@ -4,23 +4,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
-@NoArgsConstructor
 public class UserRes {
 
-    private Long id;
-    private Long seedMoney;
-    private Long cash;
-    private String profileImage;
-    private String name;
-    private Integer bankruptcyNo;
-    private LocalDate lastQuizDate;
-    private LocalDateTime joinAt;
-    private Long totalValue;
+    private final Long id;
+    private final Long seedMoney;
+    private final Long cash;
+    private final String profileImage;
+    private final String name;
+    private final Integer bankruptcyNo;
+    private final LocalDate lastQuizDate;
+    private final LocalDateTime joinAt;
+    private final Long totalValue;
 
     @Builder
     public UserRes(Long id, Long seedMoney, Long cash, String profileImage, String name,

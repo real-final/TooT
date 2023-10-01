@@ -7,10 +7,11 @@ import lombok.ToString;
 @Getter
 @ToString
 public class OauthFriendInfoReq {
-    private String profile_nickname;
-    private String profile_thumbnail_image;
-    private Boolean favorite;
-    private Long id;
+
+    private final String profile_nickname;
+    private final String profile_thumbnail_image;
+    private final Boolean favorite;
+    private final Long id;
 
     @Builder
     public OauthFriendInfoReq(String profile_nickname, String profile_thumbnail_image,

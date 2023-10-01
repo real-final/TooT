@@ -10,10 +10,10 @@ import lombok.ToString;
 public class RankRes {
     @JsonIgnore
     private Long id;
-    private String name;
-    private String profileImage;
-    private Integer bankruptcyNo;
-    private Long netProfit; //순이익
+    private final String name;
+    private final String profileImage;
+    private final Integer bankruptcyNo;
+    private final Long netProfit; //순이익
 
     @Builder
     public RankRes(Long id, String profileImage, String name, Integer bankruptcyNo,

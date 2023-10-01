@@ -9,7 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +27,7 @@ public class UserController {
     private final String SUCCESS = "success";
 
     /**
-     * 카카오 로그인 후 받은 인가코드로 refreshToken을 Cookie 로 저장
+     * 카카오 로그인 후 받은 인가코드로 refreshToken Cookie 로 저장
      *
      * @param code     카카오 오어스 인가코드
      * @param response 쿠키 담을거
@@ -43,7 +45,7 @@ public class UserController {
 
         // "refreshToken"을 프론트 엔드 쿠키에 저장
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
-            .path("/") // too-t.com 하위 url은 모두 저장 유지
+            .path("/") // too-t.com 하위 url 모두 저장 유지
             .httpOnly(true)
             .secure(true)
             .sameSite("None")
@@ -62,7 +64,7 @@ public class UserController {
      * @param request (쿠키에 담긴 토큰 추출해서 확인)
      * @return 새 access token
      */
-    @GetMapping("/refresh")
+    @PatchMapping("/refresh")
     public CommonResponse<String> recreateAccessToken(HttpServletRequest request,
         HttpServletResponse response) {
         log.info("UserController_recreateAccessToken_start");
@@ -98,7 +100,7 @@ public class UserController {
      * @param request (쿠키에 담긴 토큰 추출해서 확인)
      * @return "success"
      */
-    @GetMapping("/logout")
+    @DeleteMapping("/logout")
     public CommonResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
         log.info("UserController_logout_start");
         String refreshToken = getRefreshTokenFromCookies(request);

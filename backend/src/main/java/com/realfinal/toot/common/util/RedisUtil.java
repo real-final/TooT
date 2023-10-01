@@ -37,7 +37,7 @@ public class RedisUtil {
      * @param value    redis value (token)
      * @param duration redis 만료기간
      */
-    public void setDataWithExpire(String key, String value, long duration) {
+    public void setDataWithExpire(String key, String value, Long duration) {
         log.info("RedisUtil_setDataWithExpire_start: " + key + " " + value + " " + duration);
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
@@ -63,5 +63,55 @@ public class RedisUtil {
             throw new RedisNotDeletedException();
         }
         log.info("RedisUtil_deleteData_end: token deleted from redis");
+    }
+
+    /**
+     * 주어진 키로 레디스에서 채팅 데이터를 조회
+     *
+     * @param key the Redis key ("chat" + userId)
+     * @return the chat data in String format
+     */
+    public String getChatData(String key) {
+        log.info("RedisUtil_getChatData_start: " + key);
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        String chatData = valueOperations.get(key);
+        log.info("RedisUtil_getChatData_end: " + chatData);
+        return chatData;
+    }
+
+    /**
+     * 주어진 키, 값, 만료 시간으로 레디스에 채팅 데이터를 저장
+     *
+     * @param key      the Redis key ("chat" + userId)
+     * @param value    the chat data in String format
+     * @param duration expiration time in seconds
+     */
+    public void setChatDataWithExpire(String key, String value, Long duration) {
+        log.info("RedisUtil_setChatDataWithExpire_start: " + key + " " + value + " " + duration);
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        Duration expireDuration = Duration.ofSeconds(duration);
+        valueOperations.set(key, value, expireDuration);
+        // Validate saved value
+        String storedValue = valueOperations.get(key);
+        if (storedValue == null || !storedValue.equals(value)) {
+            log.warn("RedisUtil_setChatDataWithExpire_mid: problem while saving chat to redis");
+            throw new RedisNotSavedException();
+        }
+        log.info("RedisUtil_setChatDataWithExpire_end: chat data saved in redis");
+    }
+
+    /**
+     * 주어진 키의 레디스 채팅 데이터를 삭제
+     *
+     * @param key the Redis key ("chat" + userId)
+     */
+    public void deleteChatData(String key) {
+        log.info("RedisUtil_deleteChatData_start: " + key);
+        try {
+            stringRedisTemplate.delete(key);
+        } catch (Exception e) {
+            throw new RedisNotDeletedException();
+        }
+        log.info("RedisUtil_deleteChatData_end: chat data deleted from redis");
     }
 }

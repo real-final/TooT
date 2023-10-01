@@ -131,8 +131,8 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl_saveTokens_start: " + id + " " + refreshJWTToken + " "
             + oauthAccessToken);
 
-        redisUtil.setDataWithExpire(refreshJWTToken, id, 1209600000);
-        redisUtil.setDataWithExpire(id, oauthAccessToken, 31536000);
+        redisUtil.setDataWithExpire(refreshJWTToken, id, 1209600000L);
+        redisUtil.setDataWithExpire(id, oauthAccessToken, 31536000L);
 
         log.info("UserServiceImpl_saveTokens_end: token saved");
     }
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
      * @return 결과가 로그아웃이다 판단하면 true, 로그인 된 상태면 false
      */
     @Override
-    public boolean isLogout(String refreshToken) {
+    public Boolean isLogout(String refreshToken) {
         log.info("UserServiceImpl_isLogout_start: " + refreshToken);
         String data = redisUtil.getData(refreshToken);
         log.info("UserServiceImpl_isLogout_end: isLogout?" + (data == null));
