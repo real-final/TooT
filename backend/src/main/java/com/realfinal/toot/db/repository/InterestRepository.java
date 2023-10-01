@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface InterestRepository extends JpaRepository<Interest, Long> {
 
-    Interest findByUserAndStock(User user, Stock stock);
+    Interest findByUserAndStock(User user, Stock stock) throws EntitySearchException;
 
     List<Interest> findAllByUser(User user) throws EntitySearchException;
 }

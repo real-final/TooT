@@ -125,7 +125,8 @@ public class StockServiceImpl implements StockService {
 
         for (Stock stock : stockList) {
             String stockId = stock.getId();
-            Boolean liked = interestRepository.findByUserAndStock(user, stock) != null;
+            Interest interest = interestRepository.findByUserAndStock(user, stock);
+            Boolean liked = interest != null && interest.getIsInterested();
             Integer currentPrice = priceUtil.getCurrentPrice(stockId);
             String priceDifference = priceUtil.getPriceDifference(stockId);
             String rateDifference = priceUtil.getRateDifference(stockId);
@@ -185,14 +186,16 @@ public class StockServiceImpl implements StockService {
         List<InterestRes> interestResList = new ArrayList<>();
 
         for (Interest interest : interestList) {
-            Stock stock = interest.getStock();
-            String stockId = stock.getId();
-            Integer currentPrice = priceUtil.getCurrentPrice(stockId);
-            String priceDifference = priceUtil.getPriceDifference(stockId);
-            String rateDifference = priceUtil.getRateDifference(stockId);
-            InterestRes interestRes = StockMapper.INSTANCE.toInterestRes(stock, currentPrice,
-                priceDifference, rateDifference);
-            interestResList.add(interestRes);
+            if (interest.getIsInterested()) {
+                Stock stock = interest.getStock();
+                String stockId = stock.getId();
+                Integer currentPrice = priceUtil.getCurrentPrice(stockId);
+                String priceDifference = priceUtil.getPriceDifference(stockId);
+                String rateDifference = priceUtil.getRateDifference(stockId);
+                InterestRes interestRes = StockMapper.INSTANCE.toInterestRes(stock, currentPrice,
+                    priceDifference, rateDifference);
+                interestResList.add(interestRes);
+            }
         }
 
         log.info("StockServiceImpl_showInterest_end: " + interestResList);
@@ -215,6 +218,7 @@ public class StockServiceImpl implements StockService {
         UserStock userStock = userStockRepository.findByUserAndStockAndBankruptcyNo(user, stock,
             user.getBankruptcyNo());
         Interest interest = interestRepository.findByUserAndStock(user, stock);
+        Boolean liked = interest != null && interest.getIsInterested();
         Integer hold = userStock == null ? 0 : userStock.getHold();
 
         List<MinuteRes> minCandle = priceUtil.getMinCandle(stockId);
@@ -226,7 +230,7 @@ public class StockServiceImpl implements StockService {
         String totalPrice = priceUtil.getTotalPrice(stockId);
         SpecificStockRes specificStockRes = StockMapper.INSTANCE.toSpecificStockRes(stock,
             minCandle, dayCandle, weekCandle, totalPrice, currentPrice, min52, max52,
-            interest != null, hold);
+            liked, hold);
         log.info("StockServiceImpl_getStockInfo_end: " + specificStockRes);
         return specificStockRes;
     }
@@ -319,7 +323,7 @@ public class StockServiceImpl implements StockService {
      * @return { 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 }
      */
     public MyStockRes myStock(String accessToken, String stockId) {
-        log.info("StockServiceImpl_myStocks_start: " + accessToken);
+        log.info("StockServiceImpl_myStock_start: " + accessToken);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
@@ -448,37 +452,60 @@ public class StockServiceImpl implements StockService {
     }
 
     /**
-     * 관심 종목 추가/삭제
-     *
      * @param stockId
      * @param accessToken
-     * @return true(관심 종목 추가), false(관심 종목 삭제)
+     * @return true(관심 종목 추가 성공), false(관심 종목 추가 실패)
      */
     @Transactional
-    public Boolean attributeInterest(String stockId, String accessToken) {
-        log.info("StockServiceImpl_attributeInterest_start: " + stockId + " " + accessToken);
+    public Boolean addInterest(String stockId, String accessToken) {
+        log.info("StockServiceImpl_addInterest_start: " + stockId + " " + accessToken);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
         Interest interest = interestRepository.findByUserAndStock(user, stock);
 
-        String stockName = stock.getStockName();
-        String userName = user.getName();
         if (interest == null) {
-            log.info("StockServiceImpl_attributeInterest_mid: " + userName
+            String stockName = stock.getStockName();
+            String userName = user.getName();
+            log.info("StockServiceImpl_addInterest_mid: " + userName
                 + " has no interest with " + stockName);
-            interest = StockMapper.INSTANCE.toInterest(user, stock);
+            interest = StockMapper.INSTANCE.toInterest(user, stock, true);
             interestRepository.save(interest);
-            log.info("StockServiceImpl_attributeInterest_mid: add " + userName
+            log.info("StockServiceImpl_addInterest_mid: add " + userName
                 + "'s interest with " + stockName + " - " + interest);
-            log.info("StockServiceImpl_attributeInterest_end: return true");
-            return true;
         } else {
-            interestRepository.delete(interest);
-            log.info("StockServiceImpl_attributeInterest_mid: remove " + userName
-                + "'s interest with " + stockName);
-            log.info("StockServiceImpl_attributeInterest_end: return false");
-            return false;
+            interest.setInterest(true);
         }
+
+        log.info("StockServiceImpl_addInterest_end: return true");
+        return true;
     }
+
+    /**
+     * @param stockId
+     * @param accessToken
+     * @return true(관심 종목 취소 성공), false(관심 종목 취소 실패)
+     */
+    @Transactional
+    public Boolean cancelInterest(String stockId, String accessToken) {
+        log.info("StockServiceImpl_cancelInterest_start: " + stockId + " " + accessToken);
+        Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
+        Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
+        Interest interest = interestRepository.findByUserAndStock(user, stock);
+
+        if (interest == null) {
+            String stockName = stock.getStockName();
+            String userName = user.getName();
+            log.info("StockServiceImpl_cancelInterest_end: " + userName
+                + " has no interest with " + stockName);
+            throw new MySQLSearchException();
+        } else {
+            interest.setInterest(false);
+        }
+
+        log.info("StockServiceImpl_cancelInterest_end: return true");
+        return true;
+    }
+
 }

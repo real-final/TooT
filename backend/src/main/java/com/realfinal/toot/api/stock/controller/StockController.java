@@ -1,14 +1,26 @@
 package com.realfinal.toot.api.stock.controller;
 
 import com.realfinal.toot.api.stock.request.StockReq;
-import com.realfinal.toot.api.stock.response.*;
+import com.realfinal.toot.api.stock.response.AllStockRes;
+import com.realfinal.toot.api.stock.response.ExecutionRes;
+import com.realfinal.toot.api.stock.response.InterestRes;
+import com.realfinal.toot.api.stock.response.MyStockRes;
+import com.realfinal.toot.api.stock.response.SpecificStockRes;
+import com.realfinal.toot.api.stock.response.StockRankRes;
+import com.realfinal.toot.api.stock.response.UserValueRes;
 import com.realfinal.toot.api.stock.service.StockService;
 import com.realfinal.toot.common.model.CommonResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -104,7 +116,8 @@ public class StockController {
     @GetMapping("/{stockId}")
     public CommonResponse<SpecificStockRes> getStockInfo(@PathVariable("stockId") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_getStockInfo_start: stockId = " + stockId + " accessToken = " + accessToken);
+        log.info("StockController_getStockInfo_start: stockId = " + stockId + " accessToken = "
+            + accessToken);
         SpecificStockRes specificStockRes = stockService.getStockInfo(stockId, accessToken);
         log.info("StockController_getStockInfo_end: " + specificStockRes);
         return CommonResponse.success(specificStockRes);
@@ -148,7 +161,8 @@ public class StockController {
      */
     @GetMapping("/my/{stockId}")
     public CommonResponse<MyStockRes> myStock(
-        @RequestHeader(value = "accesstoken", required = false) String accessToken, @PathVariable("stockId") String stockId) {
+        @RequestHeader(value = "accesstoken", required = false) String accessToken,
+        @PathVariable("stockId") String stockId) {
         log.info("StockController_myStocks_start: " + accessToken);
         MyStockRes myStockRes = stockService.myStock(accessToken, stockId);
         log.info("StockController_myStock_end: " + myStockRes);
@@ -189,18 +203,30 @@ public class StockController {
     }
 
     /**
-     * 관심 종목 추가/삭제
-     *
      * @param stockId
      * @param accessToken
-     * @return true(관심 종목 추가), false(관심 종목 삭제)
+     * @return true(관심 종목 추가 성공), false(관심 종목 추가 실패)
      */
-    @PostMapping("/interest/{stockId}")
-    public CommonResponse<Boolean> attributeInterest(@PathVariable("stockId") String stockId,
+    @PatchMapping("/interest/add/{stockId}")
+    public CommonResponse<Boolean> addInterest(@PathVariable("stockId") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_attributeInterest_start: " + stockId + " " + accessToken);
-        Boolean isInterested = stockService.attributeInterest(stockId, accessToken);
-        log.info("StockController_attributeInterest_end: " + isInterested);
-        return CommonResponse.success(isInterested);
+        log.info("StockController_addInterest_start: " + stockId + " " + accessToken);
+        Boolean isAdded = stockService.addInterest(stockId, accessToken);
+        log.info("StockController_addInterest_end: " + isAdded);
+        return CommonResponse.success(isAdded);
+    }
+
+    /**
+     * @param stockId
+     * @param accessToken
+     * @return true(관심 종목 취소 성공), false(관심 종목 취소 실패)
+     */
+    @PatchMapping("/interest/cancel/{stockId}")
+    public CommonResponse<Boolean> cancelInterest(@PathVariable("stockId") String stockId,
+        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("StockController_cancelInterest_start: " + stockId + " " + accessToken);
+        Boolean isCanceled = stockService.cancelInterest(stockId, accessToken);
+        log.info("StockController_cancelInterest_end: " + isCanceled);
+        return CommonResponse.success(isCanceled);
     }
 }
