@@ -57,7 +57,7 @@ public interface StockMapper {
     @Mapping(source = "execution.stock.stockName", target = "stockName")
     ExecutionRes toExecutionRes(Execution execution, Long totalPrice) throws MapperException;
 
-    Interest toInterest(User user, Stock stock) throws MapperException;
+    Interest toInterest(User user, Stock stock, Boolean isInterested) throws MapperException;
 
     MinuteRes toMinuteRes(String time, String price, String amount) throws MapperException;
 

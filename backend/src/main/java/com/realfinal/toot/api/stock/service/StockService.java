@@ -1,8 +1,13 @@
 package com.realfinal.toot.api.stock.service;
 
 import com.realfinal.toot.api.stock.request.StockReq;
-import com.realfinal.toot.api.stock.response.*;
-
+import com.realfinal.toot.api.stock.response.AllStockRes;
+import com.realfinal.toot.api.stock.response.ExecutionRes;
+import com.realfinal.toot.api.stock.response.InterestRes;
+import com.realfinal.toot.api.stock.response.MyStockRes;
+import com.realfinal.toot.api.stock.response.SpecificStockRes;
+import com.realfinal.toot.api.stock.response.StockRankRes;
+import com.realfinal.toot.api.stock.response.UserValueRes;
 import java.util.List;
 
 public interface StockService {
@@ -29,5 +34,7 @@ public interface StockService {
 
     Integer sellStock(String accessToken, StockReq stockReq);
 
-    Boolean attributeInterest(String stockId, String accessToken);
+    Boolean addInterest(String stockId, String accessToken);
+
+    Boolean cancelInterest(String stockId, String accessToken);
 }
