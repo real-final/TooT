@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 import { IuserBankrupt } from "../../../interface/IuserBankrupt";
+import UserNoItem from "../UserNoItem";
 
 const BankruptDetail = () => {
   const bankruptNo = useGetSearchParam("bankruptNo");
@@ -42,12 +43,16 @@ const BankruptDetail = () => {
   return(
     <div className="w-full h-full p-8 min-h-0">
       <Title title={`${bankruptNo}회차 파산 기록`} />
-      { isBankruptTotalLoading ? <CustomCircularProgress /> : <BankruptDetailTotal bankruptTotal={userBankruptTotal} />}
-      { isBankruptTradeLoading ? <CustomCircularProgress /> : <div className="h-[70%] no-scrollbar overflow-y-auto">
-      {userBankruptTrade?.map((item, index) => (
+      { (isBankruptTotalLoading || isBankruptTradeLoading) ? 
+      <CustomCircularProgress /> : 
+      ((userBankruptTotal && userBankruptTrade) ? 
+      <>
+        <BankruptDetailTotal bankruptTotal={userBankruptTotal} />
+        {userBankruptTrade?.map((item, index) => (
           <UserStockTrade index={index} trade={item} isName={true} />
         ))}
-      </div>}
+      </> : 
+      <UserNoItem itemName="파산 기록" />)}
     </div>
   );
 };

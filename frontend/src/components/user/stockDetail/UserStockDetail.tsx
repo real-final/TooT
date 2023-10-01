@@ -10,11 +10,13 @@ import { api } from "../../../utils/api";
 import { useQuery } from "react-query";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 import { IuserStock } from "../../../interface/IuserStock";
+import UserNoItem from "../UserNoItem";
+import { IuserTrade } from "../../../interface/IuserTrade";
 
 const UserStockDetail = () => {
   const stockId = useSearchParams("stockId");
   const [userDetailTotal, setUserDetailTotal] = useState<IuserStock | undefined>();
-  const [userDetailTrade, setUserDetailTrade] = useState([]);
+  const [userDetailTrade, setUserDetailTrade] = useState<any>([]);
 
   const userAuthContext = useContext(UserAuthContext);
   const accessToken = userAuthContext?.accessToken;
@@ -26,8 +28,6 @@ const UserStockDetail = () => {
       },
     });
     setUserDetailTotal(response.data.data);
-    console.log("상세 유저 주식 api");
-    console.log(response);
   });
 
   const { isLoading: isTradeLoading } = useQuery("user-stock-detail-trade", async () => {
@@ -37,19 +37,21 @@ const UserStockDetail = () => {
       },
     });
     setUserDetailTrade(response.data.data);
-    console.log("상세 유저 주식 거래 api");
-    console.log(response);
   });
 
   return(
     <div className="w-full h-full p-8 min-h-0">
       <Title title={`보유 주식 - ${userDetailTotal?.stockName}`} />
-      { isTotalLoading ? <CustomCircularProgress /> : <UserStockDetailTotal stock={userDetailTotal} />}
-      { isTradeLoading ? <CustomCircularProgress /> : <div className="h-[60%] no-scrollbar overflow-y-auto">
-        {userDetailTrade?.map((item, index) => (
-          <UserStockTrade index={index} trade={item} />
+      { (isTotalLoading || isTradeLoading) ? 
+      <CustomCircularProgress /> : 
+      ((userDetailTotal && userDetailTrade) ? 
+      <>
+        <UserStockDetailTotal stock={userDetailTotal} />
+        {userDetailTrade?.map((item:IuserTrade, index:number) => (
+          <UserStockTrade key={index} index={index} trade={item} isName={true} />
         ))}
-      </div>}
+      </> : 
+      <UserNoItem itemName="파산 기록" />)}
     </div>
   );
 };

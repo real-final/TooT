@@ -5,7 +5,7 @@ export const sendKakaoFriendsCode = async (
   accessToken: string
 ) => {
   try {
-    await api.get(`/rank/reissue/kakao?code=${code}`, {
+    await api.patch(`/rank/reissue/kakao?code=${code}`, {
       headers: {
         accesstoken: accessToken,
       },
