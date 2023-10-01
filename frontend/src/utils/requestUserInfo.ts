@@ -2,11 +2,11 @@ import { api } from "./api";
 import { Idata } from "../interface/IauthUserContext";
 
 /** 서버로 사용자정보 요청 */
-export const requestUserInfo = async (accessToken: string) => {
+export const requestUserInfo = async (accesstoken: string) => {
   try {
     let response = await api.get<Idata>("/user/userinfo", {
       headers: {
-        accesstoken: accessToken,
+        accesstoken: accesstoken,
       },
     });
     return response?.data?.data;
