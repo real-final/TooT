@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,7 +63,7 @@ public class UserController {
      * @param request (쿠키에 담긴 토큰 추출해서 확인)
      * @return 새 access token
      */
-    @PatchMapping("/refresh")
+    @GetMapping("/refresh")
     public CommonResponse<String> recreateAccessToken(HttpServletRequest request,
         HttpServletResponse response) {
         log.info("UserController_recreateAccessToken_start");
