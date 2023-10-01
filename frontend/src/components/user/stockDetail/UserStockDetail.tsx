@@ -15,6 +15,8 @@ import { IuserTrade } from "../../../interface/IuserTrade";
 
 const UserStockDetail = () => {
   const stockId = useSearchParams("stockId");
+  console.log("stockId:");
+  console.log(stockId);
   const [userDetailTotal, setUserDetailTotal] = useState<IuserStock | undefined>();
   const [userDetailTrade, setUserDetailTrade] = useState<any>([]);
 
