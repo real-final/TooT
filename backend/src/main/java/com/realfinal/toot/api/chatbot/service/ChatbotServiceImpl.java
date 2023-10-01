@@ -68,8 +68,12 @@ public class ChatbotServiceImpl implements ChatbotService {
             Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
             String key = "chat" + userId;
             String chatJson = redisUtil.getChatData(key);
+            if (chatJson == null) {
+                log.warn("ChatbotServiceImpl_getChatData_mid: No chat data found for user " + userId);
+                return Collections.emptyList(); // No chat data found
+            }
             log.info("ChatbotServiceImpl_getChatData_end: Data retrieved successfully");
-            // Use TypeReference to inform Jackson about the List type (ibuble리스트)
+            // Use TypeReference to inform Jackson about the List type (ibubble 리스트)
             return objectMapper.readValue(chatJson, new TypeReference<>() {
             });
         } catch (JsonProcessingException e) {
