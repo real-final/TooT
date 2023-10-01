@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 import { IuserBankrupt } from "../../../interface/IuserBankrupt";
+import UserNoItem from "../UserNoItem";
 
 const Bankrupt = () => {
   const userAuthContext = useContext(UserAuthContext);
@@ -28,8 +29,7 @@ const Bankrupt = () => {
     <div className="w-full h-full p-8 min-h-0">
       <Title title="파산 기록" />
       { isLoading ? <CustomCircularProgress /> : <div className="h-[90%] no-scrollbar overflow-y-auto">
-        {/* TODO: 파산 기록 조회 데이터 BE 연동하기 */}
-        {userBankrupt?.map((item) => (
+        { !userBankrupt ? <UserNoItem itemName="파산 기록" /> : userBankrupt?.map((item) => (
           <BankruptItem key={item.bankruptcyNo} bankrupt={item} />
         ))}
       </div>}

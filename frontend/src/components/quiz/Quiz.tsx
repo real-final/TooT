@@ -45,7 +45,7 @@ const Quiz = () => {
     };
     await setIsDisabled(true);
     if(answer === word){
-      await api.post("/quiz/", {
+      await api.patch("/quiz/", {
         data: null,
       }, {
         headers: {
@@ -94,4 +94,4 @@ const Quiz = () => {
   );
 };
 
-export default Quiz;
+export default Quiz; 
