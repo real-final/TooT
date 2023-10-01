@@ -131,8 +131,8 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl_saveTokens_start: " + id + " " + refreshJWTToken + " "
             + oauthAccessToken);
 
-        redisUtil.setDataWithExpire(refreshJWTToken, id, 1209600000);
-        redisUtil.setDataWithExpire(id, oauthAccessToken, 31536000);
+        redisUtil.setDataWithExpire(refreshJWTToken, id, 1209600000L);
+        redisUtil.setDataWithExpire(id, oauthAccessToken, 31536000L);
 
         log.info("UserServiceImpl_saveTokens_end: token saved");
     }

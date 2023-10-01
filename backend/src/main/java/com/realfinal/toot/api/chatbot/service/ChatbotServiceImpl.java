@@ -46,7 +46,7 @@ public class ChatbotServiceImpl implements ChatbotService {
             existingChatList.addAll(chatList);
             String chatJson = objectMapper.writeValueAsString(existingChatList);
             // 전체 채팅 내역 다시 저장
-            redisUtil.setChatDataWithExpire(key, chatJson, 60 * 60 * 24);
+            redisUtil.setChatDataWithExpire(key, chatJson, 86400L); // (60 * 60 * 24)
             log.info("ChatbotServiceImpl_saveChatData_end: Data saved successfully");
         } catch (JsonProcessingException e) {
             log.error("ChatbotServiceImpl_saveChatData_mid: Serialization error ", e);

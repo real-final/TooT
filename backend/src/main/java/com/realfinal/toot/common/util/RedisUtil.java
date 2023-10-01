@@ -37,7 +37,7 @@ public class RedisUtil {
      * @param value    redis value (token)
      * @param duration redis 만료기간
      */
-    public void setDataWithExpire(String key, String value, long duration) {
+    public void setDataWithExpire(String key, String value, Long duration) {
         log.info("RedisUtil_setDataWithExpire_start: " + key + " " + value + " " + duration);
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
@@ -86,7 +86,7 @@ public class RedisUtil {
      * @param value    the chat data in String format
      * @param duration expiration time in seconds
      */
-    public void setChatDataWithExpire(String key, String value, long duration) {
+    public void setChatDataWithExpire(String key, String value, Long duration) {
         log.info("RedisUtil_setChatDataWithExpire_start: " + key + " " + value + " " + duration);
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);

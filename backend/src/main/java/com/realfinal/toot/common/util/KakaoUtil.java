@@ -198,7 +198,7 @@ public class KakaoUtil {
             }
             String id = jwtProviderUtil.getUserIdFromToken(accessToken).toString();
             //바뀐 accesstoken으로 redis 업데이트
-            redisUtil.setDataWithExpire(id, jsonToken.getAccessToken(), 21599);
+            redisUtil.setDataWithExpire(id, jsonToken.getAccessToken(), 21599L);
             log.info("KakaoUtil_reissue_end: accesstoken updated");
 
         } else {
