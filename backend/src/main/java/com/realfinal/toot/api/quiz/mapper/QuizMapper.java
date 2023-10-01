@@ -4,9 +4,7 @@ package com.realfinal.toot.api.quiz.mapper;
 import com.realfinal.toot.api.quiz.response.QuizQuestionRes;
 import com.realfinal.toot.api.quiz.response.QuizRes;
 import com.realfinal.toot.common.exception.user.MapperException;
-import com.realfinal.toot.db.entity.User;
 import com.realfinal.toot.db.entity.Word;
-import java.time.LocalDate;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,8 +22,4 @@ public interface QuizMapper {
     @Mapping(source = "quizResList", target = "quizList")
     QuizQuestionRes toQuizQuestionRes(Integer answerIndex, String answerString,
             List<QuizRes> quizResList) throws MapperException;
-
-    @Mapping(source = "currentDate", target = "lastQuizDate")
-    User toUser(User user, LocalDate currentDate) throws MapperException;
-
 }

@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
      * @return 결과가 로그아웃이다 판단하면 true, 로그인 된 상태면 false
      */
     @Override
-    public boolean isLogout(String refreshToken) {
+    public Boolean isLogout(String refreshToken) {
         log.info("UserServiceImpl_isLogout_start: " + refreshToken);
         String data = redisUtil.getData(refreshToken);
         log.info("UserServiceImpl_isLogout_end: isLogout?" + (data == null));

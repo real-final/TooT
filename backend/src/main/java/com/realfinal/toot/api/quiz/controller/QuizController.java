@@ -6,7 +6,7 @@ import com.realfinal.toot.common.model.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,12 +50,12 @@ public class QuizController {
 
 
     /**
-     * 정답일때 호출되는 api. cash랑 seedmoney 10000원씩 증가
+     * 정답일때 호출되는 api. cash, seed money 10000원씩 증가
      *
      * @param accessToken id 추출 위해
      * @return 성공 스트링.
      */
-    @PostMapping("/")
+    @PatchMapping("/")
     public CommonResponse<?> applyQuizResult(
             @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("QuizController_applyQuizResult_start: " + accessToken);

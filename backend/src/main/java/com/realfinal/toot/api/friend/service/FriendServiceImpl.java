@@ -41,7 +41,7 @@ public class FriendServiceImpl implements FriendService {
     /**
      * 카카오 친구 랭킹 카카오에서 받아서 반환
      *
-     * @param accessToken 내 유저id
+     * @param accessToken 내 유저 id
      * @return 랭킹 리스트, 내 등수, 내 정보
      */
     @Override
@@ -85,10 +85,9 @@ public class FriendServiceImpl implements FriendService {
                         user, netProfit);
                 kakaoFriendList.add(kakaoFriendRes);
 
-                //랭킹 전체 정렬 후, 내 등수 찾아서 프론트에 반환할 response로 mapping
+                //랭킹 전체 정렬 후, 내 등수 찾아서 프론트에 반환할 response mapping
                 RankListRes rankListRes = sortListAndGetMyRankAndMap(kakaoFriendList,
                         kakaoFriendRes);
-
                 log.info("FriendServiceImpl_getFriendList_end: " + rankListRes);
 
                 return rankListRes;
@@ -101,8 +100,7 @@ public class FriendServiceImpl implements FriendService {
             }
         } catch (IOException e) {
             // 예외 처리
-            log.error("FriendServiceImpl_getFriendList_mid: Unexpected Exception occured ");
-
+            log.error("FriendServiceImpl_getFriendList_mid: Unexpected Exception occurred ");
             throw new KakaoIOException();
         }
 
@@ -111,7 +109,7 @@ public class FriendServiceImpl implements FriendService {
     /**
      * 전체 랭킹 반환
      *
-     * @param accessToken 내 유저id
+     * @param accessToken 내 유저 id
      * @return 전체 랭킹, 내 등수, 내 정보
      */
     @Override

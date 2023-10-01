@@ -7,6 +7,7 @@ import com.realfinal.toot.common.util.KakaoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ public class FriendController {
 
     private final FriendService friendService;
     private final KakaoUtil kakaoUtil;
+
     /**
      * 카카오 친구 랭킹 리스트 가져오기
      *
@@ -28,7 +30,7 @@ public class FriendController {
      */
     @GetMapping("/list/kakao")
     public CommonResponse<?> getFriendList(
-            @RequestHeader(value = "accessToken") String accessToken) {
+            @RequestHeader(value = "accesstoken") String accessToken) {
         log.info("FriendController_getFriendList_start: " + accessToken);
         RankListRes rankResList = friendService.getFriendList(accessToken);
         log.info("FriendController_getFriendList_end: " + rankResList);
@@ -42,7 +44,8 @@ public class FriendController {
      * @return 전체 랭킹 리스트, 내 정보, 내 등수
      */
     @GetMapping("/list")
-    public CommonResponse<?> getRank(@RequestHeader(value = "accesstoken", required = false) String accessToken) {
+    public CommonResponse<?> getRank(
+            @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("FriendController_getRank_start: " + accessToken);
         RankListRes rankResList = friendService.getRank(accessToken);
         log.info("FriendController_getRank_end: " + rankResList);
@@ -52,14 +55,14 @@ public class FriendController {
     /**
      * 인가코드 재발급
      *
-     * @param code 친구 목록 조회 동의 인가코드
+     * @param code        친구 목록 조회 동의 인가코드
      * @param accessToken 내 id 파악 위해
      * @return accesstoken 재발급 성공시 "success"
      */
-    @GetMapping("/reissue/kakao")
+    @PatchMapping("/reissue/kakao")
     public CommonResponse<?> reissue(@RequestParam String code,
-            @RequestHeader(value = "accessToken", required = false) String accessToken) {
-        log.info("FriendController_reissue_start: " + accessToken );
+            @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+        log.info("FriendController_reissue_start: " + accessToken);
         kakaoUtil.reissue(code, "kakao", accessToken);
         log.info("FriendController_reissue_end: success to reissue kakao OAuth token");
         return CommonResponse.success("success");

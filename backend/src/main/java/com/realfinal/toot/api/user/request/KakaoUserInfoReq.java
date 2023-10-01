@@ -14,10 +14,6 @@ public class KakaoUserInfoReq {
         return String.valueOf(attributes.get("id"));
     }
 
-    public String getProvider() {
-        return "kakao";
-    }
-
     public String getNickName() {
         return (String) getProfile().get("nickname");
     }

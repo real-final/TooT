@@ -14,6 +14,8 @@ public enum ErrorCode {
 
 
     UNEXPECTED_ERROR(HttpStatus.BAD_REQUEST, "0"),
+    
+    CHAT_NOT_JSONFY(HttpStatus.CONFLICT, "1"),
     NOT_LOGINED(HttpStatus.BAD_REQUEST, "1000"),
     KIS_TOKEN_REQUEST_FAILED(HttpStatus.BAD_REQUEST, "881"),
     KIS_API_CALL_DENIED(HttpStatus.NOT_FOUND, "882"),

@@ -10,7 +10,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-//@JsonIgnoreProperties(ignoreUnknown = true) // 알려지지 않은 속성 무시
 public class OauthTokenRes {
     @JsonProperty("access_token")
     private String accessToken;
