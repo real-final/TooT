@@ -12,7 +12,7 @@ import lombok.ToString;
 public class AllBankruptcyRes {
 
     private Integer bankruptcyNo;
-    @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime bankruptAt;
     private Long lastTotalAsset; // 총자산
     private Long netIncome; // 순수익

@@ -1,5 +1,7 @@
 package com.realfinal.toot.api.stock.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 public class ExecutionRes {
 
+    @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dealAt;
     private Boolean isBought;
     private String stockId;
