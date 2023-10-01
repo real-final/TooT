@@ -3,7 +3,7 @@ import { api } from "./api";
 /** 새로고침 마다 서버로 AccessToken 요청 */
 export const requestAccessToken = async () => {
   try {
-    let response = await api.patch<{ data: string }>("/user/refresh");
+    let response = await api.get<{ data: string }>("/user/refresh");
     if (response?.headers?.accesstoken) {
       return response.headers.accesstoken;
     }
