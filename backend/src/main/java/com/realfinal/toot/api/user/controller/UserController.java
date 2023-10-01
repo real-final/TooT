@@ -33,9 +33,9 @@ public class UserController {
      */
     @GetMapping("/login/kakao")
     public CommonResponse<?> kakaoLogin(@RequestParam String code,
-        HttpServletResponse response) {
+            HttpServletResponse response) {
         log.info(
-            "UserController_kakaoLogin_start: ====================================================================");
+                "UserController_kakaoLogin_start: ====================================================================");
         log.info("UserController_kakaoLogin_start: " + code);
 
         // 카카오
@@ -44,16 +44,16 @@ public class UserController {
 
         // "refreshToken"을 프론트 엔드 쿠키에 저장
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
-            .path("/") // too-t.com 하위 url 모두 저장 유지
-            .httpOnly(true)
-            .secure(true)
-            .sameSite("None")
-            .build();
+                .path("/") // too-t.com 하위 url 모두 저장 유지
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .build();
         response.setHeader("Set-Cookie", refreshTokenCookie.toString());
 
         log.info("UserController_kakaoLogin_end: " + refreshToken);
         log.info(
-            "UserController_kakaoLogin_end: SUCCESS =============================================================");
+                "UserController_kakaoLogin_end: SUCCESS =============================================================");
         return CommonResponse.success(SUCCESS);
     }
 
@@ -65,7 +65,7 @@ public class UserController {
      */
     @GetMapping("/refresh")
     public CommonResponse<String> recreateAccessToken(HttpServletRequest request,
-        HttpServletResponse response) {
+            HttpServletResponse response) {
         log.info("UserController_recreateAccessToken_start");
 
         String refreshToken = getRefreshTokenFromCookies(request);
@@ -86,7 +86,7 @@ public class UserController {
      */
     @GetMapping("/userinfo")
     public CommonResponse<UserRes> getUserInfo(
-        @RequestHeader(value = "accesstoken", required = false) String accessToken) {
+            @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("UserController_getUserInfo_start: " + accessToken);
         UserRes userRes = userService.getUserInfo(accessToken);
         log.info("UserController_getUserInfo_end: " + userRes.toString());
