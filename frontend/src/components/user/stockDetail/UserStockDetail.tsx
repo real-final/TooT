@@ -51,7 +51,7 @@ const UserStockDetail = () => {
           <UserStockTrade key={index} index={index} trade={item} isName={true} />
         ))}
       </> : 
-      <UserNoItem itemName="파산 기록" />)}
+      <UserNoItem itemName="해당 보유 주식" />)}
     </div>
   );
 };
