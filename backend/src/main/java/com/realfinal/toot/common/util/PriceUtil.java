@@ -316,8 +316,8 @@ public class PriceUtil {
     public void updateDayCandle(PeriodPriceRes periodPriceRes) {
         int index = this.getStockIndex(periodPriceRes.getCorp());
         List<PeriodPriceRes.Output2> candle = periodPriceRes.getOutput2();
-
-        for (int i = 0; i < 50; ++i) {
+        int candleSize = candle.size();
+        for (int i = 0; i < candleSize; ++i) {
             if (this.dayCandle[index][i] == null) {
                 this.dayCandle[index][i] = StockMapper.INSTANCE.toDayWeekRes(
                     candle.get(i).getStck_bsop_date(), candle.get(i).getStck_oprc(),
@@ -337,8 +337,8 @@ public class PriceUtil {
     public void updateWeekCandle(PeriodPriceRes periodPriceRes) {
         int index = this.getStockIndex(periodPriceRes.getCorp());
         List<PeriodPriceRes.Output2> candle = periodPriceRes.getOutput2();
-
-        for (int i = 0; i < 50; ++i) {
+        int candleSize = candle.size();
+        for (int i = 0; i < candleSize; ++i) {
             if (this.weekCandle[index][i] == null) {
                 this.weekCandle[index][i] = StockMapper.INSTANCE.toDayWeekRes(
                     candle.get(i).getStck_bsop_date(), candle.get(i).getStck_oprc(),
