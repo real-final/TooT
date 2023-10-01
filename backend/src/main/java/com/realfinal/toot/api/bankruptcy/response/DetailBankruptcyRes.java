@@ -17,7 +17,7 @@ public class DetailBankruptcyRes {
     private Long netIncome; // 마지막 순수익
     private Double roi; // 마지막 수익률
     private Long lastTotalAsset; // 마지막 총 자산
-    @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime bankruptAt;
 
     @Builder
