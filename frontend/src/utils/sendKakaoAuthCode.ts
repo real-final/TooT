@@ -7,4 +7,4 @@ export const sendKakaoAuthCode = async (code: string) => {
   } catch (error) {
     console.error("위치: sendKakaoAuthCode.ts, 카카오 OAuth 인증코드 서버 전송 실패");
   }
-};
+}; 

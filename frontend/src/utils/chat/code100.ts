@@ -1,4 +1,3 @@
-import { IResponseStockData } from "../../interface/IResponseStockData";
 import stockNameToId from "./stockNameToId";
 
 /* 100: 주식 조회 */
