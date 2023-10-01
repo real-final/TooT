@@ -21,7 +21,7 @@ const UserStockDetail = () => {
   const userAuthContext = useContext(UserAuthContext);
   const accessToken = userAuthContext?.accessToken;
 
-  const { isLoading: isTotalLoading } = useQuery("user-stock-detail-trade", async () => {
+  const { isLoading: isTotalLoading } = useQuery("user-stock-detail-total", async () => {
     const response = await api.get(`/stock/my/${stockId}`, {
       headers: {
         accesstoken: accessToken, 
