@@ -1,4 +1,3 @@
-import { IResponseStockData } from "../../interface/IResponseStockData";
 import { code100 } from "./code100";
 import { code200 } from "./code200";
 import { code300 } from "./code300";
