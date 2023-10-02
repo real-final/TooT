@@ -1,16 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-const GuideButton = ({buttonName, isIcon, icon, url, iconColor, moveUrlTo} : 
+const GuideButton = ({buttonName, isIcon, icon, url, iconColor, moveUrlTo, onClick} : 
   {buttonName:string, 
     icon?: IconProp,
     isIcon?: boolean,
     url?: string,
     iconColor?: string,
-    moveUrlTo?: (url:string) => void
+    moveUrlTo?: (url:string) => void,
+    onClick?: () => void
   }) => {
   const handleGuideButtonClick = () => {
     if(moveUrlTo && url) moveUrlTo(url);
+    if(onClick){
+      onClick();
+    }
   };
 
   return (

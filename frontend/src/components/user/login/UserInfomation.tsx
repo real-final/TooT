@@ -5,6 +5,7 @@ import { IuserInfo } from "../../../interface/IauthUserContext";
 import Avatar from "@mui/joy/Avatar";
 import { useGetSearchParam } from "../../../hooks/useGetSearchParam";
 import { sendKakaoFriendsCode } from "../../../utils/sendKakaoFriendsCode";
+import { Tooltip, Zoom } from "@mui/material";
 
 const UserInfomation: React.FC = () => {
   const userAuthContext = useContext(UserAuthContext);
@@ -31,23 +32,37 @@ const UserInfomation: React.FC = () => {
       </div>
       <div className="h-2/3 w-full rounded-b-lg bg-white px-10 py-4 flex flex-col justify-between">
         <div>
-          <div className="flex justify-between mb-1">
-            <p className="text-slate-500">보유현금</p>
-            <p>
+          <Tooltip
+            arrow
+            placement="top-end"
+            TransitionComponent={Zoom} 
+            title={
+              <div className="p-2">
+                <div className="mb-1">{userInfo.name}님의</div>
+                <div>
+                  총 시드머니: {userInfo.seedMoney.toLocaleString()}
+                </div>
+              </div>
+          }
+          >
+          <div className="flex items-center justify-between mb-1">
+            <div className="text-slate-500">보유 현금</div>
+            <div>
               <span className="text-black text-lg">
                 {userInfo.cash.toLocaleString()}
               </span>
               <span>원</span>
-            </p>
+            </div>
           </div>
-          <div className="flex justify-between">
-            <p className="text-slate-500">시드머니</p>
-            <p>
+          </Tooltip>
+          <div className="flex items-center justify-between">
+            <div className="text-slate-500">평가 금액</div>
+            <div>
               <span className="text-black text-lg">
-                {userInfo.seedMoney.toLocaleString()}
+                {(userInfo.totalValue - userInfo.cash).toLocaleString()}
               </span>
               <span>원</span>
-            </p>
+            </div>
           </div>
         </div>
         <div className="flex justify-between items-end">

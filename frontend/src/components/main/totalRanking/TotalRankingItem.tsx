@@ -36,7 +36,7 @@ const TotalRankingItem: React.FC<ItotalRankingItem> = ({ user, index }) => {
           user.netProfit > 0 ? "text-stockRed" : "text-stockBlue"
         }`}
       >
-        {user.netProfit.toLocaleString()}
+        {(user.netProfit > 0 ? "+" : "") + user.netProfit.toLocaleString()}
         <span className="text-stockGray">원</span>
       </td>
       <td align="right" className="align-middle text-stockGray">

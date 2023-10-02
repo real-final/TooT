@@ -50,7 +50,7 @@ const RankingItem = ({
           user.netProfit > 0 ? "text-stockRed" : "text-stockBlue"
         }`}
       >
-        {user.netProfit.toLocaleString("ko-KR")}
+        {(user.netProfit > 0 ? "+" : "") + user.netProfit.toLocaleString("ko-KR")}
         <span className="text-stockGray"> 원</span>
       </td>
       <td
