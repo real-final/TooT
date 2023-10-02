@@ -22,19 +22,6 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
   stockTradingInfo,
   theme,
 }) => {
-  const chatQuantity = useSelector((state: RootState) => state.stock.share);
-
-  useEffect(() => {
-    if(chatQuantity !== null && chatQuantity !== undefined && chatQuantity > 0){
-      if (chatQuantity > availableQuantity){
-        setOrderQuantity(availableQuantity);
-      } else {
-        setOrderQuantity(chatQuantity);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatQuantity]);
-
   // 사용자 금융 정보
   const { accessToken, stockId, currentPrice, availableQuantity } =
     stockTradingInfo;
@@ -61,6 +48,26 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
       inputRef.current.value = String(quantity);
     }
   };
+
+  // 챗봇으로 넘어왔을 경우 주문 수량 default 변경
+  const chatQuantity = useSelector((state: RootState) => state.stock.share);
+  useEffect(() => {
+    if(chatQuantity !== null && chatQuantity !== undefined && chatQuantity > 0){
+      if (chatQuantity > availableQuantity){
+        setOrderQuantity(availableQuantity);
+        // 주문 수량이 변경되면 inputRef의 값을 업데이트
+      } else {
+        setOrderQuantity(chatQuantity);
+        // 주문 수량이 변경되면 inputRef의 값을 업데이트
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatQuantity]);
+
+  useEffect(() => {
+    console.log("useState 주문 수:" + orderQuantity);
+    if(inputRef.current) inputRef.current.value = String(orderQuantity);
+  }, [orderQuantity]);
 
   // 매수/매도 요청 함수
   const onClickAction = async (action: string, orderQuantity: number) => {
@@ -125,7 +132,7 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
             <Input
               type="number"
               endDecorator={"주"}
-              defaultValue={1}
+              defaultValue={orderQuantity}
               onChange={(e) => setOrderQuantity(Number(e.target.value))}
               slotProps={{
                 input: {
