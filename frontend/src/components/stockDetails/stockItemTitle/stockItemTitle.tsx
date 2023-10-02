@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { UserAuthContext } from "../../../App";
 import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
@@ -12,8 +12,6 @@ import Avatar from "@mui/joy/Avatar";
 import { IstockItem } from "../../../interface/IstockDetails";
 import { IstockTheme } from "../../../interface/IstockTradingModal";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
 
 /** 회사 이름, 로고, 코드 */
 export const ItemTitle: React.FC<{
@@ -33,19 +31,6 @@ export const ItemTitle: React.FC<{
 
   // 현재 시가 가져오기
   const currentPrice = stockItem.currentPrice;
-
-  // 챗봇을 통해 이동했으면 사용자가 원하는 매수/매도 데이터 가져오기
-  const chat = useSelector((state: RootState) => state.stock);
-
-  useEffect(() => {
-    if(chat.tradeType !== null && chat.tradeType !== undefined && chat.tradeType !== ""){
-      if(chat.tradeType === "sell"){
-        setSellModalOpen(true);
-      } else if (chat.tradeType === "buy") {
-        setBuyModalOpen(true);
-      }
-    }
-  }, [chat.tradeType]);
 
   // 보유주식 수량 가져오기
   const { data, isLoading } = useQuery(
@@ -71,6 +56,7 @@ export const ItemTitle: React.FC<{
 
   if (isLoading) return <CustomCircularProgress />;
 
+  // 보유 주식량 저장
   let hold = 0;
   if (data?.hold) {
     hold = data?.hold;

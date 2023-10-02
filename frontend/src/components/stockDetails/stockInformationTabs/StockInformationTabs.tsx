@@ -10,17 +10,14 @@ import TabPanel from "@mui/joy/TabPanel";
 import Avatar from "@mui/joy/Avatar";
 
 /** 상세조회 페이지 종목요약 & 재무정보 */
-const StockInfoTabs: React.FC<{ stockId?: string; stockItem?: IstockItem }> = ({
+const StockInfoTabs: React.FC<{ stockId: string; stockItem: IstockItem }> = ({
   stockId,
   stockItem,
 }) => {
-  if (typeof stockId === "undefined" || typeof stockItem === "undefined")
-    return <></>;
-
   return (
     <Tabs
       variant="outlined"
-      aria-label="Pricing plan"
+      aria-label="stock-info-tabs"
       defaultValue={0}
       sx={{
         borderRadius: "lg",
@@ -75,11 +72,7 @@ export const ItemOverviewHeader: React.FC<{
   return (
     <div className="mb-3">
       <div className="flex items-center gap-2 mb-3">
-        <Avatar
-          alt="회사로고"
-          src={stockItem.imageUrl}
-          size="sm"
-        />
+        <Avatar alt="회사로고" src={stockItem.imageUrl} size="sm" />
         <div>
           <h2 className="text-md font-bold">{stockItem.stockName}</h2>
           <p className="text-xs text-gray-500">코스피32 {stockId}</p>
