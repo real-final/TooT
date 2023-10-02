@@ -13,7 +13,7 @@ export const codeSwitch = (bubble:string, responseData:string[], userMessage:str
       code100(code, responseData);
       break;
     case 200 <= code && code < 300:
-      code200(code, responseData);
+      code200(code, responseData, dispatch);
       break;
     case 300 <= code && code < 400 :
       code300(code);

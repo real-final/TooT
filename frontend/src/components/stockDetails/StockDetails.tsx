@@ -10,7 +10,7 @@ import StockInformationTabs from "./stockInformationTabs/StockInformationTabs";
 import FavoriteItemsCarousel from "../main/FavoriteItemsCarousel";
 import CustomCircularProgress from "../../common/circularProgress/CustomCircularProgress";
 import NotFound from "../../common/notfound/NotFound";
-import { ItemTitle } from "./stockItemTitle/stockItemTItle";
+import { ItemTitle } from "./stockItemTitle/stockItemTitle";
 
 let item = {
   id: "001230",
