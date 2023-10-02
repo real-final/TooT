@@ -16,6 +16,9 @@ const bubbleSlice = createSlice({
             state.bubbles = [...state.bubbles, action.payload];
             localStorage.setItem("chat-list", JSON.stringify(state.bubbles));
         },
+        reset: (state) => {
+            state.bubbles = [];
+        },
     }
 });
 

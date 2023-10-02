@@ -6,6 +6,7 @@ module.exports = {
       backgroundImage: {
         'quiz': "url(/src/assets/images/quiz_paper.jpg)",
         'money': "url(/src/assets/images/money_background.jpg)",
+        'moneyquiz': "url(/src/assets/images/money_quiz.jpg)",
       },
       colors: {
         "main": "#93C1F2",
