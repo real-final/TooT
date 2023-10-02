@@ -5,7 +5,7 @@ import { code400 } from "./code400";
 import { code600 } from "./code600";
 import { code900 } from "./code900";
 
-export const codeSwitch = (bubble:string, responseData:string[], userMessage:string, dispatch:any) => {
+export const codeSwitch = (bubble:string, responseData:string[], userMessage:string, dispatch:any, navigate: any) => {
   const code = parseInt(responseData[0]);
 
   switch (true) {
@@ -13,7 +13,7 @@ export const codeSwitch = (bubble:string, responseData:string[], userMessage:str
       code100(code, responseData);
       break;
     case 200 <= code && code < 300:
-      code200(code, responseData, dispatch);
+      code200(code, responseData, dispatch, navigate);
       break;
     case 300 <= code && code < 400 :
       code300(code);

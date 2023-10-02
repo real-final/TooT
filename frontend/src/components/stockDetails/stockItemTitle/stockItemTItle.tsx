@@ -71,7 +71,11 @@ export const ItemTitle: React.FC<{
 
   if (isLoading) return <CustomCircularProgress />;
 
-  const hold = data?.hold;
+  let hold = 0;
+  if (data?.hold) {
+    hold = data?.hold;
+  }
+
   const stockName = data?.stockName;
 
   // 사용자 금융 정보
