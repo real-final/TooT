@@ -12,6 +12,9 @@ import {
   IstockOrderModal,
   IpercentageButton,
 } from "../../../interface/IstockTradingModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { reset } from "../../../store/slices/stockSlice";
 
 const StockOrderModal: React.FC<IstockOrderModal> = ({
   modalOpen,
@@ -19,6 +22,19 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
   stockTradingInfo,
   theme,
 }) => {
+  const chatQuantity = useSelector((state: RootState) => state.stock.share);
+
+  useEffect(() => {
+    if(chatQuantity !== null && chatQuantity !== undefined && chatQuantity > 0){
+      if (chatQuantity > availableQuantity){
+        setOrderQuantity(availableQuantity);
+      } else {
+        setOrderQuantity(chatQuantity);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatQuantity]);
+
   // 사용자 금융 정보
   const { accessToken, stockId, currentPrice, availableQuantity } =
     stockTradingInfo;
@@ -64,12 +80,19 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
         { stockId: stockId, count: orderQuantity },
         { headers: { accesstoken: accessToken } }
       );
+
       console.log(response.data);
-      alert(`주문이 성공적으로 체결되었습니다.`);
+      if(response.data > 0){
+        alert(`${response.data}주 ${action}가 성공적으로 체결되었습니다.`);
+      } else {
+        alert("체결에 실패했습니다. 주문 수량을 확인해주세요.");
+      }
       return window.location.reload();
     } catch {
       alert("주문 전송이 실패하였습니다. 잠시 후 다시 시도해주세요.");
       console.error("위치: stockItemTitle.tsx, 주문 실패");
+    } finally {
+      reset();
     }
   };
 
