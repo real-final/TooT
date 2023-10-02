@@ -89,7 +89,7 @@ public class StockServiceImpl implements StockService {
             Long priceSum = Long.valueOf(
                 (long) averagePrice * hold + totalPrice);
             hold += count;
-            userStock.updateHold(count);
+            userStock.updateHold(hold);
             averagePrice = (int) (priceSum / hold);
             userStock.updateAveragePrice(averagePrice);
             log.info("StockServiceImpl_buyStock_mid: update " + userName + "(" + bankruptcyNo
