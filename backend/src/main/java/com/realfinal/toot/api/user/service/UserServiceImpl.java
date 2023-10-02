@@ -33,8 +33,7 @@ public class UserServiceImpl implements UserService {
     private final PriceUtil priceUtil;
 
     /**
-     * 로그인 서비스 - kakao 로그인
-     * kakao로부터 Oauth Token 받기
+     * 로그인 서비스 - kakao 로그인 kakao로부터 Oauth Token 받기
      *
      * @param authorizeCode 프론트에서 받은 인가코드
      * @param provider      카카오
@@ -55,13 +54,13 @@ public class UserServiceImpl implements UserService {
             }
 
             // 로그인한적 없는 ID이면 회원가입 후 userId 반환
-            String id = kakaoUtil.getUserIdAndRegistIfNot("kakao", jsonToken);
+            String userId = kakaoUtil.getUserIdAndRegistIfNot("kakao", jsonToken);
             try {
                 // JWT refreshToken 생성
                 String refreshToken = jwtProviderUtil.createRefreshToken();
 
                 // redis에 JwtRefreshToken, oauthAccessToken 저장
-                saveTokens(id, refreshToken,
+                saveTokens(userId, refreshToken,
                     jsonToken.getAccessToken());
                 return refreshToken;
             } catch (Exception e) {
@@ -122,23 +121,38 @@ public class UserServiceImpl implements UserService {
     /**
      * 생성된 토큰 레디스에 저장
      *
-     * @param id               토큰 userId
+     * @param userId               토큰 userId
      * @param refreshJWTToken  JWT refresh token
      * @param oauthAccessToken oauth access token
      */
     @Override
-    public void saveTokens(String id, String refreshJWTToken, String oauthAccessToken) {
-        log.info("UserServiceImpl_saveTokens_start: " + id + " " + refreshJWTToken + " "
+    public void saveTokens(String userId, String refreshJWTToken, String oauthAccessToken) {
+        log.info("UserServiceImpl_saveTokens_start: " + userId + " " + refreshJWTToken + " "
             + oauthAccessToken);
 
-        redisUtil.setDataWithExpire(refreshJWTToken, id, 1209600000L);
-        redisUtil.setDataWithExpire(id, oauthAccessToken, 31536000L);
+        redisUtil.setDataWithExpire(refreshJWTToken, userId, 1209600000L);
+        redisUtil.setDataWithExpire(userId, oauthAccessToken, 31536000L);
 
         log.info("UserServiceImpl_saveTokens_end: token saved");
     }
 
     /**
-     * 인터셉터에서 로그인 된 사용자인지 확인. 쿠키에 있는 refresh token과 redis에 있는  refresh token이 같은건지 확인
+     * 인터셉터에서 accessToken의 payload에 저장된 userId가 DB에 존재하는지 확인
+     *
+     * @param userId accessToken payload에 담겨있던 userId
+     * @return DB 존재여부
+     */
+    @Override
+    public Boolean isUser(Long userId) {
+        log.info("UserServiceImpl_isUser_start: " + userId);
+
+        boolean isUser = userRepository.existsById(userId);
+        log.info("UserServiceImpl_isUser_end: " + isUser);
+        return isUser;
+    }
+
+    /**
+     * 인터셉터에서 로그인 된 사용자인지 확인. 쿠키에 있는 refresh token과 redis에 있는 refresh token이 같은건지 확인
      *
      * @param refreshToken 리프레시 토큰
      * @return 결과가 로그아웃이다 판단하면 true, 로그인 된 상태면 false
