@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../utils/api";
 import StockRow from "./topTrandingStocks/StockRow";
+import { Tooltip } from "@mui/material";
 
 const Home: React.FC = () => {
   // TODO: 좋아요 목록 가져오기
@@ -93,7 +94,13 @@ const Home: React.FC = () => {
         </Container>
         {/* 퀴즈 */}
         <Container>
-          <Title>퀴즈</Title>
+          <Tooltip
+            placement="top"
+            title={
+            <div className="p-2">https://www.freepik.com/free-vector/businessman-with-money_1076116.htm#page=3&query=money%20quiz&position=21&from_view=search&track=ais</div>
+          }>
+            <div className="text-lg font-bold mb-2">데일리 퀴즈</div>
+          </Tooltip>
           <Content>
             <div className="w-full text-2xl maple text-[#2e3252] flex flex-col items-end justify-end rounded-xl h-full p-4 bg-cover bg-center bg-moneyquiz cursor-pointer" onClick={() => navigate("/quiz")}>
               <div>데일리 퀴즈 풀고</div>
@@ -103,7 +110,7 @@ const Home: React.FC = () => {
         </Container>
         {/* 전체랭킹 */}
         <Container>
-          <Title>전체랭킹</Title>
+          <Title>전체 랭킹</Title>
           <Content className="min-h-0 overflow-y-auto">
             <TotalRanking />
           </Content>
