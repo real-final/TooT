@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserAuthContext } from "../../../App";
 import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
@@ -12,6 +12,8 @@ import Avatar from "@mui/joy/Avatar";
 import { IstockItem } from "../../../interface/IstockDetails";
 import { IstockTheme } from "../../../interface/IstockTradingModal";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 /** 회사 이름, 로고, 코드 */
 export const ItemTitle: React.FC<{
