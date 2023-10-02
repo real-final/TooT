@@ -89,7 +89,7 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
       );
 
       console.log(response.data);
-      if(response.data > 0){
+      if(response.data.data > 0){
         alert(`${response.data}주 ${action}가 성공적으로 체결되었습니다.`);
       } else {
         alert("체결에 실패했습니다. 주문 수량을 확인해주세요.");
