@@ -32,6 +32,19 @@ export const ItemTitle: React.FC<{
   // 현재 시가 가져오기
   const currentPrice = stockItem.currentPrice;
 
+  // 챗봇을 통해 이동했으면 사용자가 원하는 매수/매도 데이터 가져오기
+  const chat = useSelector((state: RootState) => state.stock);
+
+  useEffect(() => {
+    if(chat.tradeType !== null && chat.tradeType !== undefined && chat.tradeType !== ""){
+      if(chat.tradeType === "sell"){
+        setSellModalOpen(true);
+      } else if (chat.tradeType === "buy") {
+        setBuyModalOpen(true);
+      }
+    }
+  }, [chat.tradeType]);
+
   // 보유주식 수량 가져오기
   const { data, isLoading } = useQuery(
     "my-stocks",
