@@ -5,7 +5,7 @@ import com.realfinal.toot.common.exception.user.EmptyTokenException;
 import com.realfinal.toot.common.exception.user.ExpiredTokenException;
 import com.realfinal.toot.common.exception.user.InvalidTokenException;
 import com.realfinal.toot.common.exception.user.RefreshTokenExpiredException;
-import com.realfinal.toot.common.exception.user.UnexpecteTokenException;
+import com.realfinal.toot.common.exception.user.UnexpectedTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -139,7 +139,7 @@ public class JwtProviderUtil {
             return false;
         } catch (Exception e) {
             log.warn("JwtProviderUtil_validateToken_end: unexpected Exception occured");
-            throw new UnexpecteTokenException();
+            throw new UnexpectedTokenException();
         }
     }
 
@@ -169,7 +169,7 @@ public class JwtProviderUtil {
     public String recreateAccessToken(String refreshToken) {
         log.info("JwtProviderUtil_recreateAccessToken_start: " + refreshToken);
         refreshTokenExtractor(refreshToken);
-        String data = redisUtil.getData(refreshToken); //id
+        String data = redisUtil.getData(refreshToken); // userId
         if (data == null) { //리프레시도 만료된 경우.
             log.info("JwtProviderUtil_recreateAccessToken_mid: refresh token expired: "
                 + refreshToken);

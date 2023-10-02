@@ -15,4 +15,6 @@ public interface UserService {
     void saveTokens(String id, String refreshJWTToken, String accessToken);
 
     Boolean isLogout(String refreshToken);
+
+    Boolean isUser(Long userId);
 }
