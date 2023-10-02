@@ -3,13 +3,10 @@ import { ItemOverviewHeader } from "./StockInformationTabs";
 import { IstockItem } from "../../../interface/IstockDetails";
 
 /** 상세조회 페이지 종목요약 */
-const ItemSummary: React.FC<{ stockId?: string; stockItem?: IstockItem }> = ({
+const ItemSummary: React.FC<{ stockId: string; stockItem: IstockItem }> = ({
   stockId,
   stockItem,
 }) => {
-  if (typeof stockId === "undefined" || typeof stockItem === "undefined")
-    return <></>;
-
   return (
     <div className="mb-3">
       {/* 종목 타이틀(로고,이름,코드) */}
@@ -17,9 +14,6 @@ const ItemSummary: React.FC<{ stockId?: string; stockItem?: IstockItem }> = ({
         <ItemOverviewHeader stockId={stockId} stockItem={stockItem} />
       </div>
       {/* 간단정보 */}
-      <div className="h-5/12">
-        <ItemData data={stockItem} />
-      </div>
       <div className="h-5/12">
         <ItemData data={stockItem} />
       </div>
@@ -120,7 +114,7 @@ const ItemOutline: React.FC<{
         ))}
       <button onClick={() => setShowMore(!showMore)}>
         <p className="text-sm text-gray-600">
-          {showMore ? "숨기기" : "더보기"}
+          {showMore ? "간략히" : "더보기"}
         </p>
       </button>
     </div>

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserAuthContext } from "../../App";
 import { api } from "../../utils/api";
 
@@ -24,6 +24,8 @@ const items = Array(10).fill(<StockCard item={item} />);
 
 /** 주식 상세정보 화면 */
 const StockDetails: React.FC = () => {
+  const navigate = useNavigate();
+
   // 주식 ID 읽기
   const { stockId } = useParams<{ stockId: string }>();
 
@@ -32,26 +34,33 @@ const StockDetails: React.FC = () => {
   const accessToken = userAuthContext?.accessToken;
 
   // 종목 정보 가져오기
-  const { isLoading, data } = useQuery("stockDetails", async () => {
+  const { isLoading, data, error } = useQuery("stock-details", async () => {
     const response = await api.get(`/stock/${stockId}`, {
       headers: {
         accesstoken: accessToken,
       },
     });
-    const responseData = response?.data;
+    const responseData = await response?.data;
 
-    // 종목코드가 KOSPI 32에 없을 때
-    if (responseData?.error?.code === "MYSQL_NO_DATA") {
-      alert("올바른 종목 코드로 조회해주시기 바랍니다.");
-      return <NotFound />;
-    }
-
-    return responseData?.data;
+    return responseData;
   });
 
   if (isLoading) return <CustomCircularProgress />;
 
   if (typeof stockId === "undefined") return <NotFound />;
+
+  // 종목코드가 KOSPI 32에 없을 때
+  if (
+    error ||
+    data?.error?.code === "MYSQL_NO_DATA" ||
+    data?.error?.message === "994"
+  ) {
+    alert("올바른 종목 코드로 조회해주시기 바랍니다.");
+    navigate("/stock");
+    return <NotFound />;
+  }
+
+  let stockItem = data?.data;
 
   return (
     <div className="h-full">
@@ -64,15 +73,15 @@ const StockDetails: React.FC = () => {
         <div className="h-full grid grid-rows-6 grid-cols-3 gap-2">
           {/* 종목명, 로고, 코드, 매수/매도 버튼 */}
           <div className="row-span-1 col-span-3 flex items-center">
-            <ItemTitle stockId={stockId} stockItem={data} />
+            <ItemTitle stockId={stockId} stockItem={stockItem} />
           </div>
           {/* 종목 그래프 차트 */}
           <div className="row-span-5 col-span-2 h-full">
-            <StockChart stockItem={data} />
+            <StockChart stockItem={stockItem} />
           </div>
           {/* 종목 정보 */}
           <div className="row-span-5 col-span-1 h-full">
-            <StockInformationTabs stockId={stockId} stockItem={data} />
+            <StockInformationTabs stockId={stockId} stockItem={stockItem} />
           </div>
         </div>
       </div>

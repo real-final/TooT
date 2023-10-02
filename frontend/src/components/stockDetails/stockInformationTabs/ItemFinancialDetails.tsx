@@ -3,12 +3,9 @@ import { IstockItem } from "../../../interface/IstockDetails";
 
 /** 상세조회 페이지 재무정보 */
 const ItemFinancialDetails: React.FC<{
-  stockId?: string;
-  stockItem?: IstockItem;
+  stockId: string;
+  stockItem: IstockItem;
 }> = ({ stockId, stockItem }) => {
-  if (typeof stockId === "undefined" || typeof stockItem === "undefined")
-    return <></>;
-
   return (
     <div>
       <div className="h-1/4">

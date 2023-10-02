@@ -10,12 +10,12 @@ export interface IstockItem {
   min52: number;
   totalPrice: string;
   totalStock: number;
-  minCandle: IstockChart | null;
-  dayCandle: IstockChart | null;
-  weekCandle: IstockChart | null;
+  minCandle: IchartDataItem[];
+  dayCandle: IchartDataItem[];
+  weekCandle: IchartDataItem[];
 }
 
-export interface IstockChart {
+export interface IchartDataItem {
   time: string;
   price: string;
   amount: string;
