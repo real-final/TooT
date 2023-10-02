@@ -13,6 +13,7 @@ import QuizContainer from "./components/quiz/QuizContainer";
 import CustomCircularProgress from "./common/circularProgress/CustomCircularProgress";
 import MainUserContainer from "./components/user/MainUserContainer";
 import AuthRouterGuard from "./AuthRouterGuard";
+import StockAll from "./components/stock/StockAll";
 
 const Routers = () => {
   return (
@@ -23,6 +24,7 @@ const Routers = () => {
       <Route path="*" element={<NotFound />}></Route>
       {/* 비인가유저 접근 가능 페이지 */}
       <Route path="/" element={<AuthRouterGuard />}>
+        <Route path="/stock/all" element={<StockAll />} />
         <Route path="/stock/:stockId" element={<StockDetails />}></Route>
         {/* TODO: /user 대신 /:userID 사용 예정, user/bankrupt/:userID 대신 :userId/bankrupt */}
         <Route path="/user/:userId" element={<MainUserContainer />}>

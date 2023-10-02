@@ -7,43 +7,49 @@ import IconButton from "@mui/joy/IconButton";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 
 type Item = {
-  id: string;
-  name: string;
-  price: string;
-  difference: string;
-  percentage: string;
+  stockId: string;
+  stockName: string;
+  currentPrice: string;
+  priceDifferenct: string;
+  rateDifference: string;
 };
 
 type StockCardProps = {
   item: Item;
+  size?: string;
 };
 
 /** 주식종목 카드 */
-const StockCard: React.FC<StockCardProps> = ({ item }) => {
+const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
   const navigate = useNavigate();
 
-  const { textColor, icon } = getStockStyle(item?.percentage as string);
+  const { textColor, icon } = getStockStyle(item?.rateDifference as string);
 
   const handleCardClick = () => {
-    navigate(`/stock/${item?.id}`);
+    navigate(`/stock/${item?.stockId}`);
   };
 
+  const width = (size === "big") ? "w-[300px] " : "w-[200px] ";
+  const xsText = (size === "big") ? "text-[14px]" : "text-xs";
+  const mdText = (size === "big") ? "text-[20px]" : "text-md";
+  const xlText = (size === "big") ? "text-[24px]" : "text-xl";
+
   return (
-    <div className="w-[198px]" onClick={handleCardClick}>
-      <Card className="hover:cursor-pointer">
-        <div className="h-full flex flex-col justify-between relative">
+    <div className={`${width}`} onClick={handleCardClick}>
+      <Card className="hover:cursor-pointer" size="big" >
+        <div className="h-full flex flex-col justify-between relative p-2">
           <LikeButton />
           <div className="flex items-start">
-            <p className="text-xs text-slate-500 mr-2">{item?.id}</p>
-            <p className="text-xs text-slate-500">코스피200</p>
+            <p className={`${xsText} text-slate-500 mr-2`}>{item?.stockId}</p>
+            <p className={`${xsText} text-slate-500`}>코스피200</p>
           </div>
           <div className="flex items-start">
-            <h2 className="text-md">{item?.name}</h2>
+            <h2 className={`${mdText}`}>{item?.stockName}</h2>
           </div>
           <div className="flex items-center">
-            <p className={"text-xl mr-2 " + textColor}>{item?.price}</p>
-            <p className={"text-xs text-center " + textColor}>
-              {icon} {item?.difference}({item?.percentage}%)
+            <p className={`${xlText} mr-2 ` + textColor}>{item?.currentPrice.toLocaleString()}</p>
+            <p className={`${xsText} text-center ` + textColor}>
+              {icon} {item?.priceDifferenct}({item?.rateDifference}%)
             </p>
           </div>
         </div>
