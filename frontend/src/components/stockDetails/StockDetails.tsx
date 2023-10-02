@@ -13,11 +13,11 @@ import NotFound from "../../common/notfound/NotFound";
 import { ItemTitle } from "./stockItemTitle/stockItemTitle";
 
 let item = {
-  id: "001230",
-  name: "삼성전자",
-  price: "100,000",
-  difference: "200",
-  percentage: "-0.80",
+  stockId: "001230",
+  stockName: "삼성전자",
+  currentPrice: "100,000",
+  priceDifferenct: "200",
+  rateDifference: "-0.80",
 };
 // 좋아요 목록 가져오기
 const items = Array(10).fill(<StockCard item={item} />);

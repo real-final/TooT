@@ -4,7 +4,7 @@ import stockNameToId from "./stockNameToId";
 export const code100 = (code:number, responseData:string[]) => {
   switch(code) {
     case 101:
-      window.location.href = "/stock";
+      window.location.href = "/stock/all";
       break;
     case 102:
       const stockName:string = responseData[1];
