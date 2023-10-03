@@ -12,6 +12,7 @@ import CustomCircularProgress from "../../../common/circularProgress/CustomCircu
 import { IuserStock } from "../../../interface/IuserStock";
 import UserNoItem from "../UserNoItem";
 import { IuserTrade } from "../../../interface/IuserTrade";
+import { Helmet } from "react-helmet";
 
 const UserStockDetail = () => {
   const { stockId } = useParams<{ stockId: string }>();
@@ -41,6 +42,9 @@ const UserStockDetail = () => {
 
   return(
     <div className="w-full h-full p-8 min-h-0">
+      <Helmet>
+        <title>{`TooT - 내 ${userDetailTotal?.stockName}`}</title>
+      </Helmet>
       <Title title={`보유 주식 - ${userDetailTotal?.stockName}`} />
       { (isTotalLoading || isTradeLoading) ? 
       <CustomCircularProgress /> : 

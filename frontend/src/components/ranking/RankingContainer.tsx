@@ -11,6 +11,7 @@ import CustomCircularProgress from "../../common/circularProgress/CustomCircular
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy } from "@fortawesome/free-solid-svg-icons";
+import { Helmet } from "react-helmet";
 
 const RankingContainer = ({ title }: { size: string; title: string }) => {
   const userAuthContext = useContext(UserAuthContext);
@@ -44,6 +45,9 @@ const RankingContainer = ({ title }: { size: string; title: string }) => {
 
   return (
     <div className="w-full h-full p-8 min-h-0">
+      <Helmet>
+        <title>{`TooT - ${title}`}</title>
+      </Helmet>
       <div className="flex">
         <Title title={title} />
         <FontAwesomeIcon

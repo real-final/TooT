@@ -7,6 +7,7 @@ import { api } from "../../../utils/api";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 import { IuserBankrupt } from "../../../interface/IuserBankrupt";
 import UserNoItem from "../UserNoItem";
+import { Helmet } from "react-helmet";
 
 const Bankrupt = () => {
   const userAuthContext = useContext(UserAuthContext);
@@ -27,6 +28,9 @@ const Bankrupt = () => {
 
   return (
     <div className="w-full h-full p-8 min-h-0">
+      <Helmet>
+        <title>{"TooT - 내 파산 기록"}</title>
+      </Helmet>
       <Title title="파산 기록" />
       { isLoading ? <CustomCircularProgress /> : <div className="h-[90%] no-scrollbar overflow-y-auto">
         { !userBankrupt ? <UserNoItem itemName="파산 기록" /> : userBankrupt?.map((item) => (

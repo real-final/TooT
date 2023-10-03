@@ -4,11 +4,19 @@ import FavoriteItemsCarousel from "./favoriteStocks/FavoriteItemsCarousel";
 import TotalRanking from "./totalRanking/TotalRanking";
 import { Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   return (
     <div className="h-full">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="description" content="주린이들을 위한 모의 주식 투자 트레이닝 서비스 TooT입니다!" />
+        <meta name="keywords" content="주린이, 모의 주식 투자, 주식 트레이닝, 모의 주식, 주식 게임, 모의 주식 게임, 주식 투자, 주식, TooT, toot, TOOT, 주식 초보, 초보, 코스피, 코스피32, 주식 단어 퀴즈, 주식 용어 퀴즈, 투투, 투자 트레이닝" />
+        <meta name="author" content="SSAFY 9기 특화팀 A709 real_final" />
+        <title>{"TooT - 투자 트레이닝"}</title>
+      </Helmet>
       {/* 좋아요 종목 캐러셀 */}
       <div className="h-1/5">
         <FavoriteItemsCarousel />

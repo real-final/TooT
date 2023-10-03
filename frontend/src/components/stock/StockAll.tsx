@@ -5,6 +5,7 @@ import { UserAuthContext } from "../../App";
 import CustomCircularProgress from "../../common/circularProgress/CustomCircularProgress";
 import { useQuery } from "react-query";
 import StockCard from "../../common/card/StockCard";
+import { Helmet } from "react-helmet";
 
 const StockAll = () => {
   const userAuthContext = useContext(UserAuthContext);
@@ -27,6 +28,9 @@ const StockAll = () => {
 
   return (
     <div className="w-full h-full p-8 min-h-0">
+      <Helmet>
+        <title>{"TooT - KOSPI 32"}</title>
+      </Helmet>
       <Title title="전체 주식" />
       <div className="w-full h-[90%] min-h-0 overflow-y-auto no-scrollbar">
         <div className="w-full min-h-0 grid grid-cols-3 gap-4 no-scrollbar place-items-center">
