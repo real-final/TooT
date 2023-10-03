@@ -52,8 +52,12 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
   // 챗봇으로 넘어왔을 경우 주문 수량 default 변경
   const chatQuantity = useSelector((state: RootState) => state.stock.share);
   useEffect(() => {
-    if(chatQuantity !== null && chatQuantity !== undefined && chatQuantity > 0){
-      if (chatQuantity > availableQuantity){
+    if (
+      chatQuantity !== null &&
+      chatQuantity !== undefined &&
+      chatQuantity > 0
+    ) {
+      if (chatQuantity > availableQuantity) {
         setOrderQuantity(availableQuantity);
         // 주문 수량이 변경되면 inputRef의 값을 업데이트
       } else {
@@ -66,7 +70,7 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
 
   useEffect(() => {
     console.log("useState 주문 수:" + orderQuantity);
-    if(inputRef.current) inputRef.current.value = String(orderQuantity);
+    if (inputRef.current) inputRef.current.value = String(orderQuantity);
   }, [orderQuantity]);
 
   // 매수/매도 요청 함수
@@ -76,7 +80,7 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
     // 매도 API
     if (action === "매도") actionAPI = "/stock/sell";
     // 신청 가능여부?
-    if (orderQuantity > availableQuantity || !orderQuantity) {
+    if (orderQuantity > availableQuantity || orderQuantity <= 0) {
       alert("요청하신 수량을 확인해주시기 바랍니다.");
       return;
     }
@@ -89,7 +93,7 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
       );
 
       console.log(response.data);
-      if(response.data.data > 0){
+      if (response.data.data > 0) {
         alert(`${response.data.data}주 ${action}가 성공적으로 체결되었습니다.`);
       } else {
         alert("체결에 실패했습니다. 주문 수량을 확인해주세요.");

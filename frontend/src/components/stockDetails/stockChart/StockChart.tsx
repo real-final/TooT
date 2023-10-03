@@ -13,9 +13,6 @@ import Typography from "@mui/joy/Typography";
 
 const StockChart: React.FC<{ stockItem: IstockItem }> = ({ stockItem }) => {
   let minCandle = stockItem?.minCandle;
-
-  console.log(minCandle);
-
   return (
     <Tabs
       aria-label="stock-chart"
@@ -91,7 +88,7 @@ const ApexChart: React.FC<{ data: IchartDataItem[] }> = ({ data }) => {
     grid: {
       padding: {
         top: 0,
-        bottom: -10,
+        bottom: -25,
       },
     },
     xaxis: {
@@ -116,7 +113,7 @@ const ApexChart: React.FC<{ data: IchartDataItem[] }> = ({ data }) => {
     grid: {
       padding: {
         top: -20,
-        bottom: 0,
+        bottom: -25,
       },
     },
     xaxis: {

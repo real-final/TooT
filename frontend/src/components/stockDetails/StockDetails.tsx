@@ -4,23 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { UserAuthContext } from "../../App";
 import { api } from "../../utils/api";
 
-import StockCard from "../../common/card/StockCard";
 import StockChart from "./stockChart/StockChart";
 import StockInformationTabs from "./stockInformationTabs/StockInformationTabs";
-import FavoriteItemsCarousel from "../main/FavoriteItemsCarousel";
+import FavoriteItemsCarousel from "../main/favoriteStocks/FavoriteItemsCarousel";
 import CustomCircularProgress from "../../common/circularProgress/CustomCircularProgress";
 import NotFound from "../../common/notfound/NotFound";
 import { ItemTitle } from "./stockItemTitle/stockItemTitle";
-
-let item = {
-  stockId: "001230",
-  stockName: "삼성전자",
-  currentPrice: "100,000",
-  priceDifferenct: "200",
-  rateDifference: "-0.80",
-};
-// 좋아요 목록 가져오기
-const items = Array(10).fill(<StockCard item={item} />);
 
 /** 주식 상세정보 화면 */
 const StockDetails: React.FC = () => {
@@ -34,16 +23,19 @@ const StockDetails: React.FC = () => {
   const accessToken = userAuthContext?.accessToken;
 
   // 종목 정보 가져오기
-  const { isLoading, data, error } = useQuery("stock-details", async () => {
-    const response = await api.get(`/stock/${stockId}`, {
-      headers: {
-        accesstoken: accessToken,
-      },
-    });
-    const responseData = await response?.data;
+  const { isLoading, data, error } = useQuery(
+    ["stock-details", stockId],
+    async () => {
+      const response = await api.get(`/stock/${stockId}`, {
+        headers: {
+          accesstoken: accessToken,
+        },
+      });
+      const responseData = await response?.data;
 
-    return responseData;
-  });
+      return responseData;
+    }
+  );
 
   if (isLoading) return <CustomCircularProgress />;
 
@@ -66,7 +58,7 @@ const StockDetails: React.FC = () => {
     <div className="h-full">
       {/* 상단: 좋아요 종목 캐러셀 */}
       <div className="h-1/5">
-        <FavoriteItemsCarousel items={items} />
+        <FavoriteItemsCarousel />
       </div>
       {/* 하단: 상세 종목 조회 Container */}
       <div className="h-4/5 px-6 pb-4">
