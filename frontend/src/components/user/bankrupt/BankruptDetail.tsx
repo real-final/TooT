@@ -52,7 +52,7 @@ const BankruptDetail = () => {
       ((userBankruptTotal && userBankruptTrade) ? 
       <>
         <BankruptDetailTotal bankruptTotal={userBankruptTotal} />
-        <div className="w-full h-full min-h-0 overflox-y-scroll no-scrollbar">
+        <div className="w-full h-[80%] min-h-0 overflox-y-scroll no-scrollbar">
         {userBankruptTrade?.map((item, index) => (
           <UserStockTrade index={index} trade={item} isName={true} />
         ))}
