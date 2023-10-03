@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 const BankruptDetail = () => {
-  const { bankruptcyNo } = useParams<{ bankruptcyNo: string }>();
+  const { bankruptcyNo } = useParams<{ bankruptcyNo?: string }>();
   const userAuthContext = useContext(UserAuthContext);
   const accessToken = userAuthContext?.accessToken;
 
@@ -44,20 +44,20 @@ const BankruptDetail = () => {
   return(
     <div className="w-full h-full p-8 min-h-0">
       <Helmet>
-        <title>{`TooT - 내 ${bankruptcyNo + 1}회차 파산`}</title>
+        <title>{`TooT - 내 ${bankruptcyNo ? parseInt(bankruptcyNo) + 1 : ""}회차 파산`}</title>
       </Helmet>
-      <Title title={`${bankruptcyNo + 1}회차 파산 기록`} />
+      <Title title={`$${bankruptcyNo ? parseInt(bankruptcyNo) + 1 : ""}회차 파산 기록`} />
       { (isBankruptTotalLoading || isBankruptTradeLoading) ? 
       <CustomCircularProgress /> : 
       ((userBankruptTotal && userBankruptTrade) ? 
-      <>
+      <div className="w-full h-[90%] min-h-0">
         <BankruptDetailTotal bankruptTotal={userBankruptTotal} />
-        <div className="w-full h-[80%] min-h-0 overflox-y-scroll no-scrollbar">
+        <div className="w-full h-[75%] min-h-0 overflow-y-scroll no-scrollbar">
         {userBankruptTrade?.map((item, index) => (
           <UserStockTrade index={index} trade={item} isName={true} />
         ))}
         </div>
-      </> : 
+      </div> : 
       <UserNoItem itemName="파산 기록" />)}
     </div>
   );
