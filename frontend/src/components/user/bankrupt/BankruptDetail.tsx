@@ -50,12 +50,14 @@ const BankruptDetail = () => {
       { (isBankruptTotalLoading || isBankruptTradeLoading) ? 
       <CustomCircularProgress /> : 
       ((userBankruptTotal && userBankruptTrade) ? 
-      <div className="w-full h-full min-h-0 overflox-y-scroll no-scrollbar">
+      <>
         <BankruptDetailTotal bankruptTotal={userBankruptTotal} />
+        <div className="w-full h-full min-h-0 overflox-y-scroll no-scrollbar">
         {userBankruptTrade?.map((item, index) => (
           <UserStockTrade index={index} trade={item} isName={true} />
         ))}
-      <div/> : 
+        </div>
+      </> : 
       <UserNoItem itemName="파산 기록" />)}
     </div>
   );

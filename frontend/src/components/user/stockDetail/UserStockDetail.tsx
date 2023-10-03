@@ -49,12 +49,14 @@ const UserStockDetail = () => {
       { (isTotalLoading || isTradeLoading) ? 
       <CustomCircularProgress /> : 
       ((userDetailTotal && userDetailTrade) ? 
-      <div className="w-full h-full min-h-0 overflox-y-scroll no-scrollbar">
+      <>
         <UserStockDetailTotal stock={userDetailTotal} />
-        {userDetailTrade?.map((item:IuserTrade, index:number) => (
-          <UserStockTrade key={index} index={index} trade={item} isName={true} />
-        ))}
-      <div/> : 
+        <div className="w-full h-full min-h-0 overflox-y-scroll no-scrollbar">
+          {userDetailTrade?.map((item:IuserTrade, index:number) => (
+            <UserStockTrade key={index} index={index} trade={item} isName={true} />
+          ))}
+        </div>
+      </> : 
       <UserNoItem itemName="해당 보유 주식" />)}
     </div>
   );
