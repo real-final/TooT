@@ -13,15 +13,17 @@ public class InterestRes {
     private Integer currentPrice;
     private String priceDifference;
     private String rateDifference;
+    private Boolean isInterested;
 
     @Builder
     public InterestRes(String stockId, String stockName, Integer currentPrice,
         String priceDifference,
-        String rateDifference) {
+        String rateDifference, Boolean isInterested) {
         this.stockId = stockId;
         this.stockName = stockName;
         this.currentPrice = currentPrice;
         this.priceDifference = priceDifference;
         this.rateDifference = rateDifference;
+        this.isInterested = isInterested;
     }
 }

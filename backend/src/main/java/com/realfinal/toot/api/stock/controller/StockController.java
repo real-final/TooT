@@ -94,7 +94,7 @@ public class StockController {
      * 사용자가 등록한 관심 종목 목록 조회
      *
      * @param accessToken
-     * @return [ 종목번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률 ] 리스트
+     * @return [ 종목번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률, 관심 종목 등록 여부(무조건 true) ] 리스트
      */
     @GetMapping("/interest/show")
     public CommonResponse<List<InterestRes>> showInterest(
@@ -134,7 +134,7 @@ public class StockController {
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("StockController_myStocks_start: " + accessToken);
         List<MyStockRes> myStockResList = stockService.myStocks(accessToken);
-        log.info("StockController_myStock_end: " + myStockResList);
+        log.info("StockController_myStocks_end: " + myStockResList);
         return CommonResponse.success(myStockResList);
     }
 
@@ -163,7 +163,7 @@ public class StockController {
     public CommonResponse<MyStockRes> myStock(
         @RequestHeader(value = "accesstoken", required = false) String accessToken,
         @PathVariable("stockId") String stockId) {
-        log.info("StockController_myStocks_start: " + accessToken);
+        log.info("StockController_myStock_start: " + accessToken);
         MyStockRes myStockRes = stockService.myStock(accessToken, stockId);
         log.info("StockController_myStock_end: " + myStockRes);
         return CommonResponse.success(myStockRes);
