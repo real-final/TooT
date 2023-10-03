@@ -6,6 +6,7 @@ import { pushBotBubble } from "../../utils/chat/chat";
 import QuizEnd from "./QuizEnd";
 import { api } from "../../utils/api";
 import { UserAuthContext } from "../../App";
+import { Helmet } from "react-helmet";
 
 const QuizContainer = () => {
   const [isSolved, setIsSolved] = useState<boolean | null>(null);
@@ -46,6 +47,9 @@ const QuizContainer = () => {
 
   return(
   <div className="w-full h-full p-8 min-h-0 flex justify-center items-center bg-white">
+    <Helmet>
+        <title>{"TooT - 주식 용어 퀴즈"}</title>
+    </Helmet>
     {(isSolved === false) ? <QuizEnd /> : null}
     {(isSolved === true) ? <Quiz /> : null}
   </div>

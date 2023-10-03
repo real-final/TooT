@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 import UserNoItem from "../UserNoItem";
+import { Helmet } from "react-helmet";
 
 const UserStock = () => {
   
@@ -29,6 +30,9 @@ const UserStock = () => {
 
   return (
     <div className="w-full h-full p-8 min-h-0">
+      <Helmet>
+        <title>{"TooT - 내 보유 주식"}</title>
+      </Helmet>
       <Title title="보유 주식" />
       <div className="h-[90%] no-scrollbar overflow-y-auto">
         {!userStockList ? <UserNoItem itemName="보유 주식" /> : userStockList?.map((item, index) => (

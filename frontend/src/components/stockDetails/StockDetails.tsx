@@ -10,6 +10,7 @@ import FavoriteItemsCarousel from "../main/favoriteStocks/FavoriteItemsCarousel"
 import CustomCircularProgress from "../../common/circularProgress/CustomCircularProgress";
 import NotFound from "../../common/notfound/NotFound";
 import { ItemTitle } from "./stockItemTitle/stockItemTitle";
+import { Helmet } from "react-helmet";
 
 /** 주식 상세정보 화면 */
 const StockDetails: React.FC = () => {
@@ -56,6 +57,9 @@ const StockDetails: React.FC = () => {
 
   return (
     <div className="h-full">
+      <Helmet>
+        <title>{`TooT - ${stockItem.stockName}`}</title>
+      </Helmet>
       {/* 상단: 좋아요 종목 캐러셀 */}
       <div className="h-1/5">
         <FavoriteItemsCarousel />

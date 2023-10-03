@@ -9,6 +9,7 @@ import CustomCircularProgress from "../../../common/circularProgress/CustomCircu
 import { IuserBankrupt } from "../../../interface/IuserBankrupt";
 import UserNoItem from "../UserNoItem";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const BankruptDetail = () => {
   const { bankruptcyNo } = useParams<{ bankruptcyNo: string }>();
@@ -42,6 +43,9 @@ const BankruptDetail = () => {
 
   return(
     <div className="w-full h-full p-8 min-h-0">
+      <Helmet>
+        <title>{`TooT - 내 ${bankruptcyNo}회차 파산`}</title>
+      </Helmet>
       <Title title={`${bankruptcyNo}회차 파산 기록`} />
       { (isBankruptTotalLoading || isBankruptTradeLoading) ? 
       <CustomCircularProgress /> : 
