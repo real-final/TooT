@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -15,6 +15,24 @@ export const UserAuthContext = createContext<IuserAuthContext | undefined>(
 );
 
 function App() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  const handleResize = () => {
+    if(window.innerWidth < 768 || window.innerWidth <= window.innerHeight){
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   // 유저정보 & Access 토큰 요청하기
   const { data: contextData, isLoading } = useQuery(
     "userAuthData",
@@ -29,10 +47,13 @@ function App() {
     <HelmetProvider>
       <Provider store={store}>
         <UserAuthContext.Provider value={contextData}>
-          <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
+          { !isMobile ? <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
             <Nav />
             {isLoading ? <CustomCircularProgress /> : <Grid />}
-          </div>
+          </div> : null}
+          {isMobile ? <div className="w-screen h-screen flex items-center justify-center">
+            <span>PC 화면으로 접속해주세요!</span>
+          </div> : null}
         </UserAuthContext.Provider>
       </Provider>
     </HelmetProvider>
