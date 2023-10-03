@@ -92,7 +92,6 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
         { headers: { accesstoken: accessToken } }
       );
 
-      console.log(response.data);
       if (response.data.data > 0) {
         alert(`${response.data.data}주 ${action}가 성공적으로 체결되었습니다.`);
       } else {
