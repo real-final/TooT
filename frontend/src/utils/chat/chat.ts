@@ -19,7 +19,7 @@ export const sendBubble = (text:string, dispatch: any) => {
   dispatch(add(newBubble));
 };
 
-export const getBubble = async (text:string, dispatch: any, navigate: any) => {
+export const getBubble = async (text:string, dispatch: any, navigate: any, userAuthContext:any) => {
 
   let bubble = "";
   let bubbleData:any = [];
@@ -59,5 +59,5 @@ export const getBubble = async (text:string, dispatch: any, navigate: any) => {
     }
   });
   await dispatch(add(newBubble));
-  await codeSwitch(bubble, bubbleData, text, dispatch, navigate);
+  await codeSwitch(bubbleData, text, dispatch, navigate, userAuthContext);
 };

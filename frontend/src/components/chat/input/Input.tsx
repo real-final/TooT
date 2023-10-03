@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SendButton from "./SendButton";
 import { useDispatch } from "react-redux";
 import { getBubble, sendBubble } from "../../../utils/chat/chat";
 import { useNavigate } from "react-router-dom";
+import { UserAuthContext } from "../../../App";
 
 const Input = () => {
   const [inputText, setInputText] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userAuthContext = useContext(UserAuthContext);
 
   const handleInputTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
@@ -16,7 +18,7 @@ const Input = () => {
   const handleBubble = async () => {
     await sendBubble(inputText, dispatch);
     setInputText("");
-    await getBubble(inputText, dispatch, navigate);
+    await getBubble(inputText, dispatch, navigate, userAuthContext);
   };
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {

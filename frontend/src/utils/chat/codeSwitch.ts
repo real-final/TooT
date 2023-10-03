@@ -3,9 +3,10 @@ import { code200 } from "./code200";
 import { code300 } from "./code300";
 import { code400 } from "./code400";
 import { code600 } from "./code600";
+import { code700 } from "./code700";
 import { code900 } from "./code900";
 
-export const codeSwitch = (bubble:string, responseData:string[], userMessage:string, dispatch:any, navigate: any) => {
+export const codeSwitch = (responseData:string[], userMessage:string, dispatch:any, navigate: any, userAuthContext:any) => {
   const code = parseInt(responseData[0]);
 
   switch (true) {
@@ -26,6 +27,7 @@ export const codeSwitch = (bubble:string, responseData:string[], userMessage:str
       break;
     // TODO: 파산하기 넣기
     case 700 <= code && code < 800 :
+      code700(code, dispatch, userAuthContext);
       break;
     case 800 <= code && code < 900 :
     // TODO: 이스터에그 추가 처리 필요하면 넣기
