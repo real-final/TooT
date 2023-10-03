@@ -20,7 +20,7 @@ const BankruptDetail = () => {
   const [userBankruptTrade, setUserBankruptTrade] = useState([]);
 
   const { isLoading:isBankruptTotalLoading } = useQuery("user-bankrupt-detail-total", async () => {
-    const response = await api.get(`/bankruptcy/${bankruptcyNo}`, {
+    const response = await api.get(`/bankruptcy/detail/${bankruptcyNo}`, {
       headers: {
         accesstoken: accessToken,
       },
@@ -31,7 +31,7 @@ const BankruptDetail = () => {
   });
 
   const { isLoading:isBankruptTradeLoading } = useQuery("user-bankrupt-detail-trade", async () => {
-    const response = await api.get(`/detail/${bankruptcyNo}`, {
+    const response = await api.get(`/bankruptcy/detail/${bankruptcyNo}/execution`, {
       headers: {
         accesstoken: accessToken,
       },
@@ -46,7 +46,7 @@ const BankruptDetail = () => {
       <Helmet>
         <title>{`TooT - 내 ${bankruptcyNo ? parseInt(bankruptcyNo) + 1 : ""}회차 파산`}</title>
       </Helmet>
-      <Title title={`$${bankruptcyNo ? parseInt(bankruptcyNo) + 1 : ""}회차 파산 기록`} />
+      <Title title={`${bankruptcyNo ? parseInt(bankruptcyNo) + 1 : ""}회차 파산 기록`} />
       { (isBankruptTotalLoading || isBankruptTradeLoading) ? 
       <CustomCircularProgress /> : 
       ((userBankruptTotal && userBankruptTrade) ? 
