@@ -44,9 +44,9 @@ const BankruptDetail = () => {
   return(
     <div className="w-full h-full p-8 min-h-0">
       <Helmet>
-        <title>{`TooT - 내 ${bankruptcyNo}회차 파산`}</title>
+        <title>{`TooT - 내 ${bankruptcyNo + 1}회차 파산`}</title>
       </Helmet>
-      <Title title={`${bankruptcyNo}회차 파산 기록`} />
+      <Title title={`${bankruptcyNo + 1}회차 파산 기록`} />
       { (isBankruptTotalLoading || isBankruptTradeLoading) ? 
       <CustomCircularProgress /> : 
       ((userBankruptTotal && userBankruptTrade) ? 
