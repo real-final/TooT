@@ -270,19 +270,21 @@ public class PriceUtil {
             this.minState[index] = 0;
         }
         // 슬라이딩 윈도우 적용: 2분 전 ~ 30분 전 데이터는 변동이 없으므로 31분 전 데이터만 1분 전 데이터로 변환
-        this.minState[index] = (this.minState[index] + 29) % 30;
-        if (this.minCandle[index][this.minState[index]] == null) {
-            this.minCandle[index][this.minState[index]] = StockMapper.INSTANCE.toMinuteRes(
-                minutePriceRes.getOutput2().get(0).getStck_cntg_hour(),
-                minutePriceRes.getOutput2().get(0).getStck_prpr(),
-                minutePriceRes.getOutput2().get(0).getCntg_vol());
-        } else {
-            this.minCandle[index][this.minState[index]].updateTime(
-                minutePriceRes.getOutput2().get(0).getStck_cntg_hour());
-            this.minCandle[index][this.minState[index]].updatePrice(
-                minutePriceRes.getOutput2().get(0).getStck_prpr());
-            this.minCandle[index][this.minState[index]].updateAmount(
-                minutePriceRes.getOutput2().get(0).getCntg_vol());
+        if (minutePriceRes.getOutput2().size() > 0) {
+            this.minState[index] = (this.minState[index] + 29) % 30;
+            if (this.minCandle[index][this.minState[index]] == null) {
+                this.minCandle[index][this.minState[index]] = StockMapper.INSTANCE.toMinuteRes(
+                    minutePriceRes.getOutput2().get(0).getStck_cntg_hour(),
+                    minutePriceRes.getOutput2().get(0).getStck_prpr(),
+                    minutePriceRes.getOutput2().get(0).getCntg_vol());
+            } else {
+                this.minCandle[index][this.minState[index]].updateTime(
+                    minutePriceRes.getOutput2().get(0).getStck_cntg_hour());
+                this.minCandle[index][this.minState[index]].updatePrice(
+                    minutePriceRes.getOutput2().get(0).getStck_prpr());
+                this.minCandle[index][this.minState[index]].updateAmount(
+                    minutePriceRes.getOutput2().get(0).getCntg_vol());
+            }
         }
     }
 
@@ -383,7 +385,9 @@ public class PriceUtil {
         if (!userStockList.isEmpty()) {
             for (UserStock userStock : userStockList) {
                 Integer currentPrice = this.getCurrentPrice(userStock.getStock().getId());
-                Long calculatedValue = Long.valueOf((long) currentPrice * userStock.getHold());
+                Integer hold = userStock.getHold();
+                hold = Integer.max(0, hold);
+                Long calculatedValue = Long.valueOf((long) currentPrice * hold);
                 stockValue += calculatedValue;
             }
         }

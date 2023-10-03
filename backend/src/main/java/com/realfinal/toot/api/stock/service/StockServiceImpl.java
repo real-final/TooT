@@ -54,6 +54,12 @@ public class StockServiceImpl implements StockService {
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         String stockId = stockReq.getStockId();
         Integer count = stockReq.getCount();
+
+        if(count <= 0) {
+            log.info("StockServiceImpl_buyStock_end: count is less than 1 -> return 0");
+            return 0;
+        }
+
         Integer price = priceUtil.getCurrentPrice(stockId);
         Long totalPrice = Long.valueOf((long) price * count);
         Long cash = user.getCash();
@@ -170,7 +176,7 @@ public class StockServiceImpl implements StockService {
      * 사용자가 등록한 관심 종목 목록 조회
      *
      * @param accessToken
-     * @return [ 종목번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률 ] 리스트
+     * @return [ 종목번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률, 관심 종목 등록 여부(무조건 true) ] 리스트
      */
     public List<InterestRes> showInterest(String accessToken) {
         log.info("StockServiceImpl_showInterest_start: " + accessToken);
@@ -193,7 +199,7 @@ public class StockServiceImpl implements StockService {
                 String priceDifference = priceUtil.getPriceDifference(stockId);
                 String rateDifference = priceUtil.getRateDifference(stockId);
                 InterestRes interestRes = StockMapper.INSTANCE.toInterestRes(stock, currentPrice,
-                    priceDifference, rateDifference);
+                    priceDifference, rateDifference, true);
                 interestResList.add(interestRes);
             }
         }
@@ -281,7 +287,7 @@ public class StockServiceImpl implements StockService {
             }
         }
 
-        log.info("StockServiceImpl_myStock_end: " + myStockResList);
+        log.info("StockServiceImpl_myStocks_end: " + myStockResList);
         return myStockResList;
     }
 
@@ -413,6 +419,11 @@ public class StockServiceImpl implements StockService {
         UserStock userStock = userStockRepository.findByUserAndStockAndBankruptcyNo(user, stock,
             bankruptcyNo);
         Integer count = stockReq.getCount();
+
+        if(count <= 0) {
+            log.info("StockServiceImpl_sellStock_end: count is less than 1 -> return 0");
+            return 0;
+        }
 
         String userName = user.getName();
         String stockName = stock.getStockName();

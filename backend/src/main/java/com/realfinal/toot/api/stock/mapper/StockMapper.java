@@ -39,7 +39,7 @@ public interface StockMapper {
 
     @Mapping(source = "stock.id", target = "stockId")
     InterestRes toInterestRes(Stock stock, Integer currentPrice, String priceDifference,
-        String rateDifference) throws MapperException;
+        String rateDifference, Boolean isInterested) throws MapperException;
 
 
     @Mapping(source = "stock.industry.industryClass", target = "industryClass")
