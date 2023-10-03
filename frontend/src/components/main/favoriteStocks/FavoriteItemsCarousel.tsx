@@ -8,6 +8,7 @@ import Button from "@mui/joy/Button";
 import { useContext } from "react";
 import { UserAuthContext } from "../../../App";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
+import { useNavigate } from "react-router-dom";
 
 /** 관심 종목 캐러셀 */
 const FavoriteItemsCarousel: React.FC = () => {
@@ -67,12 +68,13 @@ export default FavoriteItemsCarousel;
 
 /** 관심 종목이 없을 때 컴포넌트 */
 const NoFavoriteStocks: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="h-full px-6 py-4 bg-slate-200 rounded-t-lg">
       <div className="w-full h-full flex flex-col items-center justify-center gap-2">
         <p className="text-gray-500">현재 목록에 관심종목이 없습니다.</p>
         <p className="text-gray-500">종목을 추가해보세요.</p>
-        <Button size="sm" variant="solid" color="danger">
+        <Button size="sm" variant="solid" color="danger" onClick={() => navigate("/stock/all")}>
           종목 추가
         </Button>
       </div>
