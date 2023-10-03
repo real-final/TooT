@@ -12,14 +12,26 @@ const Home: React.FC = () => {
     <div className="h-full">
       <Helmet>
         <meta charSet="utf-8" />
-        <meta name="description" content="주린이들을 위한 모의 주식 투자 트레이닝 서비스 TooT입니다!" />
-        <meta name="keywords" content="주린이, 모의 주식 투자, 주식 트레이닝, 모의 주식, 주식 게임, 모의 주식 게임, 주식 투자, 주식, TooT, toot, TOOT, 주식 초보, 초보, 코스피, 코스피32, 주식 단어 퀴즈, 주식 용어 퀴즈, 투투, 투자 트레이닝" />
+        <meta
+          name="description"
+          content="주린이들을 위한 모의 주식 투자 트레이닝 서비스 TooT입니다!"
+        />
+        <meta
+          name="keywords"
+          content="주린이, 모의 주식 투자, 주식 트레이닝, 모의 주식, 주식 게임, 모의 주식 게임, 주식 투자, 주식, TooT, toot, TOOT, 주식 초보, 초보, 코스피, 코스피32, 주식 단어 퀴즈, 주식 용어 퀴즈, 투투, 투자 트레이닝"
+        />
         <meta name="author" content="SSAFY 9기 특화팀 A709 real_final" />
         <meta property="og:url" content="https://too-t.com/" />
         <meta property="og:title" content="TooT 투자 트레이닝 서비스" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="	https://too-t.com/static/media/money_quiz.60aab1366cf0b87cc7c1.jpg" />
-  <     meta property="og:description" content="주린이들을 위한 모의 주식 투자 서비스 TooT!" />
+        <meta
+          property="og:image"
+          content="	https://too-t.com/static/media/money_quiz.60aab1366cf0b87cc7c1.jpg"
+        />
+        <meta
+          property="og:description"
+          content="주린이들을 위한 모의 주식 투자 서비스 TooT!"
+        />
         <title>{"TooT - 투자 트레이닝"}</title>
       </Helmet>
       {/* 좋아요 종목 캐러셀 */}

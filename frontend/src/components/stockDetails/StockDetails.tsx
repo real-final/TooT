@@ -28,13 +28,9 @@ const StockDetails: React.FC = () => {
     ["stock-details", stockId],
     async () => {
       const response = await api.get(`/stock/${stockId}`, {
-        headers: {
-          accesstoken: accessToken,
-        },
+        headers: { accesstoken: accessToken },
       });
-      const responseData = await response?.data;
-
-      return responseData;
+      return response?.data;
     }
   );
 

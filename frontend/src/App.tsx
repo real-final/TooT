@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { Provider } from "react-redux";
 import store from "./store";
 import Grid from "./Grid";
@@ -15,8 +15,6 @@ export const UserAuthContext = createContext<IuserAuthContext | undefined>(
 );
 
 function App() {
-  const queryClient = new QueryClient();
-
   // 유저정보 & Access 토큰 요청하기
   const { data: contextData, isLoading } = useQuery(
     "userAuthData",
@@ -30,14 +28,12 @@ function App() {
   return (
     <HelmetProvider>
       <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <UserAuthContext.Provider value={contextData}>
-            <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
-              <Nav />
-              {isLoading ? <CustomCircularProgress /> : <Grid />}
-            </div>
-          </UserAuthContext.Provider>
-        </QueryClientProvider>
+        <UserAuthContext.Provider value={contextData}>
+          <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
+            <Nav />
+            {isLoading ? <CustomCircularProgress /> : <Grid />}
+          </div>
+        </UserAuthContext.Provider>
       </Provider>
     </HelmetProvider>
   );

@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
 
-import StockCard, { Item } from "../../../common/card/StockCard";
+import StockCard, { IstockCardData } from "../../../common/card/StockCard";
 import Carousel from "../../../common/carousel/Carousel";
 
 import Button from "@mui/joy/Button";
@@ -50,8 +50,7 @@ const FavoriteItemsCarousel: React.FC = () => {
 
   // 좋아요 카드 만들기
   const favoriteStocks = data?.data;
-  console.log(favoriteStocks);
-  const items = favoriteStocks?.map((favoriteStock: Item) => (
+  const items = favoriteStocks?.map((favoriteStock: IstockCardData) => (
     <StockCard item={favoriteStock} size="small" />
   ));
 
@@ -74,7 +73,12 @@ const NoFavoriteStocks: React.FC = () => {
       <div className="w-full h-full flex flex-col items-center justify-center gap-2">
         <p className="text-gray-500">현재 목록에 관심종목이 없습니다.</p>
         <p className="text-gray-500">종목을 추가해보세요.</p>
-        <Button size="sm" variant="solid" color="danger" onClick={() => navigate("/stock/all")}>
+        <Button
+          size="sm"
+          variant="solid"
+          color="danger"
+          onClick={() => navigate("/stock/all")}
+        >
           종목 추가
         </Button>
       </div>
