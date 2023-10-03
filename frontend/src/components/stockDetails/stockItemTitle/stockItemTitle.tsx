@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
 
 import StockOrderModal from "./StockOrderModal";
+import LikeButton from "../../../common/button/LikeButton";
 
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
@@ -34,12 +35,19 @@ export const ItemTitle: React.FC<{
   // 현재 시가 가져오기
   const currentPrice = stockItem.currentPrice;
 
+  // 종목 좋아요 여부 가져오기
+  const isFavorite = stockItem.interested;
+
   // 챗봇을 통해 이동했으면 사용자가 원하는 매수/매도 데이터 가져오기
   const chat = useSelector((state: RootState) => state.stock);
 
   useEffect(() => {
-    if(chat.tradeType !== null && chat.tradeType !== undefined && chat.tradeType !== ""){
-      if(chat.tradeType === "sell"){
+    if (
+      chat.tradeType !== null &&
+      chat.tradeType !== undefined &&
+      chat.tradeType !== ""
+    ) {
+      if (chat.tradeType === "sell") {
         setSellModalOpen(true);
       } else if (chat.tradeType === "buy") {
         setBuyModalOpen(true);
@@ -96,6 +104,7 @@ export const ItemTitle: React.FC<{
       availableQuantity: hold, // 주문 가능 수량
     },
   };
+
   // 매수/매도 모달 테마
   const theme: IstockTheme = {
     buy: { title: "매수", color: "danger", textColor: "text-red-700" },
@@ -111,6 +120,7 @@ export const ItemTitle: React.FC<{
         <Avatar alt="회사로고" src={stockItem.imageUrl} size="sm" />
         <h2 className="text-2xl mx-1">{stockItem?.stockName}</h2>
         <p className="text-md text-gray-400">코스피32 {stockId}</p>
+        <LikeButton stockId={stockId} isFavorite={isFavorite} size="medium" />
       </Box>
       {/* 매수/매도 버튼 & 모달 */}
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>

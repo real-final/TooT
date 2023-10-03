@@ -30,7 +30,7 @@ const TotalRanking: React.FC = () => {
 
   return (
     <div className="w-full h-full h-min-0 overflow-y-auto no-scrollbar">
-      <table className="w-full h-full border-separate border-spacing-y-2">
+      <table className="w-full h-full border-separate border-spacing-2.5">
         <tbody>
           {rankingList?.map((list: ListType, index: number) => (
             <TotalRankingItem user={list} index={index} key={index} />
