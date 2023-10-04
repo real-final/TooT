@@ -7,7 +7,6 @@ import com.realfinal.toot.common.util.KakaoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +58,7 @@ public class FriendController {
      * @param accessToken 내 id 파악 위해
      * @return accesstoken 재발급 성공시 "success"
      */
-    @PatchMapping("/reissue/kakao")
+    @GetMapping("/reissue/kakao")
     public CommonResponse<?> reissue(@RequestParam String code,
             @RequestHeader(value = "accesstoken", required = false) String accessToken) {
         log.info("FriendController_reissue_start: " + accessToken);
