@@ -32,18 +32,15 @@ public class MinutePriceService {
     private final PriceUtil priceUtil;
     private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
-    private Boolean startedOutOfTime = false;
 
     @PostConstruct
     public void init() {
         if (!openCronUtil.shouldRun()) {
             try {
-                startedOutOfTime = true;
-                openCronUtil.startTasks();
                 Thread.sleep(40000);
+                openCronUtil.startTasks();
                 getMinutePrice();
                 openCronUtil.stopTasks();
-                startedOutOfTime = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -86,11 +83,7 @@ public class MinutePriceService {
                     .bodyToMono(MinutePriceRes.class)
                     .block();
                 result.setCorp(companies.get(finalI));
-                if (startedOutOfTime) {
-                    priceUtil.initMinCandle(result);
-                } else {
-                    priceUtil.updateMinCandle(result);
-                }
+                priceUtil.updateMinCandle(result);
 
                 // 마지막 원소가 아닐 때만 1초 대기
                 if (i < companies.size() - 1) {

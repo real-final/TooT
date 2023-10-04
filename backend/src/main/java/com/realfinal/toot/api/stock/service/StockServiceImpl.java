@@ -196,8 +196,8 @@ public class StockServiceImpl implements StockService {
                 Stock stock = interest.getStock();
                 String stockId = stock.getId();
                 Integer currentPrice = priceUtil.getCurrentPrice(stockId);
-                String priceDifference = priceUtil.getPriceDifference(stockId);
-                String rateDifference = priceUtil.getRateDifference(stockId);
+                Integer priceDifference = Integer.parseInt(priceUtil.getPriceDifference(stockId));
+                Double rateDifference = Double.parseDouble(priceUtil.getRateDifference(stockId));
                 InterestRes interestRes = StockMapper.INSTANCE.toInterestRes(stock, currentPrice,
                     priceDifference, rateDifference, true);
                 interestResList.add(interestRes);
@@ -236,8 +236,8 @@ public class StockServiceImpl implements StockService {
         String totalPrice = priceUtil.getTotalPrice(stockId);
         String per = priceUtil.getPer(stockId);
         String pbr = priceUtil.getPbr(stockId);
-        String priceDifference = priceUtil.getPriceDifference(stockId);
-        String rateDifference = priceUtil.getRateDifference(stockId);
+        Integer priceDifference = Integer.parseInt(priceUtil.getPriceDifference(stockId));
+        Double rateDifference = Double.parseDouble(priceUtil.getRateDifference(stockId));
         SpecificStockRes specificStockRes = StockMapper.INSTANCE.toSpecificStockRes(stock,
             minCandle, dayCandle, weekCandle, totalPrice, currentPrice, min52, max52, per, pbr,
             priceDifference, rateDifference, liked, hold);

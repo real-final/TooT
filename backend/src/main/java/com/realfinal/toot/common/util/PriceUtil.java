@@ -3,6 +3,7 @@ package com.realfinal.toot.common.util;
 import com.realfinal.toot.api.kis.response.CurrentPriceRes;
 import com.realfinal.toot.api.kis.response.MinutePriceRes;
 import com.realfinal.toot.api.kis.response.PeriodPriceRes;
+import com.realfinal.toot.api.kis.response.PeriodPriceRes.Output2;
 import com.realfinal.toot.api.stock.mapper.StockMapper;
 import com.realfinal.toot.api.stock.response.AllStockRes;
 import com.realfinal.toot.api.stock.response.DayWeekRes;
@@ -268,37 +269,29 @@ public class PriceUtil {
 
         if (this.minState[index] == null) {
             this.minState[index] = 0;
-        }
-        // 슬라이딩 윈도우 적용: 2분 전 ~ 30분 전 데이터는 변동이 없으므로 31분 전 데이터만 1분 전 데이터로 변환
-        if (minutePriceRes.getOutput2().size() > 0) {
-            this.minState[index] = (this.minState[index] + 29) % 30;
-            if (this.minCandle[index][this.minState[index]] == null) {
-                this.minCandle[index][this.minState[index]] = StockMapper.INSTANCE.toMinuteRes(
-                    minutePriceRes.getOutput2().get(0).getStck_cntg_hour(),
-                    minutePriceRes.getOutput2().get(0).getStck_prpr(),
-                    minutePriceRes.getOutput2().get(0).getCntg_vol());
-            } else {
-                this.minCandle[index][this.minState[index]].updateTime(
-                    minutePriceRes.getOutput2().get(0).getStck_cntg_hour());
-                this.minCandle[index][this.minState[index]].updatePrice(
-                    minutePriceRes.getOutput2().get(0).getStck_prpr());
-                this.minCandle[index][this.minState[index]].updateAmount(
-                    minutePriceRes.getOutput2().get(0).getCntg_vol());
+            int size = minutePriceRes.getOutput2().size();
+
+            for (int i = size - 1; i >= 0; --i) {
+                this.minState[index] = (this.minState[index] + 29) % 30;
+
+                if (this.minCandle[index][this.minState[index]] == null) {
+                    this.minCandle[index][this.minState[index]] = StockMapper.INSTANCE.toMinuteRes(
+                        minutePriceRes.getOutput2().get(0).getStck_cntg_hour(),
+                        minutePriceRes.getOutput2().get(0).getStck_prpr(),
+                        minutePriceRes.getOutput2().get(0).getCntg_vol());
+                } else {
+                    this.minCandle[index][this.minState[index]].updateTime(
+                        minutePriceRes.getOutput2().get(0).getStck_cntg_hour());
+                    this.minCandle[index][this.minState[index]].updatePrice(
+                        minutePriceRes.getOutput2().get(0).getStck_prpr());
+                    this.minCandle[index][this.minState[index]].updateAmount(
+                        minutePriceRes.getOutput2().get(0).getCntg_vol());
+                }
             }
         }
-    }
-
-    public void initMinCandle(MinutePriceRes minutePriceRes) {
-        int index = this.getStockIndex(minutePriceRes.getCorp());
-        int size = minutePriceRes.getOutput2().size();
-
-        if (this.minState[index] == null) {
-            this.minState[index] = 0;
-        }
-
-        for (int i = size - 1; i >= 0; --i) {
+        // 슬라이딩 윈도우 적용: 2분 전 ~ 30분 전 데이터는 변동이 없으므로 31분 전 데이터만 1분 전 데이터로 변환
+        else if (minutePriceRes.getOutput2().size() > 0) {
             this.minState[index] = (this.minState[index] + 29) % 30;
-
             if (this.minCandle[index][this.minState[index]] == null) {
                 this.minCandle[index][this.minState[index]] = StockMapper.INSTANCE.toMinuteRes(
                     minutePriceRes.getOutput2().get(0).getStck_cntg_hour(),
@@ -345,7 +338,7 @@ public class PriceUtil {
     public void updateDayCandle(PeriodPriceRes periodPriceRes) {
         int index = this.getStockIndex(periodPriceRes.getCorp());
         List<PeriodPriceRes.Output2> candle = periodPriceRes.getOutput2();
-        int candleSize = candle.size();
+        int candleSize = Integer.min(50, candle.size());
         for (int i = 0; i < candleSize; ++i) {
             if (this.dayCandle[index][i] == null) {
                 this.dayCandle[index][i] = StockMapper.INSTANCE.toDayWeekRes(
@@ -366,7 +359,7 @@ public class PriceUtil {
     public void updateWeekCandle(PeriodPriceRes periodPriceRes) {
         int index = this.getStockIndex(periodPriceRes.getCorp());
         List<PeriodPriceRes.Output2> candle = periodPriceRes.getOutput2();
-        int candleSize = candle.size();
+        int candleSize = Integer.min(50, candle.size());
         for (int i = 0; i < candleSize; ++i) {
             if (this.weekCandle[index][i] == null) {
                 this.weekCandle[index][i] = StockMapper.INSTANCE.toDayWeekRes(
