@@ -9,8 +9,6 @@ import UserRanking from "./UserRanking";
 import Title from "../../common/etc/Title";
 import CustomCircularProgress from "../../common/circularProgress/CustomCircularProgress";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { Helmet } from "react-helmet";
 
 const RankingContainer = ({ title }: { size: string; title: string }) => {
@@ -49,11 +47,7 @@ const RankingContainer = ({ title }: { size: string; title: string }) => {
         <title>{`TooT - ${title}`}</title>
       </Helmet>
       <div className="flex">
-        <Title title={title} />
-        <FontAwesomeIcon
-          className="ml-2.5 text-first text-[24px]"
-          icon={faTrophy}
-        />
+        <Title title={title} isTrophy={true} />
       </div>
       <div className="w-full flex justify-center mt-2.5 mb-8">
         <UserRanking index={0} user={data?.myInfo} userRank={data?.myRank} />
