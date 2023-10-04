@@ -1,10 +1,14 @@
+import { setRespondingFalse } from "../../store/slices/chatInputSlice";
+
 /* 600: 메인 & 튜토리얼 조회 */
-export const code600 = (code:number) => {
+export const code600 = async (code:number, dispatch:any, navigate:any) => {
   switch(code) {
     case 601:
-      window.location.href = "/";
+      await dispatch(setRespondingFalse());
+      navigate("/");
       break;
     case 602:
-      window.location.href = "/tutorials"
+      await dispatch(setRespondingFalse());
+      navigate("/tutorials");
   };
 };
