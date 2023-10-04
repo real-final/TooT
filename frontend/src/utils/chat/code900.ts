@@ -1,5 +1,6 @@
 import axios from "axios";
 import { pushBotBubble } from "./chat";
+import { setRespondingFalse } from "../../store/slices/chatInputSlice";
 
 /* 900: chatGPT 패스 & 에러 */
 export const code900 = async (code:number, userMessage: string, dispatch: any) => {
@@ -10,8 +11,8 @@ export const code900 = async (code:number, userMessage: string, dispatch: any) =
       await axios.post("https://too-t.com/express/chatgpt", {
         sendData: userMessage,
       }).then((res) => {
-        console.log(res);
         pushBotBubble(res.data.chatResponse.choices[0].message.content, dispatch);
+        dispatch(setRespondingFalse());
       }).catch((err) => {
         console.log(err);
       });

@@ -35,7 +35,7 @@ const UserStock = () => {
       </Helmet>
       <Title title="보유 주식" />
       <div className="h-[90%] no-scrollbar overflow-y-auto">
-        {!userStockList ? <UserNoItem itemName="보유 주식" /> : userStockList?.map((item, index) => (
+        {userStockList.length < 1 ? <UserNoItem itemName="보유 주식" /> : userStockList?.map((item, index) => (
           <UserStockItem key={index} stock={item} />
         ))}
       </div>
