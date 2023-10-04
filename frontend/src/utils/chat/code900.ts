@@ -12,10 +12,11 @@ export const code900 = async (code:number, userMessage: string, dispatch: any) =
         sendData: userMessage,
       }).then((res) => {
         pushBotBubble(res.data.chatResponse.choices[0].message.content, dispatch);
-        dispatch(setRespondingFalse());
       }).catch((err) => {
         console.log(err);
-      });
+      }).finally(() => {
+        dispatch(setRespondingFalse());
+      })
       break;
     case 999:
       break;
