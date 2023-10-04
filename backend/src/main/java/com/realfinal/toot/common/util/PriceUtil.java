@@ -276,16 +276,16 @@ public class PriceUtil {
 
                 if (this.minCandle[index][this.minState[index]] == null) {
                     this.minCandle[index][this.minState[index]] = StockMapper.INSTANCE.toMinuteRes(
-                        minutePriceRes.getOutput2().get(0).getStck_cntg_hour(),
-                        minutePriceRes.getOutput2().get(0).getStck_prpr(),
-                        minutePriceRes.getOutput2().get(0).getCntg_vol());
+                        minutePriceRes.getOutput2().get(i).getStck_cntg_hour(),
+                        minutePriceRes.getOutput2().get(i).getStck_prpr(),
+                        minutePriceRes.getOutput2().get(i).getCntg_vol());
                 } else {
                     this.minCandle[index][this.minState[index]].updateTime(
-                        minutePriceRes.getOutput2().get(0).getStck_cntg_hour());
+                        minutePriceRes.getOutput2().get(i).getStck_cntg_hour());
                     this.minCandle[index][this.minState[index]].updatePrice(
-                        minutePriceRes.getOutput2().get(0).getStck_prpr());
+                        minutePriceRes.getOutput2().get(i).getStck_prpr());
                     this.minCandle[index][this.minState[index]].updateAmount(
-                        minutePriceRes.getOutput2().get(0).getCntg_vol());
+                        minutePriceRes.getOutput2().get(i).getCntg_vol());
                 }
             }
         }

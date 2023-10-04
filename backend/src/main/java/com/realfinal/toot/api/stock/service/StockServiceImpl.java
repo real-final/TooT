@@ -357,7 +357,7 @@ public class StockServiceImpl implements StockService {
 
         MyStockRes myStockRes = null;
 
-        if (userStock.getHold() > 0) {
+        if (userStock.getHold() >= 0) {
             //주식 정보
             Integer currentPrice = priceUtil.getCurrentPrice(stockId);
 
