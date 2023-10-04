@@ -288,6 +288,33 @@ public class PriceUtil {
         }
     }
 
+    public void initMinCandle(MinutePriceRes minutePriceRes) {
+        int index = this.getStockIndex(minutePriceRes.getCorp());
+        int size = minutePriceRes.getOutput2().size();
+
+        if (this.minState[index] == null) {
+            this.minState[index] = 0;
+        }
+
+        for (int i = size - 1; i >= 0; --i) {
+            this.minState[index] = (this.minState[index] + 29) % 30;
+
+            if (this.minCandle[index][this.minState[index]] == null) {
+                this.minCandle[index][this.minState[index]] = StockMapper.INSTANCE.toMinuteRes(
+                    minutePriceRes.getOutput2().get(0).getStck_cntg_hour(),
+                    minutePriceRes.getOutput2().get(0).getStck_prpr(),
+                    minutePriceRes.getOutput2().get(0).getCntg_vol());
+            } else {
+                this.minCandle[index][this.minState[index]].updateTime(
+                    minutePriceRes.getOutput2().get(0).getStck_cntg_hour());
+                this.minCandle[index][this.minState[index]].updatePrice(
+                    minutePriceRes.getOutput2().get(0).getStck_prpr());
+                this.minCandle[index][this.minState[index]].updateAmount(
+                    minutePriceRes.getOutput2().get(0).getCntg_vol());
+            }
+        }
+    }
+
     public List<MinuteRes> getMinCandle(String stockId) {
         List<MinuteRes> candle = new ArrayList<MinuteRes>();
         int index = this.getStockIndex(stockId);
