@@ -322,6 +322,10 @@ public class StockServiceImpl implements StockService {
                 Long.valueOf((long) execution.getPrice() * execution.getAmount())));
         }
 
+        if (!executionResList.isEmpty()) {
+            executionResList.sort(Comparator.comparing(ExecutionRes::getDealAt).reversed());
+        }
+
         log.info("StockServiceImpl_myAllExecution_end: " + executionResList);
         return executionResList;
     }
@@ -401,6 +405,10 @@ public class StockServiceImpl implements StockService {
         for (Execution execution : executionList) {
             executionResList.add(StockMapper.INSTANCE.toExecutionRes(execution,
                 Long.valueOf((long) execution.getPrice() * execution.getAmount())));
+        }
+
+        if (!executionResList.isEmpty()) {
+            executionResList.sort(Comparator.comparing(ExecutionRes::getDealAt).reversed());
         }
 
         log.info("StockServiceImpl_myExecution_end: " + executionResList);
