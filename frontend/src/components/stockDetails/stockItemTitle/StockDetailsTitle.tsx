@@ -160,34 +160,34 @@ export const StockDetailsTitle: React.FC<{
 /** 매수 버튼 */
 export const BuyButton = (props: { onClick?: () => void }) => {
   return (
-    <Tooltip
-      title={"주식을 매도하면 현재가 기준 0.315%의 수수료가 발생합니다!"}
-      TransitionComponent={Zoom}
+    <Button
+      className="h-6"
+      color="danger"
+      variant="soft"
+      onClick={props.onClick}
     >
-      <span>
-        <Button
-        className="h-6"
-        color="danger"
-        variant="soft"
-        onClick={props.onClick}
-        >
-          매수
-        </Button>
-      <span>
-    <Tooltip/>
+      매수
+    </Button>
   );
 };
 
 /** 매도 버튼 */
 export const SellButton = (props: { onClick?: () => void }) => {
   return (
-    <Button
-      className="h-6"
-      color="primary"
-      variant="soft"
-      onClick={props.onClick}
+    <Tooltip
+      title={"주식을 매도하면 현재가 기준 0.315%의 수수료가 발생합니다!"}
+      TransitionComponent={Zoom}
     >
-      매도
-    </Button>
+      <span>
+        <Button
+          className="h-6"
+          color="primary"
+          variant="soft"
+          onClick={props.onClick}
+        >
+          매도
+        </Button>
+      <span>
+    <Tooltip/>
   );
 };
