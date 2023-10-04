@@ -126,7 +126,7 @@ export const StockDetailsTitle: React.FC<{
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
         <BuyButton onClick={() => setBuyModalOpen(true)} />
         <SellButton onClick={() => setSellModalOpen(true)} />
-        <StockOrderModal
+        <StockOrderModal 
           modalOpen={buyModalOpen}
           setModalOpen={setBuyModalOpen}
           stockTradingInfo={stockTradingInfo.buy}

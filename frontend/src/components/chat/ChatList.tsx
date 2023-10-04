@@ -14,7 +14,7 @@ const ChatList = ({bubbles}: {bubbles: Ibubble[]}) => {
   }, [bubbles]);
 
   return (
-    <div className="max-h-full min-w-full h-full flex flex-col no-scrollbar overflow-y-auto">
+    <div className="max-h-full min-w-full w-full h-full flex flex-col no-scrollbar overflow-y-auto">
       {bubbles.map((bubble, index) => (
       bubble.speaker ? <UserBubble key={index} text={bubble.message} /> : <ChatbotBubble key={index} type={bubble.type} text={bubble.message} url={bubble.url} />))}
       <div ref={scrollEndRef}></div>

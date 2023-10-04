@@ -14,6 +14,7 @@ import CustomCircularProgress from "./common/circularProgress/CustomCircularProg
 import MainUserContainer from "./components/user/MainUserContainer";
 import AuthRouterGuard from "./AuthRouterGuard";
 import StockAll from "./components/stock/StockAll";
+import Tutorials from "./components/tutorials/Tutorials";
 
 const Routers = () => {
   return (
@@ -49,7 +50,7 @@ const Routers = () => {
           ></Route>
         </Route>
         <Route path="/quiz" element={<QuizContainer />}></Route>
-        <Route path="/tutorials" element={<Example />}></Route>
+        <Route path="/tutorials" element={<Tutorials />}></Route>
       </Route>
     </Routes>
   );

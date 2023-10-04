@@ -2,6 +2,7 @@ import { code100 } from "./code100";
 import { code200 } from "./code200";
 import { code300 } from "./code300";
 import { code400 } from "./code400";
+import { code500 } from "./code500";
 import { code600 } from "./code600";
 import { code700 } from "./code700";
 import { code900 } from "./code900";
@@ -21,6 +22,9 @@ export const codeSwitch = (responseData:string[], userMessage:string, dispatch:a
       break;
     case 400 <= code && code < 500:
       code400(code, responseData);
+      break;
+    case 500 <= code && code < 600:
+      code500(code);
       break;
     case 600 <= code && code < 700 :
       code600(code);

@@ -1,8 +1,18 @@
 import { IuserTrade } from "../../interface/IuserTrade";
+import { useNavigate } from "react-router-dom";
 
 const UserStockTrade = ({index, trade, isName}: {index:number, trade:IuserTrade, isName?:boolean}) => {
+  const navigate = useNavigate();
+  const userInfoString = localStorage.getItem("userInfo");
+  const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
+  const userId = userInfo?.id;
+  
+  const handleClick = () => {
+    navigate(`/user/${userId}/stock/${trade?.stockId}`);
+  };
+  
   return (
-    <div className="font-extralight grid grid-cols-9 h-12 grid-rows-1 pl-4 pr-4 pt-2 pb-2 rounded-lg border border-solid mb-4 border-gray-200">
+    <div onClick={handleClick} className="cursor-pointer font-extralight grid grid-cols-9 h-12 grid-rows-1 pl-4 pr-4 pt-2 pb-2 rounded-lg border border-solid mb-4 border-gray-200">
       <div className="col-span-2 flex items-center text-stockGray">
         {trade.dealAt}
       </div>

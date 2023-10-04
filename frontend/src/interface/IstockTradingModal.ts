@@ -14,7 +14,7 @@ export interface IstockTheme {
 export interface IstockTradingInfo {
   accessToken: string;
   stockName: string;
-  stockId: string;
+  stockId: string | undefined;
   currentPrice: number;
   availableQuantity: number;
 }
