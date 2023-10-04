@@ -15,6 +15,7 @@ import { IstockTheme } from "../../../interface/IstockTradingModal";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import { getStockStyle } from "../../../utils/getStockStyle";
 
 /** 회사 이름, 로고, 코드 */
 export const StockDetailsTitle: React.FC<{
@@ -37,6 +38,13 @@ export const StockDetailsTitle: React.FC<{
 
   // 종목 좋아요 여부 가져오기
   const isFavorite = stockItem.interested;
+
+  // 전일대비 금액
+  const priceDifference = stockItem.priceDifference;
+
+  // 전일대비율
+  const rateDifference = stockItem.rateDifference;
+  const { textColor, icon } = getStockStyle(rateDifference);
 
   // 챗봇을 통해 이동했으면 사용자가 원하는 매수/매도 데이터 가져오기
   const chat = useSelector((state: RootState) => state.stock);
@@ -61,14 +69,8 @@ export const StockDetailsTitle: React.FC<{
     async () => {
       try {
         const response = await api.get(`stock/my/${stockId}`, {
-          headers: {
-            accesstoken: accessToken,
-          },
-          data: {
-            stockId: stockId,
-          },
+          headers: { accesstoken: accessToken },
         });
-
         return response?.data?.data;
       } catch {
         console.error("위치:stockItemITtle.tsx, 보유주식수량 가져오기 실패");
@@ -85,6 +87,7 @@ export const StockDetailsTitle: React.FC<{
     hold = data?.hold;
   }
 
+  // 종목이름 저장
   const stockName = data?.stockName;
 
   // 사용자 금융 정보
@@ -121,6 +124,16 @@ export const StockDetailsTitle: React.FC<{
         <h2 className="text-2xl mx-1">{stockItem?.stockName}</h2>
         <p className="text-md text-gray-400 mr-2">코스피32 {stockId}</p>
         <LikeButton stockId={stockId} isFavorite={isFavorite} size="medium" />
+        <p>ㆍ</p>
+        <div className="flex gap-4 items-center">
+          <p className={textColor + " text-2xl"}>
+            {currentPrice.toLocaleString()}원
+          </p>
+          <p className={textColor + " text-lg"}>{rateDifference}%</p>
+          <p className={textColor + " text-lg"}>
+            {icon} {Math.abs(priceDifference).toLocaleString()}
+          </p>
+        </div>
       </Box>
       {/* 매수/매도 버튼 & 모달 */}
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>

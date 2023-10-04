@@ -14,8 +14,8 @@ export interface IstockCardData {
   stockId: string;
   stockName: string;
   currentPrice: string;
-  priceDifference: string;
-  rateDifference: string;
+  priceDifference: number;
+  rateDifference: number;
 }
 
 type StockCardProps = {
@@ -28,10 +28,10 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
   const navigate = useNavigate();
   const { stockId, stockName, currentPrice, priceDifference, rateDifference } =
     item;
-  const { textColor, icon } = getStockStyle(rateDifference as string);
+  const { textColor, icon } = getStockStyle(rateDifference as number);
 
   // size별 카드 크기
-  const width = size === "medium" ? "w-[300px] " : "w-[198px] ";
+  const width = size === "medium" ? "w-[300px] " : "w-[212px] ";
   const xsText = size === "medium" ? "text-[14px]" : "text-xs";
   const mdText = size === "medium" ? "text-[20px]" : "text-md";
   const xlText = size === "medium" ? "text-[24px]" : "text-xl";
@@ -75,9 +75,9 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
               </div>
             )}
           </div>
-          <div className="flex items-start">
-            <p className={`${xsText} text-slate-500 mr-2`}>{stockId}</p>
-            <p className={`${xsText} text-slate-500`}>코스피200</p>
+          <div className="flex items-start gap-2">
+            <p className={`${xsText} text-slate-500`}>코스피32</p>
+            <p className={`${xsText} text-slate-500`}>{stockId}</p>
           </div>
           <div className="flex items-center gap-2">
             {size === "medium" && (
@@ -94,7 +94,8 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
               {currentPrice.toLocaleString()}
             </p>
             <p className={`${xsText} text-center ` + textColor}>
-              {icon} {priceDifference}({rateDifference}%)
+              {icon} {Math.abs(priceDifference).toLocaleString()}(
+              {rateDifference}%)
             </p>
           </div>
         </div>

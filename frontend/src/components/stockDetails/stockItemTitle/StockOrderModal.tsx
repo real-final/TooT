@@ -69,7 +69,6 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
   }, [chatQuantity]);
 
   useEffect(() => {
-    console.log("useState 주문 수:" + orderQuantity);
     if (inputRef.current) inputRef.current.value = String(orderQuantity);
   }, [orderQuantity]);
 

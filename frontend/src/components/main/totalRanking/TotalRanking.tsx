@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { api } from "../../../utils/api";
 
 import TotalRankingItem from "./TotalRankingItem";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
+import { UserAuthContext } from "../../../App";
 
 type ListType = {
   name: string;
@@ -12,11 +14,19 @@ type ListType = {
 };
 
 const TotalRanking: React.FC = () => {
+  // Access 토큰 가져오기
+  const userAuthContext = useContext(UserAuthContext);
+  const accessToken = userAuthContext?.accessToken as string;
+
   // 전체랭킹 가져오기
   const { data, isLoading, isError } = useQuery(
     "ranking-list",
     async () => {
-      const response = await api.get("/rank/list");
+      const response = await api.get("/rank/list", {
+        headers: {
+          accesstoken: accessToken,
+        },
+      });
       return response?.data?.data;
     },
     { retry: 0 }

@@ -9,18 +9,14 @@ interface IcustomModal {
   children: ReactNode;
 }
 
-const CustomModal: React.FC<IcustomModal> = ({
-  open,
-  setOpen,
-  children,
-}) => {
+const CustomModal: React.FC<IcustomModal> = ({ open, setOpen, children }) => {
   return (
     <React.Fragment>
       <Modal
         aria-labelledby="close-modal-title"
         open={open}
         onClose={(_event: React.MouseEvent<HTMLButtonElement>) => {
-          setOpen(false);
+          setOpen(open);
         }}
         sx={{
           display: "flex",

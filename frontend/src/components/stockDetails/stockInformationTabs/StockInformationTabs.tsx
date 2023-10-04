@@ -1,4 +1,4 @@
-import ItemFinancialDetails from "./ItemFinancialDetails";
+import CompanyOverview from "./CompanyOverview";
 import ItemSummary from "./ItemSummary";
 
 import { IstockItem } from "../../../interface/IstockDetails";
@@ -47,16 +47,16 @@ const StockInfoTabs: React.FC<{ stockId: string; stockItem: IstockItem }> = ({
           종목요약
         </Tab>
         <Tab disableIndicator variant="soft" sx={{ flexGrow: 1 }}>
-          재무정보
+          기업개요
         </Tab>
       </TabList>
+      {/* 종목요약 */}
       <TabPanel value={0} sx={{ overflowY: "auto" }} className="no-scrollbar">
-        {/* 종목요약 */}
         <ItemSummary stockId={stockId} stockItem={stockItem} />
       </TabPanel>
-      <TabPanel value={1}>
-        {/* 재무정보 */}
-        <ItemFinancialDetails stockId={stockId} stockItem={stockItem} />
+      {/* 기업개요 */}
+      <TabPanel value={1} sx={{ overflowY: "auto" }} className="no-scrollbar">
+        <CompanyOverview stockId={stockId} stockItem={stockItem} />
       </TabPanel>
     </Tabs>
   );

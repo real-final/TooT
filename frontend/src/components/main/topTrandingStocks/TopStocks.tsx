@@ -11,7 +11,7 @@ type rowType = {
   stockId: string;
   stockName: string;
   price: number;
-  rateDifference: string;
+  rateDifference: number;
 };
 
 /** 거래량 순위 */
