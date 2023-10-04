@@ -187,7 +187,7 @@ export const SellButton = (props: { onClick?: () => void }) => {
         >
           매도
         </Button>
-      <span>
-    <Tooltip/>
+      </span>
+    </Tooltip>
   );
 };
