@@ -5,6 +5,7 @@ import { pushBotBubble } from "./chat";
 export const code900 = async (code:number, userMessage: string, dispatch: any) => {
   switch(code){
     case 901:
+      pushBotBubble("잠시만 기다려주세요...", dispatch);
       // TODO: chatGPT에게 bubble 전달
       await axios.post("https://too-t.com/express/chatgpt", {
         sendData: userMessage,

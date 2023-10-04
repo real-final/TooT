@@ -19,7 +19,7 @@ const GuideButton = ({buttonName, isIcon, icon, url, iconColor, moveUrlTo, onCli
 
   return (
     <button
-      className="text-stockGray rounded-full border border-solid border-gray-200 border-b-2 border-r-2 text-[13px] p-2 mr-1 min-w-[26%] flex justify-around items-center"
+      className="text-stockGray rounded-full border border-solid border-gray-200 border-b-2 border-r-2 text-[13px] p-2 mr-2 min-w-[26%] flex justify-around items-center"
       onClick={handleGuideButtonClick}
     >
       {buttonName}
