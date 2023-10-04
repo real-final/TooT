@@ -16,6 +16,7 @@ import CustomCircularProgress from "../../../common/circularProgress/CustomCircu
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { getStockStyle } from "../../../utils/getStockStyle";
+import { Tooltip, Zoom } from "@mui/material";
 
 /** 회사 이름, 로고, 코드 */
 export const StockDetailsTitle: React.FC<{
@@ -159,14 +160,21 @@ export const StockDetailsTitle: React.FC<{
 /** 매수 버튼 */
 export const BuyButton = (props: { onClick?: () => void }) => {
   return (
-    <Button
-      className="h-6"
-      color="danger"
-      variant="soft"
-      onClick={props.onClick}
+    <Tooltip
+      title={"주식을 매도하면 현재가 기준 0.315%의 수수료가 발생합니다!"}
+      TransitionComponent={Zoom}
     >
-      매수
-    </Button>
+      <span>
+        <Button
+        className="h-6"
+        color="danger"
+        variant="soft"
+        onClick={props.onClick}
+        >
+          매수
+        </Button>
+      <span>
+    <Tooltip/>
   );
 };
 
