@@ -45,9 +45,9 @@ const UserStockDetail = () => {
   return(
     <div className="w-full h-full p-8 min-h-0">
       <Helmet>
-        <title>{`TooT - 내 ${userDetailTotal?.stockName}`}</title>
+        <title>{`TooT - 내 ${stockId}}`}</title>
       </Helmet>
-      <Title className="cursor-pointer" onClick={() => navigate(`/stock/${stockId}`)} title={`보유 주식 - ${userDetailTotal?.stockName}`} />
+      <Title className="cursor-pointer" onClick={() => navigate(`/stock/${stockId}`)} title={`보유 주식 - ${stockId}`} />
       { (isTotalLoading || isTradeLoading) ? 
       <CustomCircularProgress /> : 
       ((userDetailTotal && userDetailTrade) ? 
