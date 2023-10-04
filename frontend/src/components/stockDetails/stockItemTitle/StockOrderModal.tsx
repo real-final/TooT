@@ -100,7 +100,7 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
       return window.location.reload();
     } catch {
       alert("주문 전송이 실패하였습니다. 잠시 후 다시 시도해주세요.");
-      console.error("위치: stockItemTitle.tsx, 주문 실패");
+      console.error("위치: StockOrderModal.tsx, 주문 실패");
     } finally {
       reset();
     }

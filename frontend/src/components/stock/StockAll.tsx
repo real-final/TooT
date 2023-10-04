@@ -34,10 +34,12 @@ const StockAll = () => {
       <Title title="전체 주식" />
       <div className="w-full h-[90%] min-h-0 overflow-y-auto no-scrollbar">
         <div className="w-full min-h-0 grid grid-cols-3 gap-4 no-scrollbar place-items-center">
-          {stockList.map((item, index) => <StockCard size="big" item={item} key={index} />)}
+          {stockList.map((item, index) => (
+            <StockCard size="medium" item={item} key={index} />
+          ))}
         </div>
       </div>
-    </div> 
+    </div>
   );
 };
 

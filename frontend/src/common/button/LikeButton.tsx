@@ -50,16 +50,12 @@ const LikeButton: React.FC<IlikeButton> = ({ stockId, isFavorite, size }) => {
     updateInterestedStatus(stockId);
   };
 
-  const iconButtonSize = size === "medium" ? "32px" : "22px";
-
   return (
     <IconButton
       onClick={isFavorite ? onUnlikeClick : onLikeClick}
       color="danger"
       variant="plain"
-      sx={{
-        "--IconButton-size": iconButtonSize,
-      }}
+      sx={{ "--IconButton-size": "22px" }}
     >
       {/* 좋아요 눌러진 버튼 */}
       <Favorite
