@@ -33,7 +33,7 @@ app.post("/chatgpt", async (req, res) => {
     });
     const sendData = [{
         "role": "user",
-        content: req.body.sendData + " 한국어로 답변해줘"
+        content: req.body.sendData + " 한국어로 답변해줘" + "만약 내가 하는 질문에 동의어가 있다면 주식이나 금융, 투자 관련으로 생각해서 답변해줘"
     }];
     try{
         const response = await openai.chat.completions.create({
