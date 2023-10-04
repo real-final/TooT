@@ -7,7 +7,9 @@ import { faArrowAltCircleLeft } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 import daily_quiz from "../../assets/gifs/daily_quiz.gif";
-import login from "../../assets/gifs/login.gif";
+// import login from "../../assets/gifs/login.gif";
+import bankrupt from "../../assets/gifs/bankrupt.gif";
+import ranking_all from "../../assets/gifs/ranking_all.gif";
 
 interface Itab {
   fileName: string;
@@ -28,19 +30,30 @@ const Tutorials = () => {
   return (
     <div className="w-full h-full p-6 min-h-0 flex flex-col items-center">
       <div className="w-full flex items-center justify-between mb-6">
-        <div className="flex items-center">
-          <div className="w-full text-[28px] text-gray-800 font-normal">
+        <div className="flex items-center w-[80%]">
+          <div className="w-[20%] text-[28px] text-gray-800 font-normal">
             튜토리얼
           </div>
-          <Box className="w-full">
+          <Box className="max-w-[80%]">
             <Tabs
               value={value}
               onChange={handleChange}
               variant="scrollable"
               scrollButtons="auto"
+              allowScrollButtonsMobile
             >
               <Tab label="로그인" />
+              <Tab label="전체 주식" />
+              <Tab label="관심 주식" />
+              <Tab label="상세 주식" />
+              <Tab label="내 주식" />
+              <Tab label="내 상세 주식" />
+              <Tab label="내 거래" />
+              <Tab label="내 파산" />
               <Tab label="데일리 퀴즈" />
+              <Tab label="전체 랭킹" />
+              <Tab label="친구 랭킹" />
+              <Tab label="챗봇" />
             </Tabs>
           </Box>
         </div>
@@ -50,13 +63,18 @@ const Tutorials = () => {
           className="cursor-pointer text-[#1E2731] w-[36px] h-[36px]"
         />
       </div>
-      <CustomTab fileName="로그인" index={0} value={value} file={login} />
-      <CustomTab
-        fileName="데일리 퀴즈"
-        index={1}
-        value={value}
-        file={daily_quiz}
-      />
+      <CustomTab fileName="로그인" index={0} value={value} file={bankrupt} />
+      <CustomTab fileName="전체 주식" index={1} value={value} file={bankrupt} />
+      <CustomTab fileName="관심 주식" index={2} value={value} file={bankrupt} />
+      <CustomTab fileName="상세 주식" index={3} value={value} file={bankrupt} />
+      <CustomTab fileName="내 주식" index={4} value={value} file={bankrupt} />
+      <CustomTab fileName="내 상세 주식" index={5} value={value} file={bankrupt} />
+      <CustomTab fileName="내 거래" index={6} value={value} file={bankrupt} />
+      <CustomTab fileName="내 파산" index={7} value={value} file={bankrupt} />
+      <CustomTab fileName="데일리 퀴즈" index={9} value={value} file={daily_quiz} />
+      <CustomTab fileName="전체 랭킹" index={10} value={value} file={ranking_all} />
+      <CustomTab fileName="친구 랭킹" index={11} value={value} file={daily_quiz} />
+      <CustomTab fileName="챗봇" index={12} value={value} file={bankrupt} />
     </div>
   );
 }
