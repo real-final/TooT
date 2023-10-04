@@ -55,7 +55,7 @@ public class StockServiceImpl implements StockService {
         String stockId = stockReq.getStockId();
         Integer count = stockReq.getCount();
 
-        if(count <= 0) {
+        if (count <= 0) {
             log.info("StockServiceImpl_buyStock_end: count is less than 1 -> return 0");
             return 0;
         }
@@ -234,9 +234,13 @@ public class StockServiceImpl implements StockService {
         Integer min52 = priceUtil.getMin52(stockId);
         Integer max52 = priceUtil.getMax52(stockId);
         String totalPrice = priceUtil.getTotalPrice(stockId);
+        String per = priceUtil.getPer(stockId);
+        String pbr = priceUtil.getPbr(stockId);
+        String priceDifference = priceUtil.getPriceDifference(stockId);
+        String rateDifference = priceUtil.getRateDifference(stockId);
         SpecificStockRes specificStockRes = StockMapper.INSTANCE.toSpecificStockRes(stock,
-            minCandle, dayCandle, weekCandle, totalPrice, currentPrice, min52, max52,
-            liked, hold);
+            minCandle, dayCandle, weekCandle, totalPrice, currentPrice, min52, max52, per, pbr,
+            priceDifference, rateDifference, liked, hold);
         log.info("StockServiceImpl_getStockInfo_end: " + specificStockRes);
         return specificStockRes;
     }
@@ -276,9 +280,10 @@ public class StockServiceImpl implements StockService {
                 Integer averagePrice = userStock.getAveragePrice();
                 Integer hold = userStock.getHold();
                 Long totalPrice = Long.valueOf((long) currentPrice * hold);
-                Long profit = Long.valueOf((long) averagePrice * hold) - totalPrice;
+                Long profit = totalPrice - Long.valueOf((long) averagePrice * hold);
                 Double profitRate = Double.valueOf(
                     100.0 * (currentPrice - averagePrice) / averagePrice);
+                profitRate = Math.round(profitRate * 100.0) / 100.0;
 
                 //사용자가 보유 중인 주식 정보 반환
                 MyStockRes myStockRes = StockMapper.INSTANCE.toMyStockRes(stock, hold, averagePrice,
@@ -356,9 +361,10 @@ public class StockServiceImpl implements StockService {
             Integer averagePrice = userStock.getAveragePrice();
             Integer hold = userStock.getHold();
             Long totalPrice = Long.valueOf((long) currentPrice * hold);
-            Long profit = Long.valueOf((long) averagePrice * hold) - totalPrice;
+            Long profit = totalPrice - Long.valueOf((long) averagePrice * hold);
             Double profitRate = Double.valueOf(
                 100.0 * (currentPrice - averagePrice) / averagePrice);
+            profitRate = Math.round(profitRate * 100.0) / 100.0;
 
             //사용자가 보유 중인 주식 정보 반환
             myStockRes = StockMapper.INSTANCE.toMyStockRes(stock, hold, averagePrice,
@@ -420,7 +426,7 @@ public class StockServiceImpl implements StockService {
             bankruptcyNo);
         Integer count = stockReq.getCount();
 
-        if(count <= 0) {
+        if (count <= 0) {
             log.info("StockServiceImpl_sellStock_end: count is less than 1 -> return 0");
             return 0;
         }

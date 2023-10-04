@@ -9,6 +9,7 @@ import com.realfinal.toot.common.exception.kis.KisApiCallTooManyException;
 import com.realfinal.toot.common.util.PriceUtil;
 import com.realfinal.toot.config.KisConfig;
 import com.realfinal.toot.config.Kospi32Config;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -31,6 +32,31 @@ public class PeriodPriceService {
     private final PriceUtil priceUtil;
     private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
+
+    @PostConstruct
+    public void init() {
+        try {
+            Thread.sleep(3000);
+            fetchPeriodPriceForBatch1_D();
+            Thread.sleep(1000);
+            fetchPeriodPriceForBatch1_W();
+            Thread.sleep(1000);
+            fetchPeriodPriceForBatch2_D();
+            Thread.sleep(1000);
+            fetchPeriodPriceForBatch2_W();
+            Thread.sleep(1000);
+            fetchPeriodPriceForBatch3_D();
+            Thread.sleep(1000);
+            fetchPeriodPriceForBatch3_W();
+            Thread.sleep(1000);
+            fetchPeriodPriceForBatch4_D();
+            Thread.sleep(1000);
+            fetchPeriodPriceForBatch4_W();
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Scheduled(cron = "0 0 7 ? * MON-FRI")
     public void fetchPeriodPriceForBatch1_D() {

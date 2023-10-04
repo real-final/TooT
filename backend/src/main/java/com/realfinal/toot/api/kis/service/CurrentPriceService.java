@@ -8,6 +8,7 @@ import com.realfinal.toot.common.exception.kis.KisApiCallTooManyException;
 import com.realfinal.toot.common.util.PriceUtil;
 import com.realfinal.toot.config.KisConfig;
 import com.realfinal.toot.config.Kospi32Config;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,22 +32,43 @@ public class CurrentPriceService {
     private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
 
-    @Scheduled(fixedRate = 5000, initialDelay = 1250)
+    @PostConstruct
+    public void init() {
+        if (!openCronUtil.shouldRun()) {
+            try {
+                openCronUtil.startTasks();
+                Thread.sleep(30000);
+                fetchCurrentPriceForBatch1();
+                Thread.sleep(1000);
+                fetchCurrentPriceForBatch2();
+                Thread.sleep(1000);
+                fetchCurrentPriceForBatch3();
+                Thread.sleep(1000);
+                fetchCurrentPriceForBatch4();
+                Thread.sleep(1000);
+                openCronUtil.stopTasks();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Scheduled(fixedRate = 5000, initialDelay = 31250)
     public void fetchCurrentPriceForBatch1() {
         getCurrentPrice(kospi32Config.company1, "현재가 기업1");
     }
 
-    @Scheduled(fixedRate = 5000, initialDelay = 2500)
+    @Scheduled(fixedRate = 5000, initialDelay = 32500)
     public void fetchCurrentPriceForBatch2() {
         getCurrentPrice(kospi32Config.company2, "현재가 기업2");
     }
 
-    @Scheduled(fixedRate = 5000, initialDelay = 3750)
+    @Scheduled(fixedRate = 5000, initialDelay = 33750)
     public void fetchCurrentPriceForBatch3() {
         getCurrentPrice(kospi32Config.company3, "현재가 기업3");
     }
 
-    @Scheduled(fixedRate = 5000, initialDelay = 5000)
+    @Scheduled(fixedRate = 5000, initialDelay = 35000)
     public void fetchCurrentPriceForBatch4() {
         getCurrentPrice(kospi32Config.company4, "현재가 기업4");
     }
@@ -63,7 +85,7 @@ public class CurrentPriceService {
             resList[i] = result;
         }
         priceUtil.updatePrice(resList); //8개 단위로 업데이트
-        if(companyInfo.equals("현재가 기업4")) { // 32개 모두 갱신할 때 state 바꿔주기
+        if (companyInfo.equals("현재가 기업4")) { // 32개 모두 갱신할 때 state 바꿔주기
             priceUtil.updateState();
         }
 //        log.info("CurrentPriceService_getCurrentPrice_end: 8개씩 호출");
@@ -72,21 +94,22 @@ public class CurrentPriceService {
     private CurrentPriceRes fetchCurrentPriceForCompany(String companyId) {
         try {
             CurrentPriceRes currentPriceRes = kisWebClient
-                    .get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/uapi/domestic-stock/v1/quotations/inquire-price")
-                            .queryParam("FID_COND_MRKT_DIV_CODE", "J")
-                            .queryParam("FID_INPUT_ISCD", companyId)
-                            .build())
-                    .headers(httpHeaders -> {
-                        httpHeaders.add("authorization", "Bearer " + kisAccessTokenUtil.getAccessToken());
-                        httpHeaders.add("appkey", kisConfig.getAppKey());
-                        httpHeaders.add("appsecret", kisConfig.getAppSecret());
-                        httpHeaders.add("tr_id", "FHKST01010100");
-                    })
-                    .retrieve()
-                    .bodyToMono(CurrentPriceRes.class)
-                    .block();
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                    .path("/uapi/domestic-stock/v1/quotations/inquire-price")
+                    .queryParam("FID_COND_MRKT_DIV_CODE", "J")
+                    .queryParam("FID_INPUT_ISCD", companyId)
+                    .build())
+                .headers(httpHeaders -> {
+                    httpHeaders.add("authorization",
+                        "Bearer " + kisAccessTokenUtil.getAccessToken());
+                    httpHeaders.add("appkey", kisConfig.getAppKey());
+                    httpHeaders.add("appsecret", kisConfig.getAppSecret());
+                    httpHeaders.add("tr_id", "FHKST01010100");
+                })
+                .retrieve()
+                .bodyToMono(CurrentPriceRes.class)
+                .block();
             currentPriceRes.setCorp(companyId);
             return currentPriceRes;
         } catch (HttpServerErrorException.InternalServerError e) {

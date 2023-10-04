@@ -9,6 +9,7 @@ import com.realfinal.toot.common.exception.kis.KisApiCallTooManyException;
 import com.realfinal.toot.common.util.PriceUtil;
 import com.realfinal.toot.config.KisConfig;
 import com.realfinal.toot.config.Kospi32Config;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,41 +32,65 @@ public class MinutePriceService {
     private final PriceUtil priceUtil;
     private final String KIS_URI = "https://openapi.koreainvestment.com:9443";
     private final WebClient kisWebClient = WebClient.builder().baseUrl(KIS_URI).build();
+    private Boolean startedOutOfTime = false;
 
-     @Scheduled(fixedDelay = 30000, initialDelay = 1000)
+    @PostConstruct
+    public void init() {
+        if (!openCronUtil.shouldRun()) {
+            try {
+                startedOutOfTime = true;
+                openCronUtil.startTasks();
+                Thread.sleep(40000);
+                getMinutePrice();
+                openCronUtil.stopTasks();
+                startedOutOfTime = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Scheduled(fixedDelay = 30000, initialDelay = 31000)
     public void getMinutePrice() {
         fetchMinutePrice(kospi32Config.totalCompany);
     }
 
     private void fetchMinutePrice(List<String> companies) {
-        if (!openCronUtil.shouldRun()) return;
+        if (!openCronUtil.shouldRun()) {
+            return;
+        }
 //        log.info("MinutePriceService_fetchMinutePrice_start:" + companies.toString());
         for (int i = 0; i < companies.size(); i++) {
             int finalI = i;
             try {
                 MinutePriceRes result = kisWebClient
-                        .get()
-                        .uri(uriBuilder -> uriBuilder
-                                .path("/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice")
-                                .queryParam("FID_ETC_CLS_CODE", "")
-                                .queryParam("FID_COND_MRKT_DIV_CODE", "J")
-                                .queryParam("FID_INPUT_ISCD", companies.get(finalI))
-                                .queryParam("FID_INPUT_HOUR_1", TimeToStringUtil.getCurrentTimeAsString())
-                                .queryParam("FID_PW_DATA_INCU_YN", "N")
-                                .build())
-                        .headers(httpHeaders -> {
-                            httpHeaders.add("content-type", "application/json; charset=utf-8");
-                            httpHeaders.add("authorization", "Bearer " + kisAccessTokenUtil.getAccessToken());
-                            httpHeaders.add("appkey", kisConfig.getAppKey());
-                            httpHeaders.add("appsecret", kisConfig.getAppSecret());
-                            httpHeaders.add("tr_id", "FHKST03010200");
-                            httpHeaders.add("custtype", "P");
-                        })
-                        .retrieve()
-                        .bodyToMono(MinutePriceRes.class)
-                        .block();
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                        .path("/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice")
+                        .queryParam("FID_ETC_CLS_CODE", "")
+                        .queryParam("FID_COND_MRKT_DIV_CODE", "J")
+                        .queryParam("FID_INPUT_ISCD", companies.get(finalI))
+                        .queryParam("FID_INPUT_HOUR_1", TimeToStringUtil.getCurrentTimeAsString())
+                        .queryParam("FID_PW_DATA_INCU_YN", "N")
+                        .build())
+                    .headers(httpHeaders -> {
+                        httpHeaders.add("content-type", "application/json; charset=utf-8");
+                        httpHeaders.add("authorization",
+                            "Bearer " + kisAccessTokenUtil.getAccessToken());
+                        httpHeaders.add("appkey", kisConfig.getAppKey());
+                        httpHeaders.add("appsecret", kisConfig.getAppSecret());
+                        httpHeaders.add("tr_id", "FHKST03010200");
+                        httpHeaders.add("custtype", "P");
+                    })
+                    .retrieve()
+                    .bodyToMono(MinutePriceRes.class)
+                    .block();
                 result.setCorp(companies.get(finalI));
-                priceUtil.updateMinCandle(result);
+                if (startedOutOfTime) {
+                    priceUtil.initMinCandle(result);
+                } else {
+                    priceUtil.updateMinCandle(result);
+                }
 
                 // 마지막 원소가 아닐 때만 1초 대기
                 if (i < companies.size() - 1) {
