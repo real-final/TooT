@@ -23,8 +23,8 @@ public class SpecificStockRes {
     private Integer max52;
     private String per;
     private String pbr;
-    private String priceDifference;
-    private String rateDifference;
+    private Integer priceDifference;
+    private Double rateDifference;
     private String outline;
     private Boolean interested;
     private String imageUrl;
@@ -34,7 +34,7 @@ public class SpecificStockRes {
     public SpecificStockRes(String stockName, List<MinuteRes> minCandle, List<DayWeekRes> dayCandle,
         List<DayWeekRes> weekCandle, String totalPrice, Integer currentPrice, Long totalStock,
         String industryClass, String wics, Integer min52, Integer max52, String per, String pbr,
-        String priceDifference, String rateDifference, String outline, Boolean interested,
+        Integer priceDifference, Double rateDifference, String outline, Boolean interested,
         String imageUrl, Integer hold) {
         this.stockName = stockName;
         this.minCandle = minCandle;

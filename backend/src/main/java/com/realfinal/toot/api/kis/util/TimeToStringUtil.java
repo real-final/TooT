@@ -20,10 +20,10 @@ public class TimeToStringUtil {
         return today.format(FORMATTER);
     }
 
-    public static String getYearLaterDayAsString() {
-        LocalDate yearLater = LocalDate.now().plusYears(1);
+    public static String getYearBeforeAsString() {
+        LocalDate yearBefore = LocalDate.now().minusYears(1);
         DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
-        return yearLater.format(FORMATTER);
+        return yearBefore.format(FORMATTER);
     }
 
 }

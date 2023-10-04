@@ -36,8 +36,8 @@ public class CurrentPriceService {
     public void init() {
         if (!openCronUtil.shouldRun()) {
             try {
-                openCronUtil.startTasks();
                 Thread.sleep(30000);
+                openCronUtil.startTasks();
                 fetchCurrentPriceForBatch1();
                 Thread.sleep(1000);
                 fetchCurrentPriceForBatch2();

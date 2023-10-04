@@ -38,8 +38,8 @@ public interface StockMapper {
         throws MapperException;
 
     @Mapping(source = "stock.id", target = "stockId")
-    InterestRes toInterestRes(Stock stock, Integer currentPrice, String priceDifference,
-        String rateDifference, Boolean isInterested) throws MapperException;
+    InterestRes toInterestRes(Stock stock, Integer currentPrice, Integer priceDifference,
+        Double rateDifference, Boolean isInterested) throws MapperException;
 
 
     @Mapping(source = "stock.industry.industryClass", target = "industryClass")
@@ -47,7 +47,7 @@ public interface StockMapper {
     SpecificStockRes toSpecificStockRes(Stock stock, List<MinuteRes> minCandle,
         List<DayWeekRes> dayCandle, List<DayWeekRes> weekCandle, String totalPrice,
         Integer currentPrice, Integer min52, Integer max52, String per, String pbr,
-        String priceDifference, String rateDifference, Boolean interested, Integer hold)
+        Integer priceDifference, Double rateDifference, Boolean interested, Integer hold)
         throws MapperException;
 
     @Mapping(source = "stock.id", target = "stockId")
