@@ -14,7 +14,7 @@ const Title = ({title , isTrophy, className, onClick}: {title:string, isTrophy?:
           icon={faTrophy}
         /> : null}
     </div>
-    <FontAwesomeIcon icon={faArrowAltCircleLeft} onClick={() => navigate(-1)} className={className + "cursor-pointer text-[#1E2731] w-[36px] h-[36px]"} />
+    <FontAwesomeIcon icon={faArrowAltCircleLeft} onClick={() => navigate(-1)} className={className + " cursor-pointer text-[#1E2731] w-[36px] h-[36px]"} />
   </div>
   );
 };
