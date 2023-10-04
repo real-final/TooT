@@ -14,10 +14,12 @@ import UserNoItem from "../UserNoItem";
 import { IuserTrade } from "../../../interface/IuserTrade";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
+import stockIdToName from "../../../utils/chat/stockIdToName";
 
 const UserStockDetail = () => {
   const navigate = useNavigate();
   const { stockId } = useParams<{ stockId: string }>();
+  const stockName = stockId ? stockIdToName[stockId] : "";
   const [userDetailTotal, setUserDetailTotal] = useState<IuserStock | undefined>();
   const [userDetailTrade, setUserDetailTrade] = useState<any>([]);
 
@@ -45,9 +47,9 @@ const UserStockDetail = () => {
   return(
     <div className="w-full h-full p-8 min-h-0">
       <Helmet>
-        <title>{`TooT - 내 ${stockId}}`}</title>
+        <title>{`TooT - 내 ${stockName}}`}</title>
       </Helmet>
-      <Title className="cursor-pointer" onClick={() => navigate(`/stock/${stockId}`)} title={`보유 주식 - ${stockId}`} />
+      <Title className="cursor-pointer" onClick={() => navigate(`/stock/${stockId}`)} title={`보유 주식 - ${stockName}`} />
       { (isTotalLoading || isTradeLoading) ? 
       <CustomCircularProgress /> : 
       ((userDetailTotal && userDetailTrade) ? 
