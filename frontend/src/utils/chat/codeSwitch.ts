@@ -1,4 +1,3 @@
-import { setRespondingFalse } from "../../store/slices/chatInputSlice";
 import { code100 } from "./code100";
 import { code200 } from "./code200";
 import { code300 } from "./code300";
@@ -11,7 +10,6 @@ import { code900 } from "./code900";
 
 export const codeSwitch = (responseData:string[], userMessage:string, dispatch:any, navigate: any, userAuthContext:any) => {
   const code = parseInt(responseData[0]);
-
   switch (true) {
     case 100 <= code && code < 200 :
       code100(code, responseData, dispatch, navigate);
@@ -41,5 +39,4 @@ export const codeSwitch = (responseData:string[], userMessage:string, dispatch:a
       code900(code, userMessage, dispatch);
       break;
   };
-  dispatch(setRespondingFalse());
 };

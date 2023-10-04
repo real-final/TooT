@@ -42,7 +42,6 @@ export const getBubble = async (text:string, dispatch: any, navigate: any, userA
 
   // TODO: 배포 url로 바꾸기
   await axios.post("https://too-t.com/express/chatbot", {sendData}).then((res) => {
-    console.log(res);
     const data = res.data.chatResponse;
     const bubbleType = data.content[0].type;
     newBubble.type = bubbleType;
@@ -53,9 +52,10 @@ export const getBubble = async (text:string, dispatch: any, navigate: any, userA
       newBubble.message = bubble;
     }
     else if(bubbleType === "image"){
-      const bubbleSlices = data.content[0].data.description.split('|');
+      const bubbleSlices = data.content[0].title.split('|');
       newBubble.url = data.content[0].data.url;
-      bubble = bubbleSlices.slice(-1);
+      bubbleData = bubbleSlices.slice(0);
+      bubble = bubbleSlices.slice(1);
       newBubble.message = bubble;
     }
   }).catch(() => {
