@@ -11,7 +11,7 @@ export const code700 = async (code:number, dispatch:any, navigate:any, userAuthC
   switch(code){
     case 701:
       if(!userName){
-        pushBotBubble("로그인 후 파산 신청이 가능합니다.", dispatch);
+        await pushBotBubble("로그인 후 파산 신청이 가능합니다.", dispatch);
         await dispatch(setRespondingFalse());
         return;
       }
@@ -21,7 +21,7 @@ export const code700 = async (code:number, dispatch:any, navigate:any, userAuthC
         }
       });
       if(checkBankrupt.data.data === false){
-        pushBotBubble(`${userName}님은 현재 시드머니 대비 평가되는 총 자산이 70% 이상으로 아직 도전할 기회가 많으세요. 섣불리 파산을 신청하는 것보단, 현재 자산으로 희망을 갖고 열심히 투자하시면 좋겠어요!`, dispatch);
+        await pushBotBubble(`${userName}님은 현재 시드머니 대비 평가되는 총 자산이 70% 이상으로 아직 도전할 기회가 많으세요. 섣불리 파산을 신청하는 것보단, 현재 자산으로 희망을 갖고 열심히 투자하시면 좋겠어요!`, dispatch);
         await dispatch(setRespondingFalse());
         return;
       }

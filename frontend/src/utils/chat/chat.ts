@@ -2,6 +2,7 @@ import axios from "axios";
 import { Ibubble } from "../../interface/Ibubble";
 import { add } from "../../store/slices/bubbleSlice";
 import { codeSwitch } from "./codeSwitch";
+import { setRespondingFalse } from "../../store/slices/chatInputSlice";
 
 export const pushBotBubble = (message:string, dispatch: any) => {
   const newBubble: Ibubble = {
@@ -57,6 +58,8 @@ export const getBubble = async (text:string, dispatch: any, navigate: any, userA
       bubble = bubbleSlices.slice(-1);
       newBubble.message = bubble;
     }
+  }).catch(() => {
+    dispatch(setRespondingFalse());
   });
   await dispatch(add(newBubble));
   await codeSwitch(bubbleData, text, dispatch, navigate, userAuthContext);
