@@ -19,6 +19,7 @@ import com.realfinal.toot.db.repository.UserRepository;
 import com.realfinal.toot.db.repository.UserStockRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -127,6 +128,10 @@ public class BankruptcyServiceImpl implements BankruptcyService {
         for (Execution execution : bankruptcyExecutionList) {
             bankruptcyExecutionResList.add(StockMapper.INSTANCE.toExecutionRes(execution,
                 Long.valueOf((long) execution.getPrice() * execution.getAmount())));
+        }
+
+        if (!bankruptcyExecutionResList.isEmpty()) {
+            bankruptcyExecutionResList.sort(Comparator.comparing(ExecutionRes::getDealAt).reversed());
         }
 
         log.info("BankruptcyServiceImpl_getAllExecutionByBankruptcy_end: " + bankruptcyExecutionResList);
