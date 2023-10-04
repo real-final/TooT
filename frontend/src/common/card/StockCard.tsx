@@ -8,6 +8,8 @@ import { UserAuthContext } from "../../App";
 import Card from "./Card";
 import LikeButton from "../button/LikeButton";
 
+import Avatar from "@mui/joy/Avatar";
+
 export interface IstockCardData {
   stockId: string;
   stockName: string;
@@ -18,7 +20,7 @@ export interface IstockCardData {
 
 type StockCardProps = {
   item: IstockCardData;
-  size: "small" | "big";
+  size: "small" | "medium";
 };
 
 /** 주식종목 카드 */
@@ -28,10 +30,11 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
     item;
   const { textColor, icon } = getStockStyle(rateDifference as string);
 
-  const width = size === "big" ? "w-[300px] " : "w-[198px] ";
-  const xsText = size === "big" ? "text-[14px]" : "text-xs";
-  const mdText = size === "big" ? "text-[20px]" : "text-md";
-  const xlText = size === "big" ? "text-[24px]" : "text-xl";
+  // size별 카드 크기
+  const width = size === "medium" ? "w-[300px] " : "w-[198px] ";
+  const xsText = size === "medium" ? "text-[14px]" : "text-xs";
+  const mdText = size === "medium" ? "text-[20px]" : "text-md";
+  const xlText = size === "medium" ? "text-[24px]" : "text-xl";
 
   // 상세조회 페이지 이동
   const handleCardClick = () => {
@@ -53,6 +56,9 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
   // 좋아요 여부 저장
   let isFavorite = data?.data?.interested;
 
+  // 기업 로고 저장
+  const logoImage = data?.data?.imageUrl;
+
   return (
     <div className={`${width}`} onClick={handleCardClick}>
       <Card className="hover:cursor-pointer" size={size}>
@@ -64,7 +70,7 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
                 <LikeButton
                   stockId={stockId}
                   isFavorite={isFavorite}
-                  size="small"
+                  size={size}
                 />
               </div>
             )}
@@ -73,7 +79,14 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
             <p className={`${xsText} text-slate-500 mr-2`}>{stockId}</p>
             <p className={`${xsText} text-slate-500`}>코스피200</p>
           </div>
-          <div className="flex items-start">
+          <div className="flex items-center gap-2">
+            {size === "medium" && (
+              <Avatar
+                src={logoImage}
+                size="sm"
+                sx={{ "--Avatar-size": "24px" }}
+              />
+            )}
             <h2 className={`${mdText}`}>{stockName}</h2>
           </div>
           <div className="flex items-center">

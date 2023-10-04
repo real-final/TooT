@@ -52,7 +52,7 @@ const Home: React.FC = () => {
           </Content>
         </Container>
       </div>
-      <div className="h-2/5 flex px-8 pb-6">
+      <div className="h-2/5 flex px-8 pb-6 gap-12">
         {/* 퀴즈 */}
         <Container>
           <Tooltip

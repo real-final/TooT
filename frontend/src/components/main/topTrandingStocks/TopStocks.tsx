@@ -42,7 +42,7 @@ const TopStocks: React.FC = () => {
   const rowTop10 = rows?.slice(5);
 
   return (
-    <div className="w-full h-full flex gap-x-24">
+    <div className="w-full h-full flex gap-x-12">
       <table className="w-full h-full overflow-hidden">
         <tbody>
           {rowTop5?.map((row: rowType) => (

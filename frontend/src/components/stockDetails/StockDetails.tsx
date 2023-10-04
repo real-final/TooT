@@ -9,7 +9,7 @@ import StockInformationTabs from "./stockInformationTabs/StockInformationTabs";
 import FavoriteItemsCarousel from "../main/favoriteStocks/FavoriteItemsCarousel";
 import CustomCircularProgress from "../../common/circularProgress/CustomCircularProgress";
 import NotFound from "../../common/notfound/NotFound";
-import { ItemTitle } from "./stockItemTitle/stockItemTitle";
+import { StockDetailsTitle } from "./stockItemTitle/StockDetailsTitle";
 import { Helmet } from "react-helmet";
 
 /** 주식 상세정보 화면 */
@@ -65,7 +65,7 @@ const StockDetails: React.FC = () => {
         <div className="h-full grid grid-rows-6 grid-cols-3 gap-2">
           {/* 종목명, 로고, 코드, 매수/매도 버튼 */}
           <div className="row-span-1 col-span-3 flex items-center">
-            <ItemTitle stockId={stockId} stockItem={stockItem} />
+            <StockDetailsTitle stockId={stockId} stockItem={stockItem} />
           </div>
           {/* 종목 그래프 차트 */}
           <div className="row-span-5 col-span-2 h-full">

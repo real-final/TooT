@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 
 /** 회사 이름, 로고, 코드 */
-export const ItemTitle: React.FC<{
+export const StockDetailsTitle: React.FC<{
   stockId: string;
   stockItem: IstockItem;
 }> = ({ stockId, stockItem }) => {
@@ -119,7 +119,7 @@ export const ItemTitle: React.FC<{
       >
         <Avatar alt="회사로고" src={stockItem.imageUrl} size="sm" />
         <h2 className="text-2xl mx-1">{stockItem?.stockName}</h2>
-        <p className="text-md text-gray-400">코스피32 {stockId}</p>
+        <p className="text-md text-gray-400 mr-2">코스피32 {stockId}</p>
         <LikeButton stockId={stockId} isFavorite={isFavorite} size="medium" />
       </Box>
       {/* 매수/매도 버튼 & 모달 */}
