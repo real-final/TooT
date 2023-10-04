@@ -10,17 +10,26 @@ export interface IstockItem {
   min52: number;
   totalPrice: string;
   totalStock: number;
-  minCandle: IchartDataItem[];
-  dayCandle: IchartDataItem[];
-  weekCandle: IchartDataItem[];
+  minCandle: IminChartData[] | IdateChartData[];
+  dayCandle: IminChartData[] | IdateChartData[];
+  weekCandle: IminChartData[] | IdateChartData[];
   per: string;
   pbr: string;
   priceDifference: number;
   rateDifference: number;
 }
 
-export interface IchartDataItem {
+export interface IminChartData {
   time: string;
   price: string;
+  amount: string;
+}
+
+export interface IdateChartData {
+  date: string;
+  startPrice: string;
+  endPrice: string;
+  bestPrice: string;
+  worstPrice: string;
   amount: string;
 }
