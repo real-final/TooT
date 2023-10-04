@@ -4,15 +4,16 @@
  * 2. 상승 => 글자색: 빨강, 아이콘: "▲"
  * 3. 하락 => 글자색: 파랑, 아이콘: "▼"
  */
-export const getStockStyle = (value: string): { textColor: string; icon: string } => {
-  let num = parseFloat(value);
+export const getStockStyle = (
+  value: number
+): { textColor: string; icon: string } => {
   let textColor = "text-slate-500";
   let icon = "";
 
-  if (num > 0) {
+  if (value > 0) {
     textColor = "text-red-500";
     icon = "▲";
-  } else if (num < 0) {
+  } else if (value < 0) {
     textColor = "text-blue-500";
     icon = "▼";
   }

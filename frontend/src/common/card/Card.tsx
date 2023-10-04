@@ -8,7 +8,7 @@ interface Icard {
 
 const Card: React.FC<Icard> = (props) => {
   const { children, className, size } = props;
-  const width = size === "medium" ? "w-[300px]" : "w-48";
+  const width = size === "medium" ? "w-[300px]" : "w-52";
   const heigth = size === "medium" ? "h-32" : "h-[88px]";
   const padding = size === "medium" ? "p-3 " : "p-2";
   const combinedClassName =

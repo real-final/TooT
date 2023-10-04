@@ -13,6 +13,10 @@ export interface IstockItem {
   minCandle: IchartDataItem[];
   dayCandle: IchartDataItem[];
   weekCandle: IchartDataItem[];
+  per: string;
+  pbr: string;
+  priceDifference: number;
+  rateDifference: number;
 }
 
 export interface IchartDataItem {

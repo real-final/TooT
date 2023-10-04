@@ -9,8 +9,6 @@ import Tab, { tabClasses } from "@mui/joy/Tab";
 import TabPanel from "@mui/joy/TabPanel";
 import Typography from "@mui/joy/Typography";
 
-// import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
-
 const StockChart: React.FC<{ stockItem: IstockItem }> = ({ stockItem }) => {
   let minCandle = stockItem?.minCandle;
   return (
@@ -18,7 +16,12 @@ const StockChart: React.FC<{ stockItem: IstockItem }> = ({ stockItem }) => {
       aria-label="stock-chart"
       defaultValue={0}
       size="sm"
-      sx={{ bgcolor: "transparent", height: "100%", marginRight: "12px" }}
+      sx={{
+        bgcolor: "transparent",
+        height: "100%",
+        marginRight: "12px",
+        gap: 1,
+      }}
     >
       <TabList
         disableUnderline
@@ -46,13 +49,13 @@ const StockChart: React.FC<{ stockItem: IstockItem }> = ({ stockItem }) => {
         </Tab>
       </TabList>
       <TabPanel value={0} sx={{ padding: "0" }} className="no-scrollbar">
-        <ApexChart data={minCandle} />
+        <ApexChart title="min" data={minCandle} />
       </TabPanel>
       <TabPanel value={1} sx={{ padding: "0" }} className="no-scrollbar">
-        <b>Second</b> tab panel
+        <ApexChart title="day" data={minCandle} />
       </TabPanel>
       <TabPanel value={2} sx={{ padding: "0" }} className="no-scrollbar">
-        <b>Third</b> tab panel
+        <ApexChart title="week" data={minCandle} />
       </TabPanel>
     </Tabs>
   );
@@ -60,8 +63,24 @@ const StockChart: React.FC<{ stockItem: IstockItem }> = ({ stockItem }) => {
 
 export default StockChart;
 
-const ApexChart: React.FC<{ data: IchartDataItem[] }> = ({ data }) => {
-  const times = data.map((item) => item.time).reverse(); // TODO: 시간 parsing 해야함.
+/** 분봉의 시간 문자열을 파싱하는 함수 */
+const parseMinTime = (timeStr: string) => {
+  const hour = timeStr.substring(0, 2);
+  const minute = timeStr.substring(2, 4);
+  return `${parseInt(hour, 10)}시 ${parseInt(minute, 10)}분`;
+};
+
+/** 주식 차트 UI */
+const ApexChart: React.FC<{ title: string; data: IchartDataItem[] }> = ({
+  title,
+  data,
+}) => {
+  let times = null;
+  if (title === "min") {
+    times = data.map((item) => parseMinTime(item.time)).reverse();
+  } else {
+    times = data.map((item) => item.time).reverse();
+  }
   const prices = data.map((item) => parseInt(item.price)).reverse();
   const amounts = data.map((item) => parseInt(item.amount)).reverse();
 
@@ -69,7 +88,7 @@ const ApexChart: React.FC<{ data: IchartDataItem[] }> = ({ data }) => {
     chart: {
       group: "stock-charts", // 동일한 그룹 이름으로 두 차트를 그룹화
       toolbar: {
-        show: true, // 첫 번째 차트 (Line 그래프)의 도구 모듈 활성화
+        show: true, // Line 그래프의 도구 모듈 활성화
       },
     },
     xaxis: {
@@ -94,10 +113,10 @@ const ApexChart: React.FC<{ data: IchartDataItem[] }> = ({ data }) => {
     xaxis: {
       ...sharedChartOptions.xaxis,
       labels: {
-        show: false, // x축 라벨 숨김
+        show: false, // Line 그래프의 x축 라벨 숨김
       },
       axisTicks: {
-        show: false, // x축 눈금 숨김
+        show: false, // Line 그래프의 x축 눈금 숨김
       },
     },
   };
@@ -107,17 +126,32 @@ const ApexChart: React.FC<{ data: IchartDataItem[] }> = ({ data }) => {
     chart: {
       ...sharedChartOptions.chart,
       toolbar: {
-        show: false, // 두 번째 차트 (Bar 그래프)의 도구 모듈 비활성화
+        show: false, // Bar 그래프의 도구 모듈 비활성화
       },
     },
     grid: {
       padding: {
         top: -20,
-        bottom: -25,
+        bottom: -5,
       },
+    },
+    dataLabels: {
+      enabled: true, // 거래량 데이터 값 보여줌
     },
     xaxis: {
       ...sharedChartOptions.xaxis,
+      labels: {
+        show: true,
+        hideOverlappingLabels: true,
+        trim: false,
+        formatter: function (val: string) {
+          const min = parseInt(val.split("시")[1], 10);
+          return !(min % 10) ? val : "";
+        },
+      },
+      axisTicks: {
+        show: true, // x축 눈금 보여줌
+      },
     },
   };
 
@@ -125,13 +159,13 @@ const ApexChart: React.FC<{ data: IchartDataItem[] }> = ({ data }) => {
     <div className="h-full">
       <ReactApexChart
         options={priceOptions}
-        series={[{ name: "Price", data: prices }]}
+        series={[{ name: "시가", data: prices }]}
         height="66%"
         type="line"
       />
       <ReactApexChart
         options={amountOptions}
-        series={[{ name: "Amount", data: amounts }]}
+        series={[{ name: "거래량", data: amounts }]}
         height="34%"
         type="bar"
       />

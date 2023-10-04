@@ -5,7 +5,7 @@ type RowType = {
   stockId: string;
   stockName: string;
   price: number;
-  rateDifference: string;
+  rateDifference: number;
 };
 
 type RowsType = {
@@ -15,26 +15,28 @@ type RowsType = {
 
 /** 거래량 순위 요소 */
 const StockRow: React.FC<RowsType> = ({ row, onClick }) => {
-  const { textColor, icon } = getStockStyle(row.rateDifference);
+  const { stockName, rank, price, rateDifference } = row;
+  const { textColor, icon } = getStockStyle(rateDifference as number);
   return (
     <tr
-      key={row.stockName}
+      key={stockName}
       onClick={onClick}
       className="hover:cursor-pointer hover:bg-slate-100"
     >
       <td align="left" className="w-1/12 align-middle">
-        <span className="text-slate-500">{row.rank}</span>
+        <span className="text-slate-500">{rank}</span>
       </td>
       <td align="left" className="w-3/12 align-middle">
-        {row.stockName}
+        {stockName}
       </td>
       <td align="right" className={textColor + " w-4/12 align-middle"}>
-        {row.price.toLocaleString()}
+        {price.toLocaleString()}
       </td>
       <td align="right" className="w-4/12 align-middle">
         <p className={textColor + " items-center justify-end"}>
-          <span className="text-[10px]">{icon}</span>&nbsp;
-          {row.rateDifference}%
+          <span className="text-[10px]">{icon}</span>
+          &nbsp;
+          {Math.abs(rateDifference)}%
         </p>
       </td>
     </tr>

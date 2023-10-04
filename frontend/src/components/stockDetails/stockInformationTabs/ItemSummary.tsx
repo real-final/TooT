@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ItemOverviewHeader } from "./StockInformationTabs";
 import { IstockItem } from "../../../interface/IstockDetails";
 
@@ -17,10 +16,6 @@ const ItemSummary: React.FC<{ stockId: string; stockItem: IstockItem }> = ({
       <div className="h-5/12">
         <ItemData data={stockItem} />
       </div>
-      {/* 기업개요 */}
-      <div className="h-4/12">
-        <ItemOutline outline={stockItem?.outline} />
-      </div>
     </div>
   );
 };
@@ -31,7 +26,7 @@ export default ItemSummary;
 const ItemData: React.FC<{ data: IstockItem }> = ({ data }) => {
   return (
     <div className="mb-3">
-      <div className="grid grid-rows-3 grid-cols-2 gap-3 mb-3">
+      <div className="grid grid-rows-4 grid-cols-2 gap-3 mb-3">
         <ItemDataElement title="시가총액" element={data.totalPrice} />
         <ItemDataElement
           title="주식수"
@@ -47,8 +42,9 @@ const ItemData: React.FC<{ data: IstockItem }> = ({ data }) => {
           title="52주 최고"
           element={data.max52.toLocaleString()}
         />
+        <ItemDataElement title="PER(배)" element={data.per} />
+        <ItemDataElement title="PBR(배)" element={data.pbr} />
       </div>
-      <hr />
     </div>
   );
 };
@@ -86,37 +82,6 @@ const ItemDataElement: React.FC<{
     <div>
       <h3 className="text-sm text-neutral-500">{title}</h3>
       <p className={"text-sm " + textColor}>{displayValue}</p>
-    </div>
-  );
-};
-
-/** 기업 개요 컴포넌트 */
-const ItemOutline: React.FC<{
-  outline: string;
-}> = ({ outline: overview }) => {
-  const [showMore, setShowMore] = useState(false);
-
-  // 내용을 문장으로 분할
-  const sentences = overview
-    .split(".")
-    .filter((sentence) => sentence.trim() !== "");
-  const firstSentence = sentences[0];
-
-  return (
-    <div>
-      <h2 className="text-md font-bold mb-2">기업개요</h2>
-      <p className="text-sm mb-2">{firstSentence}.</p>
-      {showMore &&
-        sentences.map((sentence, index) => (
-          <p key={index} className="text-sm mb-2">
-            {sentence}.
-          </p>
-        ))}
-      <button onClick={() => setShowMore(!showMore)}>
-        <p className="text-sm text-gray-600">
-          {showMore ? "간략히" : "더보기"}
-        </p>
-      </button>
     </div>
   );
 };
