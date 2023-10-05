@@ -19,6 +19,7 @@ export const code900 = async (code:number, userMessage: string, dispatch: any) =
       })
       break;
     case 999:
+      dispatch(setRespondingFalse());
       break;
   };
 };
