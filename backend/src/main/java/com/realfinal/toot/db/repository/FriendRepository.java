@@ -1,5 +1,5 @@
 package com.realfinal.toot.db.repository;
 
-public class FriendRepository {
+public interface FriendRepository {
 
 }
