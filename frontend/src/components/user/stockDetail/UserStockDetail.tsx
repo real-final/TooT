@@ -55,7 +55,7 @@ const UserStockDetail = () => {
       ((userDetailTotal && userDetailTrade) ? 
       <div className="w-full h-[90%] min-h-0">
         <UserStockDetailTotal stock={userDetailTotal} />
-        <div className="w-full h-[75%] min-h-0 overflow-y-scroll no-scrollbar">
+        <div className="w-full h-[70%] min-h-0 overflow-y-scroll no-scrollbar">
           {userDetailTrade?.map((item:IuserTrade, index:number) => (
             <UserStockTrade key={index} index={index} trade={item} isName={true} />
           ))}
