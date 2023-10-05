@@ -5,6 +5,7 @@ import { api } from "../../../utils/api";
 import TotalRankingItem from "./TotalRankingItem";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
 import { UserAuthContext } from "../../../App";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type ListType = {
   name: string;
@@ -17,6 +18,7 @@ const TotalRanking: React.FC = () => {
   // Access토큰 가져오기
   const userAuthContext = useContext(UserAuthContext);
   const accessToken = userAuthContext?.accessToken as string;
+  const [animationParent] = useAutoAnimate();
 
   // 전체랭킹 가져오기
   const { data, isLoading, error } = useQuery(
@@ -36,7 +38,7 @@ const TotalRanking: React.FC = () => {
   return (
     <div className="w-full h-full h-min-0 overflow-y-auto no-scrollbar">
       <table className="w-full h-full border-separate border-spacing-2.5">
-        <tbody>
+        <tbody ref={animationParent}>
           {rankingList?.map((list: ListType, index: number) => (
             <TotalRankingItem user={list} index={index} key={index} />
           ))}
