@@ -15,6 +15,12 @@ export const code700 = async (code:number, dispatch:any, navigate:any, userAuthC
         await dispatch(setRespondingFalse());
         return;
       }
+      if(!confirm("파산 신청을 하시겠습니까?")){
+        alert("파산 신청을 철회합니다.");
+        return;
+      } else {
+        alert("파산을 신청합니다!");
+      }
       const checkBankrupt = await api.get("bankruptcy/filing", {
         headers:{
           accesstoken: accessToken,
