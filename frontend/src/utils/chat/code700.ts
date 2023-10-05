@@ -51,7 +51,7 @@ export const code700 = async (
           },
         }
       );
-      if (fileBankrupt.data.data === true) {
+      if (fileBankrupt.data.data === "success") {
         pushBotBubble("파산 신청 성공!", dispatch);
       } else {
         pushBotBubble("파산 신청 실패!", dispatch);
