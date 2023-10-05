@@ -1,6 +1,7 @@
 import axios from "axios";
 import { pushBotBubble } from "./chat";
 import { setRespondingFalse } from "../../store/slices/chatInputSlice";
+import { reset } from "../../store/slices/stockSlice";
 
 /* 900: chatGPT 패스 & 에러 */
 export const code900 = async (code:number, userMessage: string, dispatch: any) => {
@@ -17,6 +18,11 @@ export const code900 = async (code:number, userMessage: string, dispatch: any) =
       }).finally(() => {
         dispatch(setRespondingFalse());
       })
+      break;
+    case 902:
+      dispatch(reset());
+      localStorage.setItem("chat-list", JSON.stringify([]));
+      window.location.reload();
       break;
     case 999:
       dispatch(setRespondingFalse());
