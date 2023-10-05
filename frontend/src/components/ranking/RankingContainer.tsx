@@ -20,7 +20,7 @@ const RankingContainer = ({ title }: { size: string; title: string }) => {
     rankingAPI += "/kakao";
   }
 
-  const { data, isLoading, isError } = useQuery("ranking-list", async () => {
+  const { data, isLoading, isError } = useQuery(["ranking-list", title], async () => {
     const response = await axios.get(rankingAPI, {
       headers: {
         accesstoken: accessToken,
