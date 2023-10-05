@@ -1,5 +1,8 @@
 package com.realfinal.toot.common.util;
 
+import com.realfinal.toot.api.friend.mapper.FriendMapper;
+import com.realfinal.toot.api.friend.response.RankListRes;
+import com.realfinal.toot.api.friend.response.RankRes;
 import com.realfinal.toot.api.kis.response.CurrentPriceRes;
 import com.realfinal.toot.api.kis.response.MinutePriceRes;
 import com.realfinal.toot.api.kis.response.PeriodPriceRes;
@@ -24,6 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -84,6 +88,9 @@ public class PriceUtil {
     private volatile Integer currentState = 0;
     private volatile Integer nextState = 1;
     private StockRankRes[][] stockRankResList = new StockRankRes[2][10];
+    private List<RankRes>[] rankResList = new ArrayList[2];
+    private volatile Integer rankCurrentState = 0;
+    private volatile Integer rankNextState = 0;
 
     public Integer getStockIndex(String stockId) {
         return this.stockIndex.get(stockId);
@@ -186,30 +193,56 @@ public class PriceUtil {
             String stockId = stock.getId();
             Integer price = this.currentPrice[this.getStockIndex(stockId)][nextState];
             String rate = this.rateDifference[this.getStockIndex(stockId)][nextState];
+
             StockRankRes stockRankRes = StockMapper.INSTANCE.toRankRes(i + 1, stock, price,
                 rate);
+
             this.stockRankResList[nextState][i] = stockRankRes;
+        }
+
+        if (this.stockRankResList[nextState ^ 1] == null) {
+            this.stockRankResList[nextState ^ 1] = this.stockRankResList[nextState];
         }
     }
 
     private void updateCurrentPrice(int index, Integer price) {
         this.currentPrice[index][this.nextState] = price;
+
+        if (this.currentPrice[index][this.currentState] == null) {
+            this.currentPrice[index][this.currentState] = price;
+        }
     }
 
     private void updateTotalPrice(int index, String price) {
         this.totalPrice[index][this.nextState] = price;
+
+        if (this.totalPrice[index][this.currentState] == null) {
+            this.totalPrice[index][this.currentState] = price;
+        }
     }
 
     private void updatePriceDifference(int index, String difference) {
         this.priceDifferencce[index][this.nextState] = difference;
+
+        if (this.priceDifferencce[index][this.currentState] == null) {
+            this.priceDifferencce[index][this.currentState] = difference;
+        }
     }
 
     private void updateRateDifference(int index, String difference) {
         this.rateDifference[index][this.nextState] = difference;
+
+        if (this.rateDifference[index][this.currentState] == null) {
+            this.rateDifference[index][this.currentState] = difference;
+        }
     }
 
     private void updateTradingVolume(int index, Long volume) {
         this.tradingVolume[index][this.nextState] = volume;
+
+        if (this.tradingVolume[index][this.currentState] == null) {
+            this.tradingVolume[index][this.currentState] = volume;
+        }
     }
 
     private void updateMin52(int index, Integer price) {
@@ -222,10 +255,18 @@ public class PriceUtil {
 
     private void updatePer(int index, String newPer) {
         this.per[index][this.nextState] = newPer;
+
+        if (this.per[index][this.currentState] == null) {
+            this.per[index][this.currentState] = newPer;
+        }
     }
 
     private void updatePbr(int index, String newPbr) {
         this.pbr[index][this.nextState] = newPbr;
+
+        if (this.pbr[index][this.currentState] == null) {
+            this.pbr[index][this.currentState] = newPbr;
+        }
     }
 
     public Integer getCurrentPrice(String stockId) {
@@ -426,6 +467,39 @@ public class PriceUtil {
     }
 
     public List<StockRankRes> getRankByVolume() {
-        return Arrays.stream(this.stockRankResList[currentState]).toList();
+        return Arrays.stream(this.stockRankResList[this.currentState]).toList();
+    }
+
+    public List<RankRes> getRankList() {
+        return this.rankResList[this.rankCurrentState];
+    }
+
+    @Scheduled(fixedRate = 5000, initialDelay = 40000)
+    public void updateRankList() {
+        List<User> userList = userRepository.findAll();
+        this.rankResList[this.rankNextState] = new ArrayList<RankRes>();
+
+        if (!userList.isEmpty()) {
+            for (User user : userList) {
+                Long netProfit = calNetProfit(user.getId());
+                RankRes rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
+                this.rankResList[this.rankNextState].add(rankRes);
+            }
+
+            this.rankResList[this.rankNextState].sort(
+                Comparator.comparing(RankRes::getNetProfit)
+                    .reversed()  // 내림차순으로 netProfit 정렬
+                    .thenComparing(
+                        RankRes::getBankruptcyNo)    // netProfit이 같을 경우, 오름차순으로 bankruptcyNo 정렬
+                    .thenComparing(RankRes::getId));    // bankruptcyNo가 같을 경우, 오름차순으로 id 정렬
+        }
+
+        if (this.rankResList[this.rankCurrentState] == null
+            || this.rankResList[this.rankCurrentState].isEmpty()) {
+            this.rankResList[this.rankCurrentState] = this.rankResList[this.rankNextState];
+        }
+
+        this.rankCurrentState ^= 1;
+        this.rankNextState ^= 1;
     }
 }

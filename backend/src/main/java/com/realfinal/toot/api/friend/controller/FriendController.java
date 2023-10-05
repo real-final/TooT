@@ -30,9 +30,9 @@ public class FriendController {
     @GetMapping("/list/kakao")
     public CommonResponse<?> getFriendList(
             @RequestHeader(value = "accesstoken") String accessToken) {
-        log.info("FriendController_getFriendList_start: " + accessToken);
+        log.info("FriendController_getFriendList_start");
         RankListRes rankResList = friendService.getFriendList(accessToken);
-        log.info("FriendController_getFriendList_end: " + rankResList);
+        log.info("FriendController_getFriendList_end");
         return CommonResponse.success(rankResList);
     }
 
@@ -45,9 +45,9 @@ public class FriendController {
     @GetMapping("/list")
     public CommonResponse<?> getRank(
             @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("FriendController_getRank_start: " + accessToken);
+        log.info("FriendController_getRank_start");
         RankListRes rankResList = friendService.getRank(accessToken);
-        log.info("FriendController_getRank_end: " + rankResList);
+        log.info("FriendController_getRank_end");
         return CommonResponse.success(rankResList);
     }
 
@@ -61,7 +61,7 @@ public class FriendController {
     @GetMapping("/reissue/kakao")
     public CommonResponse<?> reissue(@RequestParam String code,
             @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("FriendController_reissue_start: " + accessToken);
+        log.info("FriendController_reissue_start");
         kakaoUtil.reissue(code, "kakao", accessToken);
         log.info("FriendController_reissue_end: success to reissue kakao OAuth token");
         return CommonResponse.success("success");
