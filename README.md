@@ -139,37 +139,37 @@
 1. 로그인 <br>
   카카오 OAuth를 이용한 로그인
   ![login](exec/file/login.gif)
-3. 챗봇 <br>
+2. 챗봇 <br>
   챗봇을 사용합니다
   ![chatbot](exec/file/chatbot.gif)
-4. 관심 종목 <br>
+3. 관심 종목 <br>
   관심 종목을 추가합니다.
   ![favourites](exec/file/favourites.gif)
-5. 전체 주식 <br>
-  전제 주식을 확인합니다. <br>
+4. 전체 주식 <br>
+  전제 주식을 확인합니다.
   ![stock_all](exec/file/stock_all.gif)
-6. 상세 주식 <br>
-  상세 주식을 확인합니다. <br>
+5. 상세 주식 <br>
+  상세 주식을 확인합니다.
   ![stock_detail](exec/file/stock_detail.gif)
-7. 주식 매수, 매도
-  주식을 구매하거나 판매합니다. <br>
+6. 주식 매수, 매도 <br>
+  주식을 구매하거나 판매합니다.
   ![buysell](exec/file/buysell.gif)
-8. 내 주식 조회 <br>
+7. 내 주식 조회 <br>
   내 주식을 조회합니다.
   ![my_stock](exec/file/my_stock.gif)
-9. 내 거래내역 <br>
+8. 내 거래내역 <br>
   내 거래내역을 조회합니다.
   ![trade](exec/file/trade.gif)
-10. 전체 랭킹 <br>
-  전체 사용자의 랭킹을 정렬합니다.
+9. 전체 랭킹 <br>
+  전체 사용자의 랭킹을 조회합니다.
   ![ranking_all](exec/file/ranking_all.gif)
-11. 친구 랭킹 <br>
+10. 친구 랭킹 <br>
   내 카카오톡 친구들끼리의 랭킹을 조회합니다.
   ![ranking_friend](exec/file/ranking_friend.gif)
-12. 데일리 퀴즈 <br>
+11. 데일리 퀴즈 <br>
   데일리 퀴즈를 진행합니다.
   ![daily_quiz](exec/file/daily_quiz.gif)
-13. 파산하기 <br>
+12. 파산하기 <br>
   총 자산이 시드머니 대비 70% 아래로 떨어지면, 파산을 할 수 있습니다.
   ![bankrupt](exec/file/bankrupt.gif)
 
