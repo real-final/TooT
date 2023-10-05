@@ -21,7 +21,7 @@ function App() {
   const [isMobile, setIsMobile] = useState(false);
 
   const handleResize = () => {
-    if(window.innerWidth < 768 || window.innerWidth <= window.innerHeight){
+    if (window.innerWidth < 768 || window.innerWidth <= window.innerHeight) {
       setIsMobile(true);
     } else {
       setIsMobile(false);
@@ -38,9 +38,10 @@ function App() {
 
   useEffect(() => {
     const isVisited = localStorage.getItem("isVisited");
-    if(!isVisited) {
+    if (!isVisited) {
       localStorage.setItem("isVisited", "true");
-      pushBotBubble(`모의 주식 투자 트레이닝 서비스
+      pushBotBubble(
+        `모의 주식 투자 트레이닝 서비스
       TooT에 오신 것을 환영합니다!
       TooT은 챗봇을 통해 다양한 상호작용을 제공합니다.
       
@@ -70,7 +71,9 @@ function App() {
       페이지 이동
       - ex) 메인 페이지 이동
       - ex) 튜토리얼 이동
-      `, dispatch);
+      `,
+        dispatch
+      );
       navigate("/tutorials");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +81,7 @@ function App() {
 
   // 유저정보 & Access 토큰 요청하기
   const { data: contextData, isLoading } = useQuery(
-    "userAuthData",
+    "user-auth-data",
     fetchUserAuthData,
     {
       refetchOnWindowFocus: false, // 다른 탭에서 다시 페이지 접근 시 refetch 취소
@@ -89,13 +92,17 @@ function App() {
   return (
     <HelmetProvider>
       <UserAuthContext.Provider value={contextData}>
-        { !isMobile ? <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
-          <Nav />
-          {isLoading ? <CustomCircularProgress /> : <Grid />}
-        </div> : null}
-        {isMobile ? <div className="w-screen h-screen flex items-center justify-center">
-          <span>PC 화면으로 접속해주세요!</span>
-        </div> : null}
+        {!isMobile ? (
+          <div className="App w-screen max-h-screen h-screen flex flex-col bg-background">
+            <Nav />
+            {isLoading ? <CustomCircularProgress /> : <Grid />}
+          </div>
+        ) : null}
+        {isMobile ? (
+          <div className="w-screen h-screen flex items-center justify-center">
+            <span>PC 화면으로 접속해주세요!</span>
+          </div>
+        ) : null}
       </UserAuthContext.Provider>
     </HelmetProvider>
   );

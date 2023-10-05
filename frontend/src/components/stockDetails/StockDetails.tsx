@@ -31,7 +31,8 @@ const StockDetails: React.FC = () => {
         headers: { accesstoken: accessToken },
       });
       return response?.data;
-    }
+    },
+    { refetchInterval: 5000 } // 5초마다 요청
   );
 
   if (isLoading) return <CustomCircularProgress />;

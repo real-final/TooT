@@ -42,7 +42,7 @@ const Home: React.FC = () => {
         {/* 거래량 순위 */}
         <Container>
           <Title>
-            거래량 순위
+            실시간 거래량 순위
             <span className="text-sm text-slate-600 ml-2">
               한국투자증권 기준
             </span>

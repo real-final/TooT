@@ -36,7 +36,7 @@ const StockRow: React.FC<RowsType> = ({ row, onClick }) => {
         <p className={textColor + " items-center justify-end"}>
           <span className="text-[10px]">{icon}</span>
           &nbsp;
-          {Math.abs(rateDifference)}%
+          {Math.abs(rateDifference).toFixed(2)}%
         </p>
       </td>
     </tr>

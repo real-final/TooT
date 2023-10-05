@@ -93,8 +93,9 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
               {currentPrice.toLocaleString()}
             </p>
             <p className={`${xsText} text-center ` + textColor}>
-              {icon} {Math.abs(priceDifference).toLocaleString()}(
-              {rateDifference}%)
+              {icon} {Math.abs(priceDifference).toLocaleString()} (
+              {priceDifference > 0 ? "+" : null}
+              {Number(rateDifference).toFixed(2)}%)
             </p>
           </div>
         </div>

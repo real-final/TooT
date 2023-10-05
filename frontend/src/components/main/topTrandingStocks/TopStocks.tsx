@@ -30,7 +30,7 @@ const TopStocks: React.FC = () => {
     data: rows,
     isLoading,
     isError,
-  } = useQuery("stockRank", fetchStockRank, {
+  } = useQuery("stock-rank", fetchStockRank, {
     refetchInterval: 5000, // 5초마다 요청
   });
 

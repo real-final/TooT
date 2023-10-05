@@ -14,29 +14,24 @@ type ListType = {
 };
 
 const TotalRanking: React.FC = () => {
-  // Access 토큰 가져오기
+  // Access토큰 가져오기
   const userAuthContext = useContext(UserAuthContext);
   const accessToken = userAuthContext?.accessToken as string;
 
   // 전체랭킹 가져오기
-  const { data, isLoading, isError } = useQuery(
-    "ranking-list",
+  const { data, isLoading, error } = useQuery(
+    ["ranking-list"],
     async () => {
       const response = await api.get("/rank/list", {
-        headers: {
-          accesstoken: accessToken,
-        },
+        headers: { accesstoken: accessToken },
       });
       return response?.data?.data;
-    },
-    { retry: 0 }
+    }
+    // { refetchInterval: 10000 }
   );
-
-  if (isLoading || isError) {
-    return <CustomCircularProgress />;
-  }
-
+  // // 전체랭킹 저장
   let rankingList = data?.list;
+  if (isLoading || error) return <CustomCircularProgress />;
 
   return (
     <div className="w-full h-full h-min-0 overflow-y-auto no-scrollbar">

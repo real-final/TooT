@@ -84,6 +84,9 @@ const ApexChart: React.FC<{
     xaxis: {
       categories: times,
     },
+    yaxis: {
+      opposite: true,
+    },
   };
 
   const priceOptions = {
@@ -97,7 +100,7 @@ const ApexChart: React.FC<{
     },
     grid: {
       padding: {
-        top: 0,
+        top: 5,
         bottom: -25,
       },
     },
