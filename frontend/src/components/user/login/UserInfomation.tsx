@@ -35,8 +35,8 @@ const UserInfomation: React.FC = () => {
         headers: { accesstoken: accessToken },
       });
       return response?.data?.data;
-    }
-    // { refetchInterval: 10000 }
+    },
+    { refetchInterval: 5000 }
   );
 
   // 사용자 정보 가져오기
@@ -51,8 +51,8 @@ const UserInfomation: React.FC = () => {
         headers: { accesstoken: accessToken },
       });
       return response?.data;
-    }
-    // { refetchInterval: 10000 }
+    },
+    { refetchInterval: 5000 }
   );
 
   // 사용자 랭킹 저장
