@@ -152,11 +152,13 @@ const ApexChart: React.FC<{
     },
   };
 
+  const chartName = title === "min" ? "시가" : "종가";
+
   return (
     <div className="h-full">
       <ReactApexChart
         options={priceOptions}
-        series={[{ name: "시가", data: prices }]}
+        series={[{ name: chartName, data: prices }]}
         height="66%"
         type="line"
       />
