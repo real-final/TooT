@@ -12,12 +12,18 @@ export const code200 = async (code: number, responseData: string[], dispatch: an
   switch(code){
     case 201:
       tradeType = "buy";
+      await dispatch(set({stockName, stockId, share, tradeType}));
+      await dispatch(setRespondingFalse());
+      navigate(`/stock/${stockId}`);
       break;
     case 202:
       tradeType = "sell"
+      await dispatch(set({stockName, stockId, share, tradeType}));
+      await dispatch(setRespondingFalse());
+      navigate(`/stock/${stockId}`);
+      break;
+    case 203:
+      await dispatch(setRespondingFalse());
       break;
   };
-  await dispatch(set({stockName, stockId, share, tradeType}));
-  await dispatch(setRespondingFalse());
-  navigate(`/stock/${stockId}`);
 };
