@@ -261,14 +261,15 @@ public class StockServiceImpl implements StockService {
         String userName = user.getName();
         Integer bankruptcyNo = user.getBankruptcyNo();
 
+        List<MyStockRes> myStockResList = new ArrayList<MyStockRes>();
+
         if (userStockList.isEmpty()) {
             log.info(
                 "StockServiceImpl_myStocks_end: " + userName + "(" + bankruptcyNo
-                    + ") has no stock -> return null");
-            return null;
+                    + ") has no stock -> return empty List");
+            return myStockResList;
         }
 
-        List<MyStockRes> myStockResList = new ArrayList<>();
         for (UserStock userStock : userStockList) {
             if (userStock.getHold() > 0) {
                 //주식 정보
