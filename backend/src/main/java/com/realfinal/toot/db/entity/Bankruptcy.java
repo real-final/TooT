@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "bankruptcy")
 @Entity
-public class Bankruptcy extends BaseEntity{
+public class Bankruptcy extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -58,13 +58,15 @@ public class Bankruptcy extends BaseEntity{
     private LocalDateTime bankruptAt;
 
     @Builder
-    public Bankruptcy(User user, Integer bankruptcyNo, Long lastCash, Long lastSeedMoney, Long lastTotalAsset, LocalDateTime bankruptAt) {
+    public Bankruptcy(User user, Integer bankruptcyNo, Long lastCash, Long lastSeedMoney,
+        Long lastTotalAsset, LocalDateTime bankruptAt) {
         this.user = user;
         this.bankruptcyNo = bankruptcyNo;
         this.lastCash = lastCash;
         this.lastSeedMoney = lastSeedMoney;
         this.lastTotalAsset = lastTotalAsset;
-        this.roi = 100.0 * this.lastTotalAsset / lastSeedMoney;
+        this.roi = Double.valueOf(
+            Math.round(100.0 * (this.lastTotalAsset - lastSeedMoney) / lastSeedMoney) / 100.0);
         this.netIncome = this.lastTotalAsset - lastSeedMoney;
         this.bankruptAt = bankruptAt;
     }

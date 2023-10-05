@@ -49,7 +49,7 @@ public class StockServiceImpl implements StockService {
      */
     @Transactional
     public Integer buyStock(String accessToken, StockReq stockReq) {
-        log.info("StockServiceImpl_buyStock_start: " + accessToken + " " + stockReq.toString());
+        log.info("StockServiceImpl_buyStock_start: " + stockReq);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         String stockId = stockReq.getStockId();
@@ -68,10 +68,10 @@ public class StockServiceImpl implements StockService {
             count = (int) (cash / price);
             if (count == 0) {
                 log.info(
-                    "StockServiceImpl_buyStock_end: lack of user cash - bought nothing -> return 0");
+                    "StockServiceImpl_buyStock_end: change 0");
                 return 0;
             }
-            log.info("StockServiceImpl_buyStock_mid: lack of user cash - change count to " + count);
+            log.info("StockServiceImpl_buyStock_mid: change " + count);
             totalPrice = Long.valueOf((long) price * count);
         }
         Stock stock = stockRepository.findById(stockId).orElseThrow(StockNotFoundException::new);
@@ -84,11 +84,8 @@ public class StockServiceImpl implements StockService {
         String stockName = stock.getStockName();
 
         if (userStock == null) {
-            log.info("StockServiceImpl_buyStock_mid: " + userName + "(" + bankruptcyNo
-                + ") did not have stock deal with " + stockName);
             userStock = StockMapper.INSTANCE.toUserStock(user, stock, count, price);
             userStockRepository.save(userStock);
-            log.info("StockServiceImpl_buyStock_mid: insert " + userStock);
         } else {
             Integer averagePrice = userStock.getAveragePrice();
             Integer hold = userStock.getHold();
@@ -98,21 +95,14 @@ public class StockServiceImpl implements StockService {
             userStock.updateHold(hold);
             averagePrice = (int) (priceSum / hold);
             userStock.updateAveragePrice(averagePrice);
-            log.info("StockServiceImpl_buyStock_mid: update " + userName + "(" + bankruptcyNo
-                + ")'s deal status with " + stockName
-                + " - hold=" + hold + ", avrPrice=" + averagePrice);
         }
         cash -= totalPrice;
         user.updateCash(cash);
-        log.info("StockServiceImpl_buyStock_mid: update " + userName + "'s cash to " + cash);
         Execution execution = StockMapper.INSTANCE.toExecution(stock, user, price, count, true);
 
         executionRepository.save(execution);
-        log.info("StockServiceImpl_buyStock_mid: " +
-            userName + "(" + bankruptcyNo + ") bounght " + count + stockName
-            + "execution data inserted");
 
-        log.info("StockServiceImpl_buyStock_end: return " + count);
+        log.info("StockServiceImpl_buyStock_end: " + count);
         return count;
     }
 
@@ -123,7 +113,7 @@ public class StockServiceImpl implements StockService {
      * @return [ 종목 번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률, 관심 종목으로 등록 여부 ] 리스트
      */
     public List<AllStockRes> showAll(String accessToken) {
-        log.info("StockServiceImpl_showAll_start: " + accessToken);
+//        log.info("StockServiceImpl_showAll_start");
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         List<Stock> stockList = stockRepository.findAll();
@@ -141,7 +131,7 @@ public class StockServiceImpl implements StockService {
             allStockResList.add(allStockRes);
         }
 
-        log.info("StockServiceImpl_showAll_end: return " + allStockResList);
+//        log.info("StockServiceImpl_showAll_end: " + !allStockResList.isEmpty());
         return allStockResList;
     }
 
@@ -152,11 +142,11 @@ public class StockServiceImpl implements StockService {
      * @return 시드머니, 계좌 잔고, 주식을 반영한 총 평가액
      */
     public UserValueRes calculateValue(String accessToken) {
-        log.info("StockServiceImpl_calculateValue_start: " + accessToken);
+        log.info("StockServiceImpl_calculateValue_start");
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
 
         UserValueRes userValueRes = priceUtil.calculateUserValue(userId);
-        log.info("StockServiceImpl_calculateValue_end: return " + userValueRes);
+        log.info("StockServiceImpl_calculateValue_end: " + userValueRes);
         return userValueRes;
     }
 
@@ -166,9 +156,9 @@ public class StockServiceImpl implements StockService {
      * @return [ 등수, 종목번호, 종목명, 현재가, 전일 대비 등락률 ] 리스트(10개)
      */
     public List<StockRankRes> rankByVolume() {
-        log.info("StockServiceImpl_rankByVolume_start: no arguments");
+//        log.info("StockServiceImpl_rankByVolume_start");
         List<StockRankRes> stockRankResList = priceUtil.getRankByVolume();
-        log.info("StockServiceImpl_rankByVolume_end: " + stockRankResList);
+//        log.info("StockServiceImpl_rankByVolume_end");
         return stockRankResList;
     }
 
@@ -179,14 +169,13 @@ public class StockServiceImpl implements StockService {
      * @return [ 종목번호, 종목명, 현재가, 전일 대비 등락가격, 전일 대비 등락률, 관심 종목 등록 여부(무조건 true) ] 리스트
      */
     public List<InterestRes> showInterest(String accessToken) {
-        log.info("StockServiceImpl_showInterest_start: " + accessToken);
+        log.info("StockServiceImpl_showInterest_start");
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         List<Interest> interestList = interestRepository.findAllByUser(user);
         if (interestList.isEmpty()) {
             String userName = user.getName();
-            log.info("StockServiceImpl_showInterest_end: " + userName
-                + " has no interest -> return null");
+            log.info("StockServiceImpl_showInterest_end: null");
             return null;
         }
         List<InterestRes> interestResList = new ArrayList<>();
@@ -204,7 +193,7 @@ public class StockServiceImpl implements StockService {
             }
         }
 
-        log.info("StockServiceImpl_showInterest_end: " + interestResList);
+        log.info("StockServiceImpl_showInterest_end");
         return interestResList;
     }
 
@@ -217,7 +206,7 @@ public class StockServiceImpl implements StockService {
      * 관심 종목 등록 여부, 사용자 보유 주식 수
      */
     public SpecificStockRes getStockInfo(String stockId, String accessToken) {
-        log.info("StockServiceImpl_getStockInfo_start: " + stockId + " " + accessToken);
+        log.info("StockServiceImpl_getStockInfo_start: " + stockId);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
@@ -252,7 +241,7 @@ public class StockServiceImpl implements StockService {
      * @return [ 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 ] 리스트
      */
     public List<MyStockRes> myStocks(String accessToken) {
-        log.info("StockServiceImpl_myStocks_start: " + accessToken);
+        log.info("StockServiceImpl_myStocks_start");
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         List<UserStock> userStockList = userStockRepository.findAllByUserAndBankruptcyNo(user,
@@ -264,9 +253,7 @@ public class StockServiceImpl implements StockService {
         List<MyStockRes> myStockResList = new ArrayList<MyStockRes>();
 
         if (userStockList.isEmpty()) {
-            log.info(
-                "StockServiceImpl_myStocks_end: " + userName + "(" + bankruptcyNo
-                    + ") has no stock -> return empty List");
+            log.info("StockServiceImpl_myStocks_end: empty List");
             return myStockResList;
         }
 
@@ -293,7 +280,7 @@ public class StockServiceImpl implements StockService {
             }
         }
 
-        log.info("StockServiceImpl_myStocks_end: " + myStockResList);
+        log.info("StockServiceImpl_myStocks_end");
         return myStockResList;
     }
 
@@ -304,7 +291,7 @@ public class StockServiceImpl implements StockService {
      * @return [ 거래일시, 매수여부, 종목번호, 종목명, 거래 주식 수, 거래가격, 총 거래가격 ] 리스트
      */
     public List<ExecutionRes> myAllExecution(String accessToken) {
-        log.info("StockServiceImpl_myAllExecution_start: " + accessToken);
+        log.info("StockServiceImpl_myAllExecution_start");
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Integer bankruptcyNo = user.getBankruptcyNo();
@@ -312,8 +299,7 @@ public class StockServiceImpl implements StockService {
             bankruptcyNo);
 
         if (executionList.isEmpty()) {
-            log.info("StockServiceImpl_myAllExecution_end: " + user.getName() + "("
-                + bankruptcyNo + ") has no history -> return null");
+            log.info("StockServiceImpl_myAllExecution_end: null");
             return null;
         }
 
@@ -327,7 +313,7 @@ public class StockServiceImpl implements StockService {
             executionResList.sort(Comparator.comparing(ExecutionRes::getDealAt).reversed());
         }
 
-        log.info("StockServiceImpl_myAllExecution_end: " + executionResList);
+        log.info("StockServiceImpl_myAllExecution_end");
         return executionResList;
     }
 
@@ -339,7 +325,7 @@ public class StockServiceImpl implements StockService {
      * @return { 종목번호, 종목명, 보유 주식 수, 평균단가, 현재가, 총 평가금액(보유 주식 수 * 현재가), 수익, 수익률 }
      */
     public MyStockRes myStock(String accessToken, String stockId) {
-        log.info("StockServiceImpl_myStock_start: " + accessToken);
+        log.info("StockServiceImpl_myStock_start: " + stockId);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
@@ -351,8 +337,7 @@ public class StockServiceImpl implements StockService {
 
         if (userStock == null) {
             log.info(
-                "StockServiceImpl_myStock_end: " + userName + "(" + bankruptcyNo
-                    + ") has no stock -> return null");
+                "StockServiceImpl_myStock_end: null");
             return null;
         }
 
@@ -388,7 +373,7 @@ public class StockServiceImpl implements StockService {
      * @return [ 거래일시, 매수여부, 종목번호, 종목명, 거래 주식 수, 거래가격, 총 거래가격 ] 리스트
      */
     public List<ExecutionRes> myExecution(String stockId, String accessToken) {
-        log.info("StockServiceImpl_myExecution_start: " + stockId + " " + accessToken);
+        log.info("StockServiceImpl_myExecution_start: " + stockId);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
@@ -397,8 +382,7 @@ public class StockServiceImpl implements StockService {
             user.getBankruptcyNo(), stock);
 
         if (executionList.isEmpty()) {
-            log.info("StockServiceImpl_myExecution_end: " + user.getName() + " has no history with "
-                + stock.getStockName() + "-> return null");
+            log.info("StockServiceImpl_myExecution_end: null");
             return null;
         }
 
@@ -412,7 +396,7 @@ public class StockServiceImpl implements StockService {
             executionResList.sort(Comparator.comparing(ExecutionRes::getDealAt).reversed());
         }
 
-        log.info("StockServiceImpl_myExecution_end: " + executionResList);
+        log.info("StockServiceImpl_myExecution_end");
         return executionResList;
     }
 
@@ -425,7 +409,7 @@ public class StockServiceImpl implements StockService {
      */
     @Transactional
     public Integer sellStock(String accessToken, StockReq stockReq) {
-        log.info("StockServiceImpl_sellStock_start: " + accessToken + " " + stockReq.toString());
+        log.info("StockServiceImpl_sellStock_start: " + stockReq);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         String stockId = stockReq.getStockId();
@@ -436,23 +420,17 @@ public class StockServiceImpl implements StockService {
         Integer count = stockReq.getCount();
 
         if (count <= 0) {
-            log.info("StockServiceImpl_sellStock_end: count is less than 1 -> return 0");
+            log.info("StockServiceImpl_sellStock_end: 0");
             return 0;
         }
 
         String userName = user.getName();
         String stockName = stock.getStockName();
         if (userStock == null) {
-            log.info(
-                "StockServiceImpl_sellStock_end: " + userName + "(" + bankruptcyNo
-                    + ") has never bought " + stockName + " -> return 0");
+            log.info("StockServiceImpl_sellStock_end: 0");
             return 0;
         } else if (userStock.getHold() < count) {
             Integer hold = userStock.getHold();
-            log.info(
-                "StockServiceImpl_sellStock_mid: " + userName + "(" + bankruptcyNo
-                    + ") has less than " + count + stockName
-                    + " stocks -> change count to " + hold);
             count = hold;
         }
 
@@ -462,18 +440,12 @@ public class StockServiceImpl implements StockService {
         totalPrice /= 100000;
         Integer hold = userStock.getHold() - count;
         userStock.updateHold(hold);
-        log.info("StockServiceImpl_sellStock_mid: update " + userName + "("
-            + bankruptcyNo + ")'s " + stockName + " hold to "
-            + hold);
         Long cash = user.getCash() + totalPrice;
         user.updateCash(cash);
-        log.info("StockServiceImpl_sellStock_mid: update " + userName + "("
-            + bankruptcyNo + ")'s cash to " + cash);
         Execution execution = StockMapper.INSTANCE.toExecution(stock, user, price, count, false);
 
         executionRepository.save(execution);
-        log.info("StockServiceImpl_sellStock_mid: add new history - " + execution);
-        log.info("StockServiceImpl_sellStock_end: return " + count);
+        log.info("StockServiceImpl_sellStock_end: " + count);
         return count;
     }
 
@@ -484,7 +456,7 @@ public class StockServiceImpl implements StockService {
      */
     @Transactional
     public Boolean addInterest(String stockId, String accessToken) {
-        log.info("StockServiceImpl_addInterest_start: " + stockId + " " + accessToken);
+        log.info("StockServiceImpl_addInterest_start: " + stockId);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
@@ -493,17 +465,13 @@ public class StockServiceImpl implements StockService {
         if (interest == null) {
             String stockName = stock.getStockName();
             String userName = user.getName();
-            log.info("StockServiceImpl_addInterest_mid: " + userName
-                + " has no interest with " + stockName);
             interest = StockMapper.INSTANCE.toInterest(user, stock, true);
             interestRepository.save(interest);
-            log.info("StockServiceImpl_addInterest_mid: add " + userName
-                + "'s interest with " + stockName + " - " + interest);
         } else {
             interest.setInterest(true);
         }
 
-        log.info("StockServiceImpl_addInterest_end: return true");
+        log.info("StockServiceImpl_addInterest_end: true");
         return true;
     }
 
@@ -514,7 +482,7 @@ public class StockServiceImpl implements StockService {
      */
     @Transactional
     public Boolean cancelInterest(String stockId, String accessToken) {
-        log.info("StockServiceImpl_cancelInterest_start: " + stockId + " " + accessToken);
+        log.info("StockServiceImpl_cancelInterest_start: " + stockId);
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
         Stock stock = stockRepository.findById(stockId).orElseThrow(MySQLSearchException::new);
@@ -523,15 +491,13 @@ public class StockServiceImpl implements StockService {
         if (interest == null) {
             String stockName = stock.getStockName();
             String userName = user.getName();
-            log.info("StockServiceImpl_cancelInterest_end: " + userName
-                + " has no interest with " + stockName);
+            log.info("StockServiceImpl_cancelInterest_end: MySQLSearchException");
             throw new MySQLSearchException();
         } else {
             interest.setInterest(false);
         }
 
-        log.info("StockServiceImpl_cancelInterest_end: return true");
+        log.info("StockServiceImpl_cancelInterest_end: true");
         return true;
     }
-
 }

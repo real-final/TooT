@@ -39,10 +39,10 @@ public class StockController {
     @GetMapping("/showall")
     public CommonResponse<List<AllStockRes>> showAll(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_showAll_start: " + accessToken);
-        List<AllStockRes> stockData = stockService.showAll(accessToken);
-        log.info("StockController_showAll_end" + stockData);
-        return CommonResponse.success(stockData);
+        log.info("StockController_showAll_start");
+        List<AllStockRes> allStockResList = stockService.showAll(accessToken);
+        log.info("StockController_showAll_end");
+        return CommonResponse.success(allStockResList);
     }
 
     /**
@@ -56,7 +56,7 @@ public class StockController {
     public CommonResponse<Integer> buyStock(
         @RequestHeader(value = "accesstoken", required = false) String accessToken,
         @RequestBody StockReq stockReq) {
-        log.info("StockController_buyStock_start: " + accessToken + " " + stockReq);
+        log.info("StockController_buyStock_start: " + stockReq);
         Integer boughtStock = stockService.buyStock(accessToken, stockReq);
         log.info("StockController_buyStock_end: return " + boughtStock);
         return CommonResponse.success(boughtStock);
@@ -71,7 +71,7 @@ public class StockController {
     @GetMapping("/value")
     public CommonResponse<UserValueRes> calculateValue(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_calculateValue_start: " + accessToken);
+        log.info("StockController_calculateValue_start");
         UserValueRes userValueRes = stockService.calculateValue(accessToken);
         log.info("StockController_calculateValue_end: " + userValueRes);
         return CommonResponse.success(userValueRes);
@@ -84,9 +84,9 @@ public class StockController {
      */
     @GetMapping("/rank")
     public CommonResponse<List<StockRankRes>> rankByVolume() {
-        log.info("StockController_rankByVolume_start: no required argument");
+        log.info("StockController_rankByVolume_start");
         List<StockRankRes> stockRankResList = stockService.rankByVolume();
-        log.info("StockController_rankByVolume_end" + stockRankResList);
+        log.info("StockController_rankByVolume_end");
         return CommonResponse.success(stockRankResList);
     }
 
@@ -99,9 +99,9 @@ public class StockController {
     @GetMapping("/interest/show")
     public CommonResponse<List<InterestRes>> showInterest(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_showInterest_start: " + accessToken);
+        log.info("StockController_showInterest_start");
         List<InterestRes> interestResList = stockService.showInterest(accessToken);
-        log.info("StockController_showInterest_end: " + interestResList);
+        log.info("StockController_showInterest_end");
         return CommonResponse.success(interestResList);
     }
 
@@ -116,8 +116,7 @@ public class StockController {
     @GetMapping("/{stockId}")
     public CommonResponse<SpecificStockRes> getStockInfo(@PathVariable("stockId") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_getStockInfo_start: stockId = " + stockId + " accessToken = "
-            + accessToken);
+        log.info("StockController_getStockInfo_start: stockId = " + stockId);
         SpecificStockRes specificStockRes = stockService.getStockInfo(stockId, accessToken);
         log.info("StockController_getStockInfo_end: " + specificStockRes);
         return CommonResponse.success(specificStockRes);
@@ -132,9 +131,9 @@ public class StockController {
     @GetMapping("/my")
     public CommonResponse<List<MyStockRes>> myStocks(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_myStocks_start: " + accessToken);
+        log.info("StockController_myStocks_start");
         List<MyStockRes> myStockResList = stockService.myStocks(accessToken);
-        log.info("StockController_myStocks_end: " + myStockResList);
+        log.info("StockController_myStocks_end");
         return CommonResponse.success(myStockResList);
     }
 
@@ -147,9 +146,9 @@ public class StockController {
     @GetMapping("/execution")
     public CommonResponse<List<ExecutionRes>> myAllExecution(
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_myAllExecution_start: " + accessToken);
+        log.info("StockController_myAllExecution_start");
         List<ExecutionRes> executionResList = stockService.myAllExecution(accessToken);
-        log.info("StockController_myAllExecution_end: " + executionResList);
+        log.info("StockController_myAllExecution_end");
         return CommonResponse.success(executionResList);
     }
 
@@ -163,9 +162,9 @@ public class StockController {
     public CommonResponse<MyStockRes> myStock(
         @RequestHeader(value = "accesstoken", required = false) String accessToken,
         @PathVariable("stockId") String stockId) {
-        log.info("StockController_myStock_start: " + accessToken);
+        log.info("StockController_myStock_start");
         MyStockRes myStockRes = stockService.myStock(accessToken, stockId);
-        log.info("StockController_myStock_end: " + myStockRes);
+        log.info("StockController_myStock_end");
         return CommonResponse.success(myStockRes);
     }
 
@@ -179,9 +178,9 @@ public class StockController {
     @GetMapping("/execution/{stockId}")
     public CommonResponse<List<ExecutionRes>> myExecution(@PathVariable("stockId") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_myExecution_start: " + stockId + " " + accessToken);
+        log.info("StockController_myExecution_start: " + stockId);
         List<ExecutionRes> executionResList = stockService.myExecution(stockId, accessToken);
-        log.info("StockController_myExecution_end: " + executionResList);
+        log.info("StockController_myExecution_end");
         return CommonResponse.success(executionResList);
     }
 
@@ -196,7 +195,7 @@ public class StockController {
     public CommonResponse<Integer> sellStock(
         @RequestHeader(value = "accesstoken", required = false) String accessToken,
         @RequestBody StockReq stockReq) {
-        log.info("StockController_sellStock_start: " + accessToken + " " + stockReq);
+        log.info("StockController_sellStock_start: " + stockReq);
         Integer soldStock = stockService.sellStock(accessToken, stockReq);
         log.info("StockController_sellStock_end: " + soldStock);
         return CommonResponse.success(soldStock);
@@ -210,7 +209,7 @@ public class StockController {
     @PatchMapping("/interest/add/{stockId}")
     public CommonResponse<Boolean> addInterest(@PathVariable("stockId") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_addInterest_start: " + stockId + " " + accessToken);
+        log.info("StockController_addInterest_start: " + stockId);
         Boolean isAdded = stockService.addInterest(stockId, accessToken);
         log.info("StockController_addInterest_end: " + isAdded);
         return CommonResponse.success(isAdded);
@@ -224,7 +223,7 @@ public class StockController {
     @PatchMapping("/interest/cancel/{stockId}")
     public CommonResponse<Boolean> cancelInterest(@PathVariable("stockId") String stockId,
         @RequestHeader(value = "accesstoken", required = false) String accessToken) {
-        log.info("StockController_cancelInterest_start: " + stockId + " " + accessToken);
+        log.info("StockController_cancelInterest_start: " + stockId);
         Boolean isCanceled = stockService.cancelInterest(stockId, accessToken);
         log.info("StockController_cancelInterest_end: " + isCanceled);
         return CommonResponse.success(isCanceled);

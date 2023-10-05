@@ -69,32 +69,39 @@ public class FriendServiceImpl implements FriendService {
                 for (Object element : elements) {
                     JSONObject friend = (JSONObject) element;
                     OauthFriendInfoReq oauthFriendInfoReq = FriendMapper.INSTANCE.jsonObjectToFriendInfoReq(
-                            friend);
+                        friend);
                     User user = userRepository.findByProviderId(
-                            oauthFriendInfoReq.getId().toString());
+                        oauthFriendInfoReq.getId().toString());
                     //순이익 계산.
                     Long netProfit = priceUtil.calNetProfit(user.getId());
                     RankRes kakaoFriendRes = FriendMapper.INSTANCE.toRankRes(
-                            oauthFriendInfoReq, user, netProfit);
+                        oauthFriendInfoReq, user, netProfit);
                     kakaoFriendList.add(kakaoFriendRes);
                 }
                 //랭킹을 조회 요청한 유저의 정보
                 User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
                 Long netProfit = priceUtil.calNetProfit(user.getId());
                 RankRes kakaoFriendRes = FriendMapper.INSTANCE.toRankRes(
-                        user, netProfit);
+                    user, netProfit);
                 kakaoFriendList.add(kakaoFriendRes);
+
+                kakaoFriendList.sort(
+                    Comparator.comparing(RankRes::getNetProfit)
+                        .reversed()  // 내림차순으로 netProfit 정렬
+                        .thenComparing(
+                            RankRes::getBankruptcyNo)    // netProfit이 같을 경우, 오름차순으로 bankruptcyNo 정렬
+                        .thenComparing(RankRes::getId));    // bankruptcyNo가 같을 경우, 오름차순으로 id 정렬
 
                 //랭킹 전체 정렬 후, 내 등수 찾아서 프론트에 반환할 response mapping
                 RankListRes rankListRes = sortListAndGetMyRankAndMap(kakaoFriendList,
-                        kakaoFriendRes);
+                    kakaoFriendRes);
                 log.info("FriendServiceImpl_getFriendList_end: " + rankListRes);
 
                 return rankListRes;
             } else {
                 // 오류 처리. 동의 안한 사용자인 경우라 에러가 아님.
                 log.info(
-                        "FriendServiceImpl_getFriendList_end: Failed to get friends list, need to reissue token");
+                    "FriendServiceImpl_getFriendList_end: Failed to get friends list, need to reissue token");
                 //재요청 필요. reissue() 호출 위한 error 프론트에 던지기
                 throw new KakaoTokenRequestException();
             }
@@ -114,15 +121,10 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public RankListRes getRank(String accessToken) {
-        log.info("FriendServiceImpl_getRank_start: " + accessToken);
-        List<User> userList = userRepository.findAll();
+        log.info("FriendServiceImpl_getRank_start");
 
-        List<RankRes> rankList = new ArrayList<>();
-        for (User user : userList) {
-            Long netProfit = priceUtil.calNetProfit(user.getId());
-            RankRes rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
-            rankList.add(rankRes);
-        }
+        List<RankRes> rankList = priceUtil.getRankList();
+
         RankRes rankRes = null;
         if (accessToken != null && !accessToken.isEmpty()) {
             Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
@@ -132,7 +134,7 @@ public class FriendServiceImpl implements FriendService {
         }
 
         RankListRes rankListRes = sortListAndGetMyRankAndMap(rankList, rankRes);
-        log.info("FriendServiceImpl_getRank_end: " + rankListRes);
+        log.info("FriendServiceImpl_getRank_end");
 
         return rankListRes;
     }
@@ -145,28 +147,42 @@ public class FriendServiceImpl implements FriendService {
      * @return 프론트에 반환될 데이터타입인 RankListRes 형태로 매핑
      */
     private RankListRes sortListAndGetMyRankAndMap(List<RankRes> rankList, RankRes rankRes) {
-        log.info("FriendServiceImpl_sortListAndGetMyRankAndMap_start: " + rankList + rankRes);
-        rankList = rankList.stream()
-                .sorted(Comparator.comparing(RankRes::getNetProfit)
-                        .reversed() // 내림차순으로 netProfit 정렬
-                        .thenComparing(
-                                RankRes::getBankruptcyNo) // netProfit이 같을 경우, 오름차순으로 bankruptcyNo 정렬
-                        .thenComparing(RankRes::getId)) // bankruptcyNo가 같을 경우, 오름차순으로 id 정렬
-                .collect(Collectors.toList());
-
+        log.info("FriendServiceImpl_sortListAndGetMyRankAndMap_start");
         int index = -1; // -1은 "찾지 못함"을 의미합니다.
-        if (rankRes != null) {
-            for (int i = 0; i < rankList.size(); i++) {
-                if (rankList.get(i).getId()
-                        .equals(rankRes.getId())) { // targetId는 찾고자 하는 ID입니다.
-                    index = i;
+        if (rankRes != null && !rankList.isEmpty()) {
+            int left = 0, right = rankList.size() - 1, mid = (left + right) >> 1;
+
+            while (left < right) {
+                RankRes midRankRes = rankList.get(mid);
+                Long midNetProfit = rankList.get(mid).getNetProfit();
+
+                if (midRankRes.getNetProfit() > rankRes.getNetProfit()) {
+                    left = mid + 1;
+                } else if (midRankRes.getNetProfit() < rankRes.getNetProfit()) {
+                    right = mid - 1;
+                } else if (midRankRes.getBankruptcyNo() < rankRes.getBankruptcyNo()) {
+                    left = mid + 1;
+                } else if (midRankRes.getBankruptcyNo() > rankRes.getBankruptcyNo()) {
+                    right = mid - 1;
+                } else if (midRankRes.getId() < rankRes.getId()) {
+                    left = mid + 1;
+                } else if (midRankRes.getId() > rankRes.getId()) {
+                    right = mid - 1;
+                } else {
                     break;
                 }
+
+                mid = (left + right) >> 1;
+            }
+
+            if (rankList.get(mid).getId().equals(rankRes.getId())) {
+                index = mid;
             }
         }
+
         RankListRes rankListRes = FriendMapper.INSTANCE.toRankListRes(
-                rankList, rankRes, index);
-        log.info("FriendServiceImpl_sortListAndGetMyRankAndMap_end: " + rankListRes);
+            rankList, rankRes, index);
+        log.info("FriendServiceImpl_sortListAndGetMyRankAndMap_end");
         return rankListRes;
     }
 

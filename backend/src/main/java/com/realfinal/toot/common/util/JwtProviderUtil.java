@@ -97,7 +97,7 @@ public class JwtProviderUtil {
      * @return userId (providerId 아님)
      */
     public Long getUserIdFromToken(String accessToken) {
-        log.info("JwtProviderUtil_getUserIdFromToken_start: " + accessToken);
+//        log.info("JwtProviderUtil_getUserIdFromToken_start: " + accessToken);
         try {
             Long userId = Long.parseLong(Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -105,11 +105,11 @@ public class JwtProviderUtil {
                 .parseClaimsJws(accessToken)
                 .getBody()
                 .getSubject());
-            log.info("JwtProviderUtil_getUserIdFromToken_end: " + userId);
+//            log.info("JwtProviderUtil_getUserIdFromToken_end: " + userId);
             return userId;
         } catch (ExpiredJwtException e) {
             Long userId = Long.parseLong(e.getClaims().getSubject());
-            log.info("JwtProviderUtil_getUserIdFromToken_end: " + userId);
+            log.info("JwtProviderUtil_getUserIdFromToken_exception: " + userId);
             return userId;
         } catch (JwtException e) {
             throw new ExpiredTokenException();
@@ -125,17 +125,17 @@ public class JwtProviderUtil {
      * @return 유효하면 true, 아니면 false 리턴
      */
     public Boolean validateToken(String token) {
-        log.info("JwtProviderUtil_validateToken_start: " + token);
+//        log.info("JwtProviderUtil_validateToken_start: " + token);
         try {
             Jws<Claims> claimsJws = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token);
             Boolean result = !claimsJws.getBody().getExpiration().before(new Date());
-            log.info("JwtProviderUtil_validateToken_end: " + result);
+//            log.info("JwtProviderUtil_validateToken_end: " + result);
             return result;
         } catch (ExpiredJwtException exception) {
-            log.info("JwtProviderUtil_validateToken_end: " + false);
+            log.info("JwtProviderUtil_validateToken_exception: " + false);
             return false;
         } catch (Exception e) {
             log.warn("JwtProviderUtil_validateToken_end: unexpected Exception occured");
