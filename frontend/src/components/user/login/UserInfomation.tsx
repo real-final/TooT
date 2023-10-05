@@ -56,12 +56,12 @@ const UserInfomation: React.FC = () => {
   );
 
   // 사용자 랭킹 저장
-  let myRank = rankingListData?.myRank;
   if (rankingListLoading || rankingListError) return <></>;
+  let myRank = rankingListData?.myRank;
 
   // 사용자 정보 저장
-  let { profileImage, name, seedMoney, cash, totalValue } = userInfoData?.data;
   if (userInfoLoading || userInfoError) return <></>;
+  let { profileImage, name, seedMoney, cash, totalValue } = userInfoData?.data;
 
   return (
     <div className="h-full overflow-hidden">

@@ -30,8 +30,8 @@ const TotalRanking: React.FC = () => {
     // { refetchInterval: 10000 }
   );
   // // 전체랭킹 저장
-  let rankingList = data?.list;
   if (isLoading || error) return <CustomCircularProgress />;
+  let rankingList = data?.list;
 
   return (
     <div className="w-full h-full h-min-0 overflow-y-auto no-scrollbar">
