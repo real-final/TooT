@@ -11,7 +11,7 @@ const UserContainer = () => {
   }
 
   return (
-    <div className="col-span-1 row-span-1 drop-shadow-lg">
+    <div className="col-span-1 row-span-1 drop-shadow-md">
       {isSignedIn ? <UserInfomation /> : <KakaoLogin />}
     </div>
   );

@@ -17,7 +17,7 @@ root.render(
     <BrowserRouter>
       <Provider store={store}>
         {/* devtools */}
-        {/* <ReactQueryDevtoolsinitialIsOpen={true} /> */}
+        {/* <ReactQueryDevtools initialIsOpen={true} /> */}
         <App />
       </Provider>
     </BrowserRouter>

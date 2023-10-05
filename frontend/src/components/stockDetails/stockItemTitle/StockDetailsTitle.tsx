@@ -9,6 +9,7 @@ import LikeButton from "../../../common/button/LikeButton";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Avatar from "@mui/joy/Avatar";
+import { Tooltip, Zoom } from "@mui/material";
 
 import { IstockItem } from "../../../interface/IstockDetails";
 import { IstockTheme } from "../../../interface/IstockTradingModal";
@@ -16,7 +17,6 @@ import CustomCircularProgress from "../../../common/circularProgress/CustomCircu
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { getStockStyle } from "../../../utils/getStockStyle";
-import { Tooltip, Zoom } from "@mui/material";
 
 /** 회사 이름, 로고, 코드 */
 export const StockDetailsTitle: React.FC<{
@@ -34,17 +34,10 @@ export const StockDetailsTitle: React.FC<{
   // Access 토큰 가져오기
   const accessToken = userAuthContext?.accessToken as string;
 
-  // 현재 시가 가져오기
-  const currentPrice = stockItem.currentPrice;
+  // 현재시가, 좋아요여부, 전일대비금액, 전일대비율
+  const { currentPrice, interested, priceDifference, rateDifference } =
+    stockItem;
 
-  // 종목 좋아요 여부 가져오기
-  const isFavorite = stockItem.interested;
-
-  // 전일대비 금액
-  const priceDifference = stockItem.priceDifference;
-
-  // 전일대비율
-  const rateDifference = stockItem.rateDifference;
   const { textColor, icon } = getStockStyle(rateDifference);
 
   // 챗봇을 통해 이동했으면 사용자가 원하는 매수/매도 데이터 가져오기
@@ -66,7 +59,7 @@ export const StockDetailsTitle: React.FC<{
 
   // 보유주식 수량 가져오기
   const { data, isLoading, error } = useQuery(
-    "my-stocks",
+    ["my-stocks", stockId],
     async () => {
       const response = await api.get(`stock/my/${stockId}`, {
         headers: { accesstoken: accessToken },
@@ -88,21 +81,16 @@ export const StockDetailsTitle: React.FC<{
   // 보유 주식량이 0이면 매도 버튼 비활성화
   let isDisabled: boolean = !!!hold;
 
-  // 종목이름 저장
-  const stockName = data?.stockName;
-
   // 사용자 금융 정보
   const stockTradingInfo = {
     buy: {
       accessToken: accessToken, // Access 토큰
-      stockName: stockName, // 종목이름
       stockId: stockId, // 종목코드
       currentPrice: currentPrice, // 현재시가
       availableQuantity: Math.floor(cash / currentPrice), // 주문 가능 수량
     },
     sell: {
       accessToken: accessToken, // Access 토큰
-      stockName: stockName, // 종목이름
       stockId: stockId, // 종목코드
       currentPrice: currentPrice, // 현재시가
       availableQuantity: hold, // 주문 가능 수량
@@ -124,13 +112,16 @@ export const StockDetailsTitle: React.FC<{
         <Avatar alt="회사로고" src={stockItem.imageUrl} size="sm" />
         <h2 className="text-2xl mx-1">{stockItem?.stockName}</h2>
         <p className="text-md text-gray-400 mr-2">코스피32 {stockId}</p>
-        <LikeButton stockId={stockId} isFavorite={isFavorite} size="medium" />
+        <LikeButton stockId={stockId} isFavorite={interested} size="medium" />
         <p>ㆍ</p>
         <div className="flex gap-4 items-center">
           <p className={textColor + " text-2xl"}>
             {currentPrice.toLocaleString()}원
           </p>
-          <p className={textColor + " text-lg"}>{rateDifference}%</p>
+          <p className={textColor + " text-lg"}>
+            {priceDifference > 0 ? "+" : null}
+            {rateDifference.toFixed(2)}%
+          </p>
           <p className={textColor + " text-lg"}>
             {icon} {Math.abs(priceDifference).toLocaleString()}
           </p>
