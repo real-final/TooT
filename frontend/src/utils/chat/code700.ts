@@ -15,7 +15,7 @@ export const code700 = async (code:number, dispatch:any, navigate:any, userAuthC
         await dispatch(setRespondingFalse());
         return;
       }
-      if(!confirm("파산 신청을 하시겠습니까?")){
+      if(!window.confirm("파산 신청을 하시겠습니까?")){
         alert("파산 신청을 철회합니다.");
         return;
       } else {
