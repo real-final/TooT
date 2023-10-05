@@ -23,6 +23,8 @@ const Routers = () => {
       <Route path="/" element={<Home />}></Route>
       <Route path="/loading" element={<CustomCircularProgress />}></Route>
       <Route path="*" element={<NotFound />}></Route>
+      <Route path="/tutorials" element={<Tutorials />}></Route>
+
       {/* 비인가유저 접근 가능 페이지 */}
       <Route path="/" element={<AuthRouterGuard />}>
         <Route path="/stock/all" element={<StockAll />} />
@@ -50,7 +52,6 @@ const Routers = () => {
           ></Route>
         </Route>
         <Route path="/quiz" element={<QuizContainer />}></Route>
-        <Route path="/tutorials" element={<Tutorials />}></Route>
       </Route>
     </Routes>
   );
