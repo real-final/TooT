@@ -7,12 +7,15 @@ import com.realfinal.toot.common.exception.quiz.NoWordException;
 import com.realfinal.toot.common.exception.quiz.NotEnoughQuestion;
 import com.realfinal.toot.common.exception.user.MySQLSearchException;
 import com.realfinal.toot.common.util.JwtProviderUtil;
+import com.realfinal.toot.common.util.RedisUtil;
 import com.realfinal.toot.db.entity.User;
 import com.realfinal.toot.db.entity.Word;
 import com.realfinal.toot.db.repository.UserRepository;
 import com.realfinal.toot.db.repository.WordRepository;
 import jakarta.transaction.Transactional;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,6 +31,7 @@ public class QuizServiceImpl implements QuizService {
     private final WordRepository wordRepository;
     private final UserRepository userRepository;
     private final JwtProviderUtil jwtProviderUtil;
+    private final RedisUtil redisUtil;
 
     /**
      * 오늘 퀴즈 풀 수 있는지 확인
@@ -103,7 +107,23 @@ public class QuizServiceImpl implements QuizService {
         log.info("QuizServiceImpl_saveQuizResult_start");
         Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
         User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
-        user.updateQuizResult();
-        log.info("QuizServiceImpl_saveQuizResult_end: saved");
+        String key = "Quiz" + userId;
+        String isTrue = redisUtil.getData(key);
+
+        if (isTrue == null) {
+            // 현재 시간을 가져옵니다.
+            LocalDateTime currentDate = LocalDateTime.now();
+            // 같은 날짜의 자정 시간을 만듭니다.
+            LocalDateTime midnight = currentDate.toLocalDate().atStartOfDay().plusDays(1);
+            // 두 시간 사이의 Duration을 계산합니다.
+            Duration duration = Duration.between(currentDate, midnight);
+            // 계산된 Duration을 초로 변환하여 출력합니다.
+            Long seconds = duration.getSeconds();
+            redisUtil.setDataWithExpire(key, "true", seconds);
+            user.updateQuizResult();
+            log.info("QuizServiceImpl_saveQuizResult_end: saved");
+        } else {
+            log.info("QuizServiceImpl_saveQuizResult_end: quiz already solved");
+        }
     }
 }
