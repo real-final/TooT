@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../utils/api";
 import { useQuery } from "react-query";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import StockRow from "./StockRow";
 import CustomCircularProgress from "../../../common/circularProgress/CustomCircularProgress";
@@ -17,6 +18,7 @@ type rowType = {
 /** 거래량 순위 */
 const TopStocks: React.FC = () => {
   const navigate = useNavigate();
+  const [animationParent] = useAutoAnimate();
 
   // 거래량 순위 요청하기
   const fetchStockRank = async () => {
@@ -44,7 +46,7 @@ const TopStocks: React.FC = () => {
   return (
     <div className="w-full h-full flex gap-x-12">
       <table className="w-full h-full overflow-hidden">
-        <tbody>
+        <tbody ref={animationParent}>
           {rowTop5?.map((row: rowType) => (
             <StockRow
               key={row.stockId}
@@ -55,7 +57,7 @@ const TopStocks: React.FC = () => {
         </tbody>
       </table>
       <table className="w-full h-full overflow-hidden">
-        <tbody>
+        <tbody ref={animationParent}>
           {rowTop10?.map((row: rowType) => (
             <StockRow
               key={row.stockId}
