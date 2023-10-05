@@ -1,7 +1,10 @@
 import { useState, useContext } from "react";
 import { useQuery } from "react-query";
 import { IuserStock } from "../../../interface/IuserStock";
-import { BuyButton, SellButton } from "../../stockDetails/stockItemTitle/StockDetailsTitle";
+import {
+  BuyButton,
+  SellButton,
+} from "../../stockDetails/stockItemTitle/StockDetailsTitle";
 import StockOrderModal from "../../stockDetails/stockItemTitle/StockOrderModal";
 import { UserAuthContext } from "../../../App";
 import { IstockTheme } from "../../../interface/IstockTradingModal";
@@ -9,7 +12,7 @@ import { api } from "../../../utils/api";
 import { useNavigate } from "react-router-dom";
 import NotFound from "../../../common/notfound/NotFound";
 
-const UserStockDetailTotal = ({stock}: {stock:IuserStock | undefined}) => {
+const UserStockDetailTotal = ({ stock }: { stock: IuserStock | undefined }) => {
   const navigate = useNavigate();
   const stockId = stock?.stockId;
 
@@ -25,15 +28,12 @@ const UserStockDetailTotal = ({stock}: {stock:IuserStock | undefined}) => {
   const [sellModalOpen, setSellModalOpen] = useState<boolean>(false);
 
   // 종목 정보 가져오기
-  const { data, error } = useQuery(
-    ["stock-details", stockId],
-    async () => {
-      const response = await api.get(`/stock/${stockId}`, {
-        headers: { accesstoken: accessToken },
-      });
-      return response?.data;
-    }
-  );
+  const { data, error } = useQuery(["stock-details", stockId], async () => {
+    const response = await api.get(`/stock/${stockId}`, {
+      headers: { accesstoken: accessToken },
+    });
+    return response?.data;
+  });
 
   const stockData = data?.data;
 
@@ -47,6 +47,12 @@ const UserStockDetailTotal = ({stock}: {stock:IuserStock | undefined}) => {
     navigate("/stock");
     return <NotFound />;
   }
+
+  // 보유 주식량 저장
+  let hold: number = stockData?.hold ? stockData.hold : 0;
+
+  // 보유 주식량이 0이면 매도 버튼 비활성화
+  let isDisabled: boolean = !!!hold;
 
   // 사용자 금융 정보
   const stockTradingInfo = {
@@ -80,9 +86,12 @@ const UserStockDetailTotal = ({stock}: {stock:IuserStock | undefined}) => {
           {stock?.hold}
           <span className="font-light">주</span>
         </div>
-        <div className="w-[15%] flex justify-between items-center">
+        <div className="flex justify-between items-center gap-2">
           <BuyButton onClick={() => setBuyModalOpen(true)} />
-          <SellButton onClick={() => setSellModalOpen(true)} />
+          <SellButton
+            onClick={() => setSellModalOpen(true)}
+            isDisabled={isDisabled}
+          />
           <StockOrderModal
             modalOpen={buyModalOpen}
             setModalOpen={setBuyModalOpen}
@@ -154,4 +163,5 @@ const UserStockDetailTotal = ({stock}: {stock:IuserStock | undefined}) => {
     </div>
   );
 };
+
 export default UserStockDetailTotal;

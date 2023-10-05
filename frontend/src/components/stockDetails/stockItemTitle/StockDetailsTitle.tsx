@@ -65,28 +65,28 @@ export const StockDetailsTitle: React.FC<{
   }, [chat.tradeType]);
 
   // 보유주식 수량 가져오기
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, error } = useQuery(
     "my-stocks",
     async () => {
-      try {
-        const response = await api.get(`stock/my/${stockId}`, {
-          headers: { accesstoken: accessToken },
-        });
-        return response?.data?.data;
-      } catch {
-        console.error("위치:stockItemITtle.tsx, 보유주식수량 가져오기 실패");
-      }
+      const response = await api.get(`stock/my/${stockId}`, {
+        headers: { accesstoken: accessToken },
+      });
+      return response?.data?.data;
     },
     { retry: 0 }
   );
 
   if (isLoading) return <CustomCircularProgress />;
 
-  // 보유 주식량 저장
-  let hold = 0;
-  if (data?.hold) {
-    hold = data?.hold;
+  if (error) {
+    console.error("위치:stockItemITtle.tsx, 보유주식수량 가져오기 실패", error);
   }
+
+  // 보유 주식량 저장
+  let hold: number = data?.hold ? data.hold : 0;
+
+  // 보유 주식량이 0이면 매도 버튼 비활성화
+  let isDisabled: boolean = !!!hold;
 
   // 종목이름 저장
   const stockName = data?.stockName;
@@ -139,7 +139,10 @@ export const StockDetailsTitle: React.FC<{
       {/* 매수/매도 버튼 & 모달 */}
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
         <BuyButton onClick={() => setBuyModalOpen(true)} />
-        <SellButton onClick={() => setSellModalOpen(true)} />
+        <SellButton
+          onClick={() => setSellModalOpen(true)}
+          isDisabled={isDisabled}
+        />
         <StockOrderModal
           modalOpen={buyModalOpen}
           setModalOpen={setBuyModalOpen}
@@ -158,7 +161,7 @@ export const StockDetailsTitle: React.FC<{
 };
 
 /** 매수 버튼 */
-export const BuyButton = (props: { onClick?: () => void }) => {
+export const BuyButton = (props: { onClick: () => void }) => {
   return (
     <Button
       className="h-6"
@@ -172,7 +175,10 @@ export const BuyButton = (props: { onClick?: () => void }) => {
 };
 
 /** 매도 버튼 */
-export const SellButton = (props: { onClick?: () => void }) => {
+export const SellButton = (props: {
+  onClick: () => void;
+  isDisabled: boolean;
+}) => {
   return (
     <Tooltip
       title={"주식을 매도하면 현재가 기준 0.315%의 수수료가 발생합니다!"}
@@ -184,6 +190,7 @@ export const SellButton = (props: { onClick?: () => void }) => {
           color="primary"
           variant="soft"
           onClick={props.onClick}
+          disabled={props.isDisabled}
         >
           매도
         </Button>

@@ -53,7 +53,7 @@ const LikeButton: React.FC<IlikeButton> = ({ stockId, isFavorite, size }) => {
   return (
     <IconButton
       onClick={isFavorite ? onUnlikeClick : onLikeClick}
-      color="danger"
+      color={isFavorite ? ("danger" as const) : ("neutral" as const)}
       variant="plain"
       sx={{ "--IconButton-size": "22px" }}
     >

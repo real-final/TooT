@@ -68,9 +68,15 @@ const StockOrderModal: React.FC<IstockOrderModal> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatQuantity]);
 
+  // input 값과 주문수량을 일치화
   useEffect(() => {
     if (inputRef.current) inputRef.current.value = String(orderQuantity);
   }, [orderQuantity]);
+
+  // 모달이 열릴 때, input 값을 1로 초기화
+  useEffect(() => {
+    if (modalOpen) setOrderQuantity(1);
+  }, [modalOpen]);
 
   // 매수/매도 요청 함수
   const onClickAction = async (action: string, orderQuantity: number) => {

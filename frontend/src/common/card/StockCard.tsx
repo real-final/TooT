@@ -35,6 +35,7 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
   const xsText = size === "medium" ? "text-[14px]" : "text-xs";
   const mdText = size === "medium" ? "text-[20px]" : "text-md";
   const xlText = size === "medium" ? "text-[24px]" : "text-xl";
+  const avatarSize = size === "medium" ? "28px" : "20px";
 
   // 상세조회 페이지 이동
   const handleCardClick = () => {
@@ -80,13 +81,11 @@ const StockCard: React.FC<StockCardProps> = ({ item, size }) => {
             <p className={`${xsText} text-slate-500`}>{stockId}</p>
           </div>
           <div className="flex items-center gap-2">
-            {size === "medium" && (
-              <Avatar
-                src={logoImage}
-                size="sm"
-                sx={{ "--Avatar-size": "24px" }}
-              />
-            )}
+            <Avatar
+              src={logoImage}
+              size="sm"
+              sx={{ "--Avatar-size": avatarSize }}
+            />
             <h2 className={`${mdText}`}>{stockName}</h2>
           </div>
           <div className="flex items-center">

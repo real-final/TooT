@@ -15,10 +15,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-    <Provider store={store}>
-      {/* devtools */}
-      {/* <ReactQueryDevtools initialIsOpen={true} /> */}
-      <App />
+      <Provider store={store}>
+        {/* devtools */}
+        {/* <ReactQueryDevtoolsinitialIsOpen={true} /> */}
+        <App />
       </Provider>
     </BrowserRouter>
   </QueryClientProvider>
