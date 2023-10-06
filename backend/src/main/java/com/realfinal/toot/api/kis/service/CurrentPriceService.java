@@ -76,6 +76,9 @@ public class CurrentPriceService {
     private void getCurrentPrice(List<String> companies, String companyInfo) {
 //        log.info("CurrentPriceService_getCurrentPrice_start: " + companyInfo + " " + companies.toString());
         if (!openCronUtil.shouldRun()) {
+            if (companyInfo.equals("현재가 기업4")) {
+                priceUtil.updateRankList(priceUtil.getNextRankState());
+            }
             return;
         }
         long start = System.currentTimeMillis();

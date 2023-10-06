@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -89,15 +90,22 @@ public class PriceUtil {
     private volatile Integer nextState = 1;
     private StockRankRes[][] stockRankResList = new StockRankRes[2][10];
     private List<RankRes>[] rankResList = new ArrayList[2];
-    private volatile Integer rankCurrentState = 0;
-    private volatile Integer rankNextState = 0;
+    private Map<Long, Integer>[] userRank = new Map[2];
+    private volatile Integer currentRankState = 0;
+    private volatile Integer nextRankState = 1;
+
 
     public Integer getStockIndex(String stockId) {
         return this.stockIndex.get(stockId);
     }
 
+    public Integer getNextRankState() {
+        return this.nextRankState;
+    }
+
     public void updateState() {
         this.calculateTradingVolume(this.nextState);
+        this.updateRankList(this.nextRankState);
         this.currentState ^= 1;
         this.nextState ^= 1;
     }
@@ -471,35 +479,46 @@ public class PriceUtil {
     }
 
     public List<RankRes> getRankList() {
-        return this.rankResList[this.rankCurrentState];
+        return this.rankResList[this.currentRankState];
     }
 
-    @Scheduled(fixedRate = 5000, initialDelay = 40000)
-    public void updateRankList() {
+    public Map<Long, Integer> getUserRank() {
+        return this.userRank[this.currentRankState];
+    }
+
+    public void updateRankList(Integer nextState) {
         List<User> userList = userRepository.findAll();
-        this.rankResList[this.rankNextState] = new ArrayList<RankRes>();
+        this.rankResList[nextState] = new ArrayList<RankRes>();
+        this.userRank[nextState] = new TreeMap<>();
 
         if (!userList.isEmpty()) {
             for (User user : userList) {
                 Long netProfit = calNetProfit(user.getId());
                 RankRes rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
-                this.rankResList[this.rankNextState].add(rankRes);
+                this.rankResList[nextState].add(rankRes);
             }
 
-            this.rankResList[this.rankNextState].sort(
+            this.rankResList[nextState].sort(
                 Comparator.comparing(RankRes::getNetProfit)
                     .reversed()  // 내림차순으로 netProfit 정렬
                     .thenComparing(
                         RankRes::getBankruptcyNo)    // netProfit이 같을 경우, 오름차순으로 bankruptcyNo 정렬
                     .thenComparing(RankRes::getId));    // bankruptcyNo가 같을 경우, 오름차순으로 id 정렬
+
+            for (int i = 0; i < this.rankResList[nextState].size(); ++i) {
+                this.userRank[nextState].put(
+                    this.rankResList[nextState].get(i).getId(), i);
+            }
         }
 
-        if (this.rankResList[this.rankCurrentState] == null
-            || this.rankResList[this.rankCurrentState].isEmpty()) {
-            this.rankResList[this.rankCurrentState] = this.rankResList[this.rankNextState];
+        Integer currentState = nextState ^ 1;
+        if (this.rankResList[currentState] == null
+            || this.rankResList[currentState].isEmpty()) {
+            this.rankResList[currentState] = this.rankResList[nextState];
+            this.userRank[currentState] = this.userRank[nextState];
         }
 
-        this.rankCurrentState ^= 1;
-        this.rankNextState ^= 1;
+        this.currentRankState ^= 1;
+        this.nextRankState ^= 1;
     }
 }
