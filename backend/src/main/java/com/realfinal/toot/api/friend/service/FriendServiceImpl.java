@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
@@ -160,14 +159,18 @@ public class FriendServiceImpl implements FriendService {
         Map<Long, Integer> userRank = priceUtil.getUserRank();
 
         RankRes rankRes = null;
+        Integer index = -1;
         if (accessToken != null && !accessToken.isEmpty()) {
             Long userId = jwtProviderUtil.getUserIdFromToken(accessToken);
-            User user = userRepository.findById(userId).orElseThrow(MySQLSearchException::new);
-            Long netProfit = priceUtil.calNetProfit(user.getId());
-            rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
+            User user = userRepository.getReferenceById(userId);
+            if (user != null) {
+                Long netProfit = priceUtil.calNetProfit(user.getId());
+                rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
+
+                index = userRank.getOrDefault(userId, -1);
+            }
         }
 
-        Integer index = userRank.getOrDefault(rankRes.getId(), -1); // -1은 "찾지 못함"을 의미합니다.
         RankListRes rankListRes = FriendMapper.INSTANCE.toRankListRes(
             rankList, rankRes, index);
 
