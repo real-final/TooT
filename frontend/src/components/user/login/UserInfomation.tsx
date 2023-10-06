@@ -73,7 +73,7 @@ const UserInfomation: React.FC = () => {
             className="text-first text-[37px]"
             icon={faTrophy}
           ></FontAwesomeIcon>
-          {typeof myRank === "number" && (
+          {typeof myRank === "number" && myRank >= 0 && (
             <p className="text-lg absolute bottom-2 flex justify-center items-center">
               {myRank + 1}
             </p>

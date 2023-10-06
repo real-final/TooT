@@ -14,7 +14,7 @@ const CompanyOverview: React.FC<{
   const sentences = overview
     .split(".")
     .filter((sentence) => sentence.trim() !== "");
-  const firstSentence = sentences[0];
+  const [firstSentence, ...remainSentences] = sentences;
 
   return (
     <>
@@ -25,7 +25,7 @@ const CompanyOverview: React.FC<{
       <h2 className="text-md font-bold mb-2">기업개요</h2>
       <p className="text-sm mb-2">{firstSentence}.</p>
       {showMore &&
-        sentences.map((sentence, index) => (
+        remainSentences.map((sentence, index) => (
           <p key={index} className="text-sm mb-2">
             {sentence}.
           </p>

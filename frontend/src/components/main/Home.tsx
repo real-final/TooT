@@ -77,7 +77,7 @@ const Home: React.FC = () => {
         </Container>
         {/* 전체랭킹 */}
         <Container>
-          <Title>전체 랭킹</Title>
+          <Title>실시간 전체 랭킹</Title>
           <Content className="min-h-0 overflow-y-auto">
             <TotalRanking />
           </Content>
