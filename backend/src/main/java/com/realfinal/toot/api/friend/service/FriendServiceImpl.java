@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,11 +93,43 @@ public class FriendServiceImpl implements FriendService {
                             RankRes::getBankruptcyNo)    // netProfit이 같을 경우, 오름차순으로 bankruptcyNo 정렬
                         .thenComparing(RankRes::getId));    // bankruptcyNo가 같을 경우, 오름차순으로 id 정렬
 
+                Integer index = -1;
                 //랭킹 전체 정렬 후, 내 등수 찾아서 프론트에 반환할 response mapping
-                RankListRes rankListRes = sortListAndGetMyRankAndMap(kakaoFriendList,
-                    kakaoFriendRes);
-                log.info("FriendServiceImpl_getFriendList_end: " + rankListRes);
+                if (kakaoFriendRes != null && !kakaoFriendList.isEmpty()) {
+                    int left = 0, right = kakaoFriendList.size() - 1, mid = (left + right) >> 1;
 
+                    while (left < right) {
+                        RankRes midRankRes = kakaoFriendList.get(mid);
+
+                        if (midRankRes.getNetProfit() > kakaoFriendRes.getNetProfit()) {
+                            left = mid + 1;
+                        } else if (midRankRes.getNetProfit() < kakaoFriendRes.getNetProfit()) {
+                            right = mid - 1;
+                        } else if (midRankRes.getBankruptcyNo()
+                            < kakaoFriendRes.getBankruptcyNo()) {
+                            left = mid + 1;
+                        } else if (midRankRes.getBankruptcyNo()
+                            > kakaoFriendRes.getBankruptcyNo()) {
+                            right = mid - 1;
+                        } else if (midRankRes.getId() < kakaoFriendRes.getId()) {
+                            left = mid + 1;
+                        } else if (midRankRes.getId() > kakaoFriendRes.getId()) {
+                            right = mid - 1;
+                        } else {
+                            break;
+                        }
+
+                        mid = (left + right) >> 1;
+                    }
+
+                    if (kakaoFriendList.get(mid).getId().equals(kakaoFriendRes.getId())) {
+                        index = mid;
+                    }
+                }
+
+                RankListRes rankListRes = FriendMapper.INSTANCE.toRankListRes(
+                    kakaoFriendList, kakaoFriendRes, index);
+                log.info("FriendServiceImpl_getFriendList_end: " + rankListRes);
                 return rankListRes;
             } else {
                 // 오류 처리. 동의 안한 사용자인 경우라 에러가 아님.
@@ -124,6 +157,7 @@ public class FriendServiceImpl implements FriendService {
         log.info("FriendServiceImpl_getRank_start");
 
         List<RankRes> rankList = priceUtil.getRankList();
+        Map<Long, Integer> userRank = priceUtil.getUserRank();
 
         RankRes rankRes = null;
         if (accessToken != null && !accessToken.isEmpty()) {
@@ -133,57 +167,12 @@ public class FriendServiceImpl implements FriendService {
             rankRes = FriendMapper.INSTANCE.toRankRes(user, netProfit);
         }
 
-        RankListRes rankListRes = sortListAndGetMyRankAndMap(rankList, rankRes);
+        Integer index = userRank.getOrDefault(rankRes.getId(), -1); // -1은 "찾지 못함"을 의미합니다.
+        RankListRes rankListRes = FriendMapper.INSTANCE.toRankListRes(
+            rankList, rankRes, index);
+
         log.info("FriendServiceImpl_getRank_end");
 
         return rankListRes;
     }
-
-    /**
-     * 유저 리스트 순이익으로 정렬, 내 등수 찾기, 그리고 한 response로 묶기 (중복 코드 제거용)
-     *
-     * @param rankList 유저 리스트
-     * @param rankRes  내 정보
-     * @return 프론트에 반환될 데이터타입인 RankListRes 형태로 매핑
-     */
-    private RankListRes sortListAndGetMyRankAndMap(List<RankRes> rankList, RankRes rankRes) {
-        log.info("FriendServiceImpl_sortListAndGetMyRankAndMap_start");
-        int index = -1; // -1은 "찾지 못함"을 의미합니다.
-        if (rankRes != null && !rankList.isEmpty()) {
-            int left = 0, right = rankList.size() - 1, mid = (left + right) >> 1;
-
-            while (left < right) {
-                RankRes midRankRes = rankList.get(mid);
-                Long midNetProfit = rankList.get(mid).getNetProfit();
-
-                if (midRankRes.getNetProfit() > rankRes.getNetProfit()) {
-                    left = mid + 1;
-                } else if (midRankRes.getNetProfit() < rankRes.getNetProfit()) {
-                    right = mid - 1;
-                } else if (midRankRes.getBankruptcyNo() < rankRes.getBankruptcyNo()) {
-                    left = mid + 1;
-                } else if (midRankRes.getBankruptcyNo() > rankRes.getBankruptcyNo()) {
-                    right = mid - 1;
-                } else if (midRankRes.getId() < rankRes.getId()) {
-                    left = mid + 1;
-                } else if (midRankRes.getId() > rankRes.getId()) {
-                    right = mid - 1;
-                } else {
-                    break;
-                }
-
-                mid = (left + right) >> 1;
-            }
-
-            if (rankList.get(mid).getId().equals(rankRes.getId())) {
-                index = mid;
-            }
-        }
-
-        RankListRes rankListRes = FriendMapper.INSTANCE.toRankListRes(
-            rankList, rankRes, index);
-        log.info("FriendServiceImpl_sortListAndGetMyRankAndMap_end");
-        return rankListRes;
-    }
-
 }
